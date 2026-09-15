@@ -5,10 +5,9 @@ import { CtaSection } from "@/components/cta-section";
 import { Container } from "@/components/container";
 import { getPageContent, getMedia } from "@/lib/content";
 import { mediaUrl } from "@/lib/supabase-public";
+import { getSchema, fieldValue } from "@/lib/page-schemas";
 
-const DEFAULT_TITLE = "3 hectares de nature préservée en plein cœur du Var";
-const DEFAULT_DESCRIPTION =
-  "Bâtisses en pierre, jardins méditerranéens et lumière de Provence : un lieu pensé pour accueillir vos plus beaux moments.";
+const schema = getSchema("domaine")!;
 
 export async function generateMetadata(): Promise<Metadata> {
   const content = await getPageContent("domaine");
@@ -21,15 +20,13 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function DomainePage() {
-  const [content, photos] = await Promise.all([getPageContent("domaine"), getMedia("domaine")]);
+  const [pageContent, photos] = await Promise.all([getPageContent("domaine"), getMedia("domaine")]);
+  const c = pageContent?.content ?? {};
+  const f = (key: string) => fieldValue(c, schema.fields.find((x) => x.key === key)!);
 
   return (
     <>
-      <PageHero
-        eyebrow="Le domaine"
-        title={content?.hero_title || DEFAULT_TITLE}
-        description={content?.hero_description || DEFAULT_DESCRIPTION}
-      />
+      <PageHero eyebrow="Le domaine" title={f("hero_title")} description={f("hero_description")} />
 
       <section className="py-20">
         <Container className="grid gap-4 sm:grid-cols-3">

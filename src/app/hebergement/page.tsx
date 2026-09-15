@@ -6,10 +6,9 @@ import { Container } from "@/components/container";
 import { getPageContent, getMedia } from "@/lib/content";
 import { mediaUrl } from "@/lib/supabase-public";
 import { staticHebergementPhotos } from "@/lib/static-gallery";
+import { getSchema, fieldValue } from "@/lib/page-schemas";
 
-const DEFAULT_TITLE = "15 hébergements au cœur du domaine";
-const DEFAULT_DESCRIPTION =
-  "Mazets et chambres répartis sur le domaine pour accueillir vos proches et prolonger la fête sans quitter les lieux.";
+const schema = getSchema("hebergement")!;
 
 export async function generateMetadata(): Promise<Metadata> {
   const content = await getPageContent("hebergement");
@@ -22,15 +21,13 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function HebergementPage() {
-  const [content, photos] = await Promise.all([getPageContent("hebergement"), getMedia("hebergement")]);
+  const [pageContent, photos] = await Promise.all([getPageContent("hebergement"), getMedia("hebergement")]);
+  const c = pageContent?.content ?? {};
+  const f = (key: string) => fieldValue(c, schema.fields.find((x) => x.key === key)!);
 
   return (
     <>
-      <PageHero
-        eyebrow="Hébergement"
-        title={content?.hero_title || DEFAULT_TITLE}
-        description={content?.hero_description || DEFAULT_DESCRIPTION}
-      />
+      <PageHero eyebrow="Hébergement" title={f("hero_title")} description={f("hero_description")} />
 
       <section className="py-20">
         <Container className="grid gap-4 sm:grid-cols-3">

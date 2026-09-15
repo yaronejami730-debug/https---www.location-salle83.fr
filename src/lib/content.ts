@@ -8,6 +8,7 @@ export async function getPageContent(slug: string) {
     hero_description: string | null;
     seo_title: string | null;
     seo_description: string | null;
+    content: Record<string, string> | null;
   } | null;
 }
 

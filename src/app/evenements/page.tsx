@@ -3,10 +3,10 @@ import { PageHero } from "@/components/page-hero";
 import { CtaSection } from "@/components/cta-section";
 import { Container } from "@/components/container";
 import { getPageContent } from "@/lib/content";
+import { getSchema, fieldValue } from "@/lib/page-schemas";
+import { pricingBrackets } from "@/lib/pricing";
 
-const DEFAULT_TITLE = "Un cadre unique pour tous vos événements privés";
-const DEFAULT_DESCRIPTION =
-  "Anniversaire, réception, tournage ou dîner privé : le domaine se privatise pour donner vie à votre projet.";
+const schema = getSchema("evenements")!;
 
 export async function generateMetadata(): Promise<Metadata> {
   const content = await getPageContent("evenements");
@@ -18,27 +18,16 @@ export async function generateMetadata(): Promise<Metadata> {
   };
 }
 
-const events = ["Anniversaires", "Réceptions privées", "Tournages & shootings", "Dîners de gala"];
-
-const pricingRows = [
-  { people: "-40 pers.", salle: 1700, lendemain: 250, piscine: 150, vaisselle: 110, cuisine: 200 },
-  { people: "-50 pers.", salle: 1800, lendemain: 250, piscine: 150, vaisselle: 110, cuisine: 200 },
-  { people: "-65 pers.", salle: 1950, lendemain: 300, piscine: 200, vaisselle: 120, cuisine: 230 },
-  { people: "-80 pers.", salle: 2100, lendemain: 350, piscine: 250, vaisselle: 130, cuisine: 250 },
-  { people: "-95 pers.", salle: 2250, lendemain: 400, piscine: 300, vaisselle: 140, cuisine: 270 },
-  { people: "-110 pers.", salle: 2400, lendemain: 450, piscine: 350, vaisselle: 150, cuisine: 290 },
-];
-
 export default async function EvenementsPage() {
-  const content = await getPageContent("evenements");
+  const pageContent = await getPageContent("evenements");
+  const c = pageContent?.content ?? {};
+  const f = (key: string) => fieldValue(c, schema.fields.find((x) => x.key === key)!);
+
+  const events = [f("event1"), f("event2"), f("event3"), f("event4")];
 
   return (
     <>
-      <PageHero
-        eyebrow="Événements & réceptions"
-        title={content?.hero_title || DEFAULT_TITLE}
-        description={content?.hero_description || DEFAULT_DESCRIPTION}
-      />
+      <PageHero eyebrow="Événements & réceptions" title={f("hero_title")} description={f("hero_description")} />
 
       <section className="py-20">
         <Container className="grid grid-cols-2 gap-6 sm:grid-cols-4">
@@ -52,11 +41,8 @@ export default async function EvenementsPage() {
 
       <section className="py-20 bg-[var(--background-muted)]">
         <Container>
-          <h2 className="text-center font-serif text-3xl text-[var(--foreground)]">Grille tarifaire</h2>
-          <p className="mx-auto mt-4 max-w-xl text-center text-sm text-[var(--foreground)]/70">
-            Forfait salle minimum : 1700 € (1800 € le 31 décembre). Tarifs en fonction du nombre de
-            personnes le jour de l&apos;événement, enfants comme adultes.
-          </p>
+          <h2 className="text-center font-serif text-3xl text-[var(--foreground)]">{f("pricing_title")}</h2>
+          <p className="mx-auto mt-4 max-w-xl text-center text-sm text-[var(--foreground)]/70">{f("pricing_note")}</p>
 
           <div className="mt-10 overflow-x-auto rounded-2xl border border-black/5 bg-[var(--background)]">
             <table className="w-full min-w-[640px] text-sm">
@@ -71,9 +57,9 @@ export default async function EvenementsPage() {
                 </tr>
               </thead>
               <tbody>
-                {pricingRows.map((row) => (
-                  <tr key={row.people} className="border-b border-black/5 last:border-0">
-                    <td className="px-5 py-4 font-medium text-[var(--foreground)]">{row.people}</td>
+                {pricingBrackets.map((row) => (
+                  <tr key={row.key} className="border-b border-black/5 last:border-0">
+                    <td className="px-5 py-4 font-medium text-[var(--foreground)]">{row.label}</td>
                     <td className="px-5 py-4 text-[var(--foreground)]/80">{row.salle} €</td>
                     <td className="px-5 py-4 text-[var(--foreground)]/80">{row.lendemain} €</td>
                     <td className="px-5 py-4 text-[var(--foreground)]/80">{row.piscine} €</td>

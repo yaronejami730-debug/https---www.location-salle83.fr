@@ -3,10 +3,9 @@ import { PageHero } from "@/components/page-hero";
 import { CtaSection } from "@/components/cta-section";
 import { Container } from "@/components/container";
 import { getPageContent } from "@/lib/content";
+import { getSchema, fieldValue } from "@/lib/page-schemas";
 
-const DEFAULT_TITLE = "Votre réception, votre ambiance, vos invités";
-const DEFAULT_DESCRIPTION =
-  "Un domaine privé en Provence pour célébrer votre union entourés des vôtres, du vin d'honneur à la soirée dansante.";
+const schema = getSchema("mariage")!;
 
 export async function generateMetadata(): Promise<Metadata> {
   const content = await getPageContent("mariage");
@@ -18,30 +17,32 @@ export async function generateMetadata(): Promise<Metadata> {
   };
 }
 
-const features = [
-  { title: "Cérémonie", text: "Un cadre naturel pour une cérémonie laïque ou religieuse, en extérieur ou sous une charpente en pierre." },
-  { title: "Réception", text: "Salles et terrasses modulables pour votre vin d'honneur, dîner et soirée dansante." },
-  { title: "Exclusivité", text: "Le domaine est privatisé pour votre événement, sans autre mariage le même jour." },
-];
-
 export default async function MariagePage() {
-  const content = await getPageContent("mariage");
+  const pageContent = await getPageContent("mariage");
+  const c = pageContent?.content ?? {};
+  const f = (key: string) => fieldValue(c, schema.fields.find((x) => x.key === key)!);
+
+  const features = [
+    { title: f("feature1_title"), text: f("feature1_text") },
+    { title: f("feature2_title"), text: f("feature2_text") },
+    { title: f("feature3_title"), text: f("feature3_text") },
+  ];
 
   return (
     <>
       <PageHero
         eyebrow="Mariage"
-        title={content?.hero_title || DEFAULT_TITLE}
-        description={content?.hero_description || DEFAULT_DESCRIPTION}
+        title={f("hero_title")}
+        description={f("hero_description")}
         image={{ src: "/images/mariage-hero.jpg", alt: "Bouquet de fleurs blanches pour décoration de mariage" }}
       />
 
       <section className="py-20">
         <Container className="grid gap-8 sm:grid-cols-3">
-          {features.map((f) => (
-            <div key={f.title} className="rounded-2xl bg-[var(--background-muted)] p-8">
-              <h3 className="font-serif text-xl text-[var(--foreground)]">{f.title}</h3>
-              <p className="mt-3 text-sm text-[var(--foreground)]/70">{f.text}</p>
+          {features.map((ft) => (
+            <div key={ft.title} className="rounded-2xl bg-[var(--background-muted)] p-8">
+              <h3 className="font-serif text-xl text-[var(--foreground)]">{ft.title}</h3>
+              <p className="mt-3 text-sm text-[var(--foreground)]/70">{ft.text}</p>
             </div>
           ))}
         </Container>

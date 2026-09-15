@@ -3,10 +3,9 @@ import { PageHero } from "@/components/page-hero";
 import { Container } from "@/components/container";
 import { ContactForm } from "@/components/contact-form";
 import { getPageContent } from "@/lib/content";
+import { getSchema, fieldValue } from "@/lib/page-schemas";
 
-const DEFAULT_TITLE = "Parlons de votre projet";
-const DEFAULT_DESCRIPTION =
-  "Remplissez le formulaire ci-dessous, nous revenons vers vous sous 48h avec une proposition personnalisée.";
+const schema = getSchema("contact")!;
 
 export async function generateMetadata(): Promise<Metadata> {
   const content = await getPageContent("contact");
@@ -19,15 +18,13 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function ContactPage() {
-  const content = await getPageContent("contact");
+  const pageContent = await getPageContent("contact");
+  const c = pageContent?.content ?? {};
+  const f = (key: string) => fieldValue(c, schema.fields.find((x) => x.key === key)!);
 
   return (
     <>
-      <PageHero
-        eyebrow="Contact"
-        title={content?.hero_title || DEFAULT_TITLE}
-        description={content?.hero_description || DEFAULT_DESCRIPTION}
-      />
+      <PageHero eyebrow="Contact" title={f("hero_title")} description={f("hero_description")} />
 
       <section className="py-20">
         <Container className="max-w-2xl">

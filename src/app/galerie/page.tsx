@@ -6,9 +6,9 @@ import { Container } from "@/components/container";
 import { getPageContent, getMedia } from "@/lib/content";
 import { mediaUrl } from "@/lib/supabase-public";
 import { staticGalleryPhotos } from "@/lib/static-gallery";
+import { getSchema, fieldValue } from "@/lib/page-schemas";
 
-const DEFAULT_TITLE = "Le domaine en images";
-const DEFAULT_DESCRIPTION = "Un aperçu des lieux, des réceptions et des hébergements du domaine.";
+const schema = getSchema("galerie")!;
 
 export async function generateMetadata(): Promise<Metadata> {
   const content = await getPageContent("galerie");
@@ -20,15 +20,13 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function GaleriePage() {
-  const [content, photos] = await Promise.all([getPageContent("galerie"), getMedia("galerie")]);
+  const [pageContent, photos] = await Promise.all([getPageContent("galerie"), getMedia("galerie")]);
+  const c = pageContent?.content ?? {};
+  const f = (key: string) => fieldValue(c, schema.fields.find((x) => x.key === key)!);
 
   return (
     <>
-      <PageHero
-        eyebrow="Galerie"
-        title={content?.hero_title || DEFAULT_TITLE}
-        description={content?.hero_description || DEFAULT_DESCRIPTION}
-      />
+      <PageHero eyebrow="Galerie" title={f("hero_title")} description={f("hero_description")} />
 
       <section className="py-20">
         <Container className="grid grid-cols-2 gap-4 sm:grid-cols-3">
