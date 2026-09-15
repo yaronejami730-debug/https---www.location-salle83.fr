@@ -1,23 +1,26 @@
 import Link from "next/link";
 import { Container } from "./container";
 import { navItems, siteConfig } from "@/lib/site";
+import { getSiteSettings } from "@/lib/content";
 
-export function Footer() {
+export async function Footer() {
+  const settings = await getSiteSettings();
+
   return (
     <footer className="mt-auto border-t border-black/5 bg-[var(--background-muted)] py-14">
       <Container className="flex flex-col gap-10 sm:flex-row sm:justify-between">
         <div className="max-w-sm">
           <p className="font-serif text-lg text-[var(--foreground)]">{siteConfig.name}</p>
-          <p className="mt-2 text-sm text-[var(--foreground)]/70">{siteConfig.tagline}</p>
+          <p className="mt-2 text-sm text-[var(--foreground)]/70">{settings.tagline}</p>
           <p className="mt-4 text-sm text-[var(--foreground)]/70">{siteConfig.locality}</p>
           <p className="mt-1 text-sm text-[var(--foreground)]/70">
-            <a href={`tel:${siteConfig.phone.replace(/\s/g, "")}`} className="hover:text-[var(--accent)]">
-              {siteConfig.phone}
+            <a href={`tel:${settings.phone.replace(/\s/g, "")}`} className="hover:text-[var(--accent)]">
+              {settings.phone}
             </a>
           </p>
           <p className="text-sm text-[var(--foreground)]/70">
-            <a href={`mailto:${siteConfig.email}`} className="hover:text-[var(--accent)]">
-              {siteConfig.email}
+            <a href={`mailto:${settings.email}`} className="hover:text-[var(--accent)]">
+              {settings.email}
             </a>
           </p>
         </div>

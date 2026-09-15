@@ -2,21 +2,24 @@ import { Header } from "@/components/header";
 import { Footer } from "@/components/footer";
 import { ChatbotWidget } from "@/components/chatbot-widget";
 import { siteConfig } from "@/lib/site";
+import { getSiteSettings } from "@/lib/content";
 
-export default function SiteLayout({ children }: { children: React.ReactNode }) {
+export default async function SiteLayout({ children }: { children: React.ReactNode }) {
+  const settings = await getSiteSettings();
+
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "EventVenue",
     name: siteConfig.name,
-    description: siteConfig.tagline,
+    description: settings.tagline,
     address: {
       "@type": "PostalAddress",
       addressLocality: "Fayence",
       addressRegion: "Var",
       addressCountry: "FR",
     },
-    telephone: siteConfig.phone,
-    email: siteConfig.email,
+    telephone: settings.phone,
+    email: settings.email,
     url: siteConfig.domain,
   };
 

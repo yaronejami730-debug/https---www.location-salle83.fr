@@ -1,4 +1,5 @@
 import { supabasePublic } from "./supabase-public";
+import { siteConfig } from "./site";
 
 export async function getPageContent(slug: string) {
   const supabase = supabasePublic();
@@ -33,6 +34,17 @@ export async function getReviews() {
     .order("sort_order", { ascending: true })
     .order("created_at", { ascending: false });
   return data ?? [];
+}
+
+export async function getSiteSettings() {
+  const supabase = supabasePublic();
+  const { data } = await supabase.from("pages").select("content").eq("slug", "global").maybeSingle();
+  const content = (data?.content as Record<string, string>) ?? {};
+  return {
+    tagline: content.tagline || siteConfig.tagline,
+    phone: content.phone || siteConfig.phone,
+    email: content.email || siteConfig.email,
+  };
 }
 
 export async function getMedia(page: string) {
