@@ -8,29 +8,41 @@ import { DatePicker } from "./date-picker";
 import { computeQuote, findBracket, pricingBrackets } from "@/lib/pricing";
 import { submitLead } from "@/app/(site)/contact/actions";
 
-const schema = z.object({
-  eventType: z.enum(["mariage", "seminaire", "reception", "autre"]),
-  eventDate: z.string().optional(),
-  guestCount: z.string().min(1, "Nombre de personnes requis"),
-  lendemain: z.boolean(),
-  piscine: z.boolean(),
-  vaisselle: z.boolean(),
-  cuisine: z.boolean(),
-  chapiteauCount: z.string(),
-  fullName: z.string().min(2, "Nom requis"),
-  phone: z.string().min(6, "Téléphone requis"),
-  email: z.string().email("Email invalide"),
-  message: z.string().optional(),
-});
+const schema = z
+  .object({
+    eventType: z.enum(["mariage", "seminaire", "reception", "hebergement", "autre"]),
+    eventDate: z.string().optional(),
+    guestCount: z.string(),
+    lendemain: z.boolean(),
+    piscine: z.boolean(),
+    vaisselle: z.boolean(),
+    cuisine: z.boolean(),
+    chapiteauCount: z.string(),
+    fullName: z.string().min(2, "Nom requis"),
+    phone: z.string().min(6, "Téléphone requis"),
+    email: z.string().email("Email invalide"),
+    message: z.string().optional(),
+  })
+  .refine((data) => data.eventType !== "autre" || (data.message ?? "").trim().length > 0, {
+    message: "Merci de préciser votre demande",
+    path: ["message"],
+  })
+  .refine((data) => data.eventType === "hebergement" || data.guestCount.trim().length > 0, {
+    message: "Nombre de personnes requis",
+    path: ["guestCount"],
+  });
 
 type FormValues = z.infer<typeof schema>;
 
 const eventOptions: { value: FormValues["eventType"]; label: string }[] = [
   { value: "mariage", label: "Mariage" },
   { value: "seminaire", label: "Séminaire" },
-  { value: "reception", label: "Réception" },
+  { value: "reception", label: "Événements & réceptions" },
+  { value: "hebergement", label: "Hébergement" },
   { value: "autre", label: "Autre" },
 ];
+
+const HEBERGEMENT_BOOKING_URL = "https://www.domainedelabegude.com/fr";
 
 const optionFields: {
   name: "lendemain" | "piscine" | "vaisselle" | "cuisine";
@@ -121,11 +133,11 @@ export function ContactForm() {
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
       <div>
         <span className="mb-2 block text-sm text-[var(--foreground)]/80">Votre événement</span>
-        <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+        <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5">
           {eventOptions.map((opt) => (
             <label
               key={opt.value}
-              className="flex cursor-pointer items-center justify-center rounded-lg border border-black/10 px-3 py-3 text-sm has-[:checked]:border-[var(--accent)] has-[:checked]:bg-[var(--accent)]/10"
+              className="flex cursor-pointer items-center justify-center rounded-lg border border-black/10 px-3 py-3 text-center text-sm has-[:checked]:border-[var(--accent)] has-[:checked]:bg-[var(--accent)]/10"
             >
               <input type="radio" value={opt.value} {...register("eventType")} className="sr-only" />
               {opt.label}
@@ -134,6 +146,23 @@ export function ContactForm() {
         </div>
       </div>
 
+      {watched.eventType === "hebergement" ? (
+        <div className="rounded-2xl border border-black/10 bg-[var(--background-muted)] p-8 text-center">
+          <p className="font-serif text-lg text-[var(--foreground)]">Réservation d&apos;hébergement</p>
+          <p className="mx-auto mt-2 max-w-sm text-sm text-[var(--foreground)]/70">
+            Les séjours en mazet se réservent directement sur notre site de réservation, avec les disponibilités en temps réel.
+          </p>
+          <a
+            href={HEBERGEMENT_BOOKING_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="mt-5 inline-flex rounded-full bg-[var(--accent)] px-6 py-3 text-sm text-white hover:opacity-90"
+          >
+            Réserver un hébergement ↗
+          </a>
+        </div>
+      ) : (
+        <>
       <div className="grid gap-6 sm:grid-cols-2">
         <div>
           <label className="mb-2 block text-sm text-[var(--foreground)]/80">Date souhaitée</label>
@@ -241,8 +270,11 @@ export function ContactForm() {
       </div>
 
       <div>
-        <label className="mb-2 block text-sm text-[var(--foreground)]/80">Votre message (optionnel)</label>
+        <label className="mb-2 block text-sm text-[var(--foreground)]/80">
+          {watched.eventType === "autre" ? "Précisez votre demande" : "Votre message (optionnel)"}
+        </label>
         <textarea {...register("message")} rows={4} className="w-full rounded-lg border border-black/10 px-4 py-3 text-sm" />
+        {errors.message && <p className="mt-1 text-xs text-red-600">{errors.message.message}</p>}
       </div>
 
       <button
@@ -257,6 +289,8 @@ export function ContactForm() {
         <p className="text-sm text-red-600">
           Une erreur est survenue. Merci de réessayer ou de nous appeler directement.
         </p>
+      )}
+        </>
       )}
     </form>
   );

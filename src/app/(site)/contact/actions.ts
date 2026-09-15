@@ -5,9 +5,9 @@ import { supabaseAdmin } from "@/lib/supabase-admin";
 import { computeQuote } from "@/lib/pricing";
 
 const schema = z.object({
-  eventType: z.enum(["mariage", "seminaire", "reception", "autre"]),
+  eventType: z.enum(["mariage", "seminaire", "reception", "hebergement", "autre"]),
   eventDate: z.string().optional(),
-  guestCount: z.string().min(1),
+  guestCount: z.string(),
   lendemain: z.boolean(),
   piscine: z.boolean(),
   vaisselle: z.boolean(),
