@@ -162,15 +162,18 @@ export default async function HomePage() {
       </section>
 
       {reviews.length > 0 && (
-        <section className="py-20 bg-[var(--background-muted)]">
+        <section className="py-16">
           <Container>
-            <h2 className="text-center font-serif text-3xl text-[var(--foreground)]">Avis</h2>
-            <div className="mt-10 grid gap-6 sm:grid-cols-3">
+            <p className="text-center text-xs uppercase tracking-[0.2em] text-[var(--foreground)]/40">Ils nous ont fait confiance</p>
+            <div className="mx-auto mt-8 flex max-w-4xl flex-wrap justify-center gap-5">
               {reviews.slice(0, 6).map((r) => (
-                <div key={r.id} className="rounded-2xl bg-[var(--background)] p-6">
-                  <p className="text-[var(--accent)]">{"★".repeat(r.rating)}</p>
-                  <p className="mt-3 text-sm text-[var(--foreground)]/70">{r.text}</p>
-                  <p className="mt-4 text-sm font-medium text-[var(--foreground)]">{r.author}</p>
+                <div
+                  key={r.id}
+                  className="w-full rounded-xl border border-black/5 bg-[var(--background-muted)]/60 p-5 sm:w-[calc(33.333%-14px)]"
+                >
+                  <p className="text-xs text-[var(--accent-warm)]">{"★".repeat(r.rating)}</p>
+                  <p className="mt-2 line-clamp-4 text-sm text-[var(--foreground)]/60">{r.text}</p>
+                  <p className="mt-3 text-xs font-medium text-[var(--foreground)]/70">{r.author}</p>
                 </div>
               ))}
             </div>
