@@ -2,7 +2,10 @@ import type { Metadata } from "next";
 import { PageHero } from "@/components/page-hero";
 import { CtaSection } from "@/components/cta-section";
 import { Container } from "@/components/container";
-import { getPageContent } from "@/lib/content";
+import { ZigzagSection } from "@/components/zigzag-section";
+import { getPageContent, getMedia } from "@/lib/content";
+import { mediaUrl } from "@/lib/supabase-public";
+import { staticGalleryPhotos } from "@/lib/static-gallery";
 import { getSchema, fieldValue } from "@/lib/page-schemas";
 
 const schema = getSchema("mariage")!;
@@ -18,9 +21,13 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function MariagePage() {
-  const pageContent = await getPageContent("mariage");
+  const [pageContent, media] = await Promise.all([getPageContent("mariage"), getMedia("galerie")]);
   const c = pageContent?.content ?? {};
   const f = (key: string) => fieldValue(c, schema.fields.find((x) => x.key === key)!);
+
+  const photos =
+    media.length > 0 ? media.map((m) => ({ src: mediaUrl(m.storage_path), alt: m.alt ?? "" })) : staticGalleryPhotos;
+  const photo = (i: number) => photos[i % photos.length];
 
   const features = [
     { title: f("feature1_title"), text: f("feature1_text") },
@@ -37,6 +44,12 @@ export default async function MariagePage() {
         image={{ src: "/images/mariage-hero.jpg", alt: "Bouquet de fleurs blanches pour décoration de mariage" }}
       />
 
+      <section className="py-16">
+        <Container className="max-w-2xl">
+          <p className="whitespace-pre-line text-[var(--foreground)]/70">{f("intro_text")}</p>
+        </Container>
+      </section>
+
       <section className="py-20">
         <Container className="grid gap-8 sm:grid-cols-3">
           {features.map((ft) => (
@@ -48,13 +61,9 @@ export default async function MariagePage() {
         </Container>
       </section>
 
-      <section className="py-16 bg-[var(--background-muted)]">
-        <Container className="grid gap-4 sm:grid-cols-3">
-          {Array.from({ length: 3 }).map((_, i) => (
-            <div key={i} className="aspect-[4/3] rounded-xl bg-gradient-to-br from-[var(--accent)]/20 to-[var(--accent-warm)]/20" />
-          ))}
-        </Container>
-      </section>
+      <ZigzagSection title={f("zigzag1_title")} text={f("zigzag1_text")} image={photo(0)} reverse />
+      <ZigzagSection title={f("zigzag2_title")} text={f("zigzag2_text")} image={photo(1)} />
+      <ZigzagSection title={f("zigzag3_title")} text={f("zigzag3_text")} image={photo(2)} reverse />
 
       <CtaSection />
     </>

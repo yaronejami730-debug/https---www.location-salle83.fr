@@ -425,6 +425,14 @@ export function PageEditor({
             </Container>
           </section>
 
+          {schema.slug === "mariage" && (
+            <section className="py-16">
+              <Container className="max-w-2xl">
+                <EditableText value={val("intro_text")} onChange={set("intro_text")} className="whitespace-pre-line text-[var(--foreground)]/70" />
+              </Container>
+            </section>
+          )}
+
           <section className="py-16">
             <Container className="grid gap-6 sm:grid-cols-3">
               {[1, 2, 3].map((n) => (
@@ -436,12 +444,37 @@ export function PageEditor({
             </Container>
           </section>
 
+          {schema.slug === "mariage" &&
+            [1, 2, 3].map((n) => {
+              const photo = media[(n - 1) % Math.max(media.length, 1)];
+              return (
+                <section key={n} className="py-14">
+                  <Container className={`grid items-center gap-10 sm:grid-cols-2 ${n % 2 === 0 ? "" : "sm:[&>*:first-child]:order-2"}`}>
+                    <div className="relative aspect-[4/3] overflow-hidden rounded-2xl bg-black/5">
+                      {photo && <Image src={mediaUrl(photo.storage_path)} alt={photo.alt ?? ""} fill className="object-cover" sizes="500px" />}
+                    </div>
+                    <div>
+                      <EditableText
+                        as="h2"
+                        value={val(`zigzag${n}_title`)}
+                        onChange={set(`zigzag${n}_title`)}
+                        className="font-serif text-3xl italic text-[var(--accent-warm)]"
+                      />
+                      <EditableText
+                        value={val(`zigzag${n}_text`)}
+                        onChange={set(`zigzag${n}_text`)}
+                        className="mt-4 whitespace-pre-line text-[var(--foreground)]/70"
+                      />
+                    </div>
+                  </Container>
+                </section>
+              );
+            })}
+
           {schema.slug === "mariage" && (
-            <section className="py-12 bg-[var(--background-muted)]">
-              <Container>
-                <EditablePhotoGrid photos={media} page="mariage" aspect="aspect-[4/3]" />
-              </Container>
-            </section>
+            <p className="pb-8 text-center text-xs text-[var(--foreground)]/40">
+              Photos partagées avec la Galerie — modifiez-les depuis l&apos;éditeur Galerie.
+            </p>
           )}
         </>
       )}
@@ -452,6 +485,12 @@ export function PageEditor({
             <Container className="max-w-2xl">
               <EditableText as="h1" value={val("hero_title")} onChange={set("hero_title")} className="font-serif text-4xl text-[var(--foreground)]" />
               <EditableText value={val("hero_description")} onChange={set("hero_description")} className="mt-4 text-[var(--foreground)]/70" />
+            </Container>
+          </section>
+
+          <section className="py-16">
+            <Container className="max-w-2xl">
+              <EditableText value={val("intro_text")} onChange={set("intro_text")} className="whitespace-pre-line text-[var(--foreground)]/70" />
             </Container>
           </section>
 

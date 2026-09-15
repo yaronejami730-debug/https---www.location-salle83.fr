@@ -16,7 +16,7 @@ export default async function AdminPageEditorRoute({ params }: { params: Promise
     slug === "home" ? supabase.from("faqs").select("*").eq("page", "home").eq("published", true).order("sort_order") : Promise.resolve({ data: [] }),
     slug === "home" ? supabase.from("reviews").select("*").eq("published", true).order("sort_order") : Promise.resolve({ data: [] }),
     ["galerie", "home", "domaine", "mariage"].includes(slug)
-      ? supabase.from("media").select("*").eq("page", slug).order("sort_order")
+      ? supabase.from("media").select("*").eq("page", slug === "mariage" ? "galerie" : slug).order("sort_order")
       : Promise.resolve({ data: [] }),
     ["galerie", "home", "hebergement"].includes(slug)
       ? supabase.from("media").select("*").eq("page", "hebergement").order("sort_order")

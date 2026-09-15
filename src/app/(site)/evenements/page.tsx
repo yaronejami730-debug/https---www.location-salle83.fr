@@ -29,6 +29,12 @@ export default async function EvenementsPage() {
     <>
       <PageHero eyebrow="Événements & réceptions" title={f("hero_title")} description={f("hero_description")} />
 
+      <section className="py-16">
+        <Container className="max-w-2xl">
+          <p className="whitespace-pre-line text-[var(--foreground)]/70">{f("intro_text")}</p>
+        </Container>
+      </section>
+
       <section className="py-20">
         <Container className="grid grid-cols-2 gap-6 sm:grid-cols-4">
           {events.map((e) => (
