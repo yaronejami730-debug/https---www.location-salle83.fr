@@ -2,11 +2,21 @@ import type { Metadata } from "next";
 import { PageHero } from "@/components/page-hero";
 import { CtaSection } from "@/components/cta-section";
 import { Container } from "@/components/container";
+import { getPageContent } from "@/lib/content";
 
-export const metadata: Metadata = {
-  title: "Mariage",
-  description: "Organisez votre mariage au Domaine de la Bégude, à Fayence dans le Var : cérémonie, réception et hébergement sur place.",
-};
+const DEFAULT_TITLE = "Votre réception, votre ambiance, vos invités";
+const DEFAULT_DESCRIPTION =
+  "Un domaine privé en Provence pour célébrer votre union entourés des vôtres, du vin d'honneur à la soirée dansante.";
+
+export async function generateMetadata(): Promise<Metadata> {
+  const content = await getPageContent("mariage");
+  return {
+    title: content?.seo_title || "Mariage",
+    description:
+      content?.seo_description ||
+      "Organisez votre mariage au Domaine de la Bégude, à Fayence dans le Var : cérémonie, réception et hébergement sur place.",
+  };
+}
 
 const features = [
   { title: "Cérémonie", text: "Un cadre naturel pour une cérémonie laïque ou religieuse, en extérieur ou sous une charpente en pierre." },
@@ -14,13 +24,15 @@ const features = [
   { title: "Exclusivité", text: "Le domaine est privatisé pour votre événement, sans autre mariage le même jour." },
 ];
 
-export default function MariagePage() {
+export default async function MariagePage() {
+  const content = await getPageContent("mariage");
+
   return (
     <>
       <PageHero
         eyebrow="Mariage"
-        title="Votre réception, votre ambiance, vos invités"
-        description="Un domaine privé en Provence pour célébrer votre union entourés des vôtres, du vin d'honneur à la soirée dansante."
+        title={content?.hero_title || DEFAULT_TITLE}
+        description={content?.hero_description || DEFAULT_DESCRIPTION}
         image={{ src: "/images/mariage-hero.jpg", alt: "Bouquet de fleurs blanches pour décoration de mariage" }}
       />
 

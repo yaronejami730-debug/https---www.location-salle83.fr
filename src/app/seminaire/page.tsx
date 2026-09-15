@@ -2,11 +2,21 @@ import type { Metadata } from "next";
 import { PageHero } from "@/components/page-hero";
 import { CtaSection } from "@/components/cta-section";
 import { Container } from "@/components/container";
+import { getPageContent } from "@/lib/content";
 
-export const metadata: Metadata = {
-  title: "Séminaire",
-  description: "Organisez votre séminaire d'entreprise au Domaine de la Bégude, à Fayence dans le Var : salles équipées, cohésion d'équipe et hébergement.",
-};
+const DEFAULT_TITLE = "Travail, détente et cohésion dans un cadre privilégié";
+const DEFAULT_DESCRIPTION =
+  "Un domaine privé en Provence pour vos séminaires d'entreprise, entre espaces de travail et moments de convivialité.";
+
+export async function generateMetadata(): Promise<Metadata> {
+  const content = await getPageContent("seminaire");
+  return {
+    title: content?.seo_title || "Séminaire",
+    description:
+      content?.seo_description ||
+      "Organisez votre séminaire d'entreprise au Domaine de la Bégude, à Fayence dans le Var : salles équipées, cohésion d'équipe et hébergement.",
+  };
+}
 
 const features = [
   { title: "Salles de travail", text: "Espaces équipés, lumineux et modulables pour réunions, ateliers et conférences." },
@@ -14,13 +24,15 @@ const features = [
   { title: "Hébergement sur place", text: "15 hébergements permettent de loger vos équipes sans quitter le domaine." },
 ];
 
-export default function SeminairePage() {
+export default async function SeminairePage() {
+  const content = await getPageContent("seminaire");
+
   return (
     <>
       <PageHero
         eyebrow="Séminaire"
-        title="Travail, détente et cohésion dans un cadre privilégié"
-        description="Un domaine privé en Provence pour vos séminaires d'entreprise, entre espaces de travail et moments de convivialité."
+        title={content?.hero_title || DEFAULT_TITLE}
+        description={content?.hero_description || DEFAULT_DESCRIPTION}
       />
 
       <section className="py-20">

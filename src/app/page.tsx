@@ -1,7 +1,10 @@
+import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { Container } from "@/components/container";
 import { siteConfig } from "@/lib/site";
+import { getPageContent, getFaqs, getReviews, getMedia } from "@/lib/content";
+import { mediaUrl } from "@/lib/supabase-public";
 
 const stats = [
   { value: "3 ha", label: "de domaine" },
@@ -10,22 +13,43 @@ const stats = [
   { value: "Fayence", label: "Var" },
 ];
 
-const faqs = [
+const fallbackFaqs = [
   {
-    q: "Combien de personnes le domaine peut-il accueillir ?",
-    a: "Le domaine accueille jusqu'à 180 invités pour une réception assise, avec plusieurs espaces modulables en intérieur et extérieur.",
+    id: "fallback-1",
+    question: "Combien de personnes le domaine peut-il accueillir ?",
+    answer: "Le domaine accueille jusqu'à 180 invités pour une réception assise, avec plusieurs espaces modulables en intérieur et extérieur.",
   },
   {
-    q: "Peut-on dormir sur place ?",
-    a: "Oui, le domaine dispose de 15 hébergements permettant de loger une partie de vos invités directement sur place.",
+    id: "fallback-2",
+    question: "Peut-on dormir sur place ?",
+    answer: "Oui, le domaine dispose de 15 hébergements permettant de loger une partie de vos invités directement sur place.",
   },
   {
-    q: "Le domaine est-il privatisable en exclusivité ?",
-    a: "Oui, le domaine se privatise en exclusivité pour votre événement, sans autre réception le même jour.",
+    id: "fallback-3",
+    question: "Le domaine est-il privatisable en exclusivité ?",
+    answer: "Oui, le domaine se privatise en exclusivité pour votre événement, sans autre réception le même jour.",
   },
 ];
 
-export default function HomePage() {
+export async function generateMetadata(): Promise<Metadata> {
+  const content = await getPageContent("home");
+  if (!content?.seo_title && !content?.seo_description) return {};
+  return {
+    title: content.seo_title || undefined,
+    description: content.seo_description || undefined,
+  };
+}
+
+export default async function HomePage() {
+  const [content, faqs, reviews, galleryPhotos] = await Promise.all([
+    getPageContent("home"),
+    getFaqs("home"),
+    getReviews(),
+    getMedia("home"),
+  ]);
+
+  const displayFaqs = faqs.length > 0 ? faqs.map((f) => ({ id: f.id, question: f.question, answer: f.answer })) : fallbackFaqs;
+
   return (
     <>
       <section className="relative flex min-h-[85vh] items-center justify-center overflow-hidden text-center">
@@ -43,10 +67,10 @@ export default function HomePage() {
             {siteConfig.name} — {siteConfig.locality}
           </p>
           <h1 className="mt-6 max-w-3xl font-serif text-4xl leading-tight text-white sm:text-6xl">
-            {siteConfig.tagline}
+            {content?.hero_title || siteConfig.tagline}
           </h1>
           <p className="mt-6 max-w-xl text-base text-white/85">
-            Mariages · Séminaires · Réceptions · Événements privés
+            {content?.hero_description || "Mariages · Séminaires · Réceptions · Événements privés"}
           </p>
           <div className="mt-10 flex flex-col gap-4 sm:flex-row">
             <Link href="/domaine" className="rounded-full border border-white/40 px-7 py-3.5 text-sm text-white hover:bg-white/10">
@@ -110,9 +134,15 @@ export default function HomePage() {
         <Container>
           <h2 className="font-serif text-3xl text-[var(--foreground)]">Galerie</h2>
           <div className="mt-10 grid grid-cols-2 gap-4 sm:grid-cols-3">
-            {Array.from({ length: 6 }).map((_, i) => (
-              <div key={i} className="aspect-[4/3] rounded-xl bg-gradient-to-br from-[var(--accent)]/20 to-[var(--accent-warm)]/20" />
-            ))}
+            {galleryPhotos.length > 0
+              ? galleryPhotos.slice(0, 6).map((p) => (
+                  <div key={p.id} className="relative aspect-[4/3] overflow-hidden rounded-xl">
+                    <Image src={mediaUrl(p.storage_path)} alt={p.alt ?? ""} fill className="object-cover" sizes="400px" />
+                  </div>
+                ))
+              : Array.from({ length: 6 }).map((_, i) => (
+                  <div key={i} className="aspect-[4/3] rounded-xl bg-gradient-to-br from-[var(--accent)]/20 to-[var(--accent-warm)]/20" />
+                ))}
           </div>
           <div className="mt-8 text-center">
             <Link href="/galerie" className="text-sm text-[var(--accent)] hover:underline">
@@ -132,22 +162,39 @@ export default function HomePage() {
               directement sur place.
             </p>
             <Link href="/hebergement" className="mt-6 inline-block text-sm text-[var(--accent)] hover:underline">
-              Découvrir l'hébergement →
+              Découvrir l&apos;hébergement →
             </Link>
           </div>
         </Container>
       </section>
 
+      {reviews.length > 0 && (
+        <section className="py-20 bg-[var(--background-muted)]">
+          <Container>
+            <h2 className="text-center font-serif text-3xl text-[var(--foreground)]">Avis</h2>
+            <div className="mt-10 grid gap-6 sm:grid-cols-3">
+              {reviews.slice(0, 6).map((r) => (
+                <div key={r.id} className="rounded-2xl bg-[var(--background)] p-6">
+                  <p className="text-[var(--accent)]">{"★".repeat(r.rating)}</p>
+                  <p className="mt-3 text-sm text-[var(--foreground)]/70">{r.text}</p>
+                  <p className="mt-4 text-sm font-medium text-[var(--foreground)]">{r.author}</p>
+                </div>
+              ))}
+            </div>
+          </Container>
+        </section>
+      )}
+
       <section className="py-20 bg-[var(--background-muted)]">
         <Container>
           <h2 className="text-center font-serif text-3xl text-[var(--foreground)]">Questions fréquentes</h2>
           <div className="mx-auto mt-10 max-w-2xl divide-y divide-black/5">
-            {faqs.map((f) => (
-              <details key={f.q} className="group py-5">
+            {displayFaqs.map((f) => (
+              <details key={f.id} className="group py-5">
                 <summary className="cursor-pointer list-none font-medium text-[var(--foreground)]">
-                  {f.q}
+                  {f.question}
                 </summary>
-                <p className="mt-3 text-sm text-[var(--foreground)]/70">{f.a}</p>
+                <p className="mt-3 text-sm text-[var(--foreground)]/70">{f.answer}</p>
               </details>
             ))}
           </div>

@@ -2,11 +2,21 @@ import type { Metadata } from "next";
 import { PageHero } from "@/components/page-hero";
 import { CtaSection } from "@/components/cta-section";
 import { Container } from "@/components/container";
+import { getPageContent } from "@/lib/content";
 
-export const metadata: Metadata = {
-  title: "Événements & réceptions",
-  description: "Anniversaires, réceptions privées, tournages, shootings : privatisez le Domaine de la Bégude à Fayence pour votre événement.",
-};
+const DEFAULT_TITLE = "Un cadre unique pour tous vos événements privés";
+const DEFAULT_DESCRIPTION =
+  "Anniversaire, réception, tournage ou dîner privé : le domaine se privatise pour donner vie à votre projet.";
+
+export async function generateMetadata(): Promise<Metadata> {
+  const content = await getPageContent("evenements");
+  return {
+    title: content?.seo_title || "Événements & réceptions",
+    description:
+      content?.seo_description ||
+      "Anniversaires, réceptions privées, tournages, shootings : privatisez le Domaine de la Bégude à Fayence pour votre événement.",
+  };
+}
 
 const events = ["Anniversaires", "Réceptions privées", "Tournages & shootings", "Dîners de gala"];
 
@@ -19,13 +29,15 @@ const pricingRows = [
   { people: "-110 pers.", salle: 2400, lendemain: 450, piscine: 350, vaisselle: 150, cuisine: 290 },
 ];
 
-export default function EvenementsPage() {
+export default async function EvenementsPage() {
+  const content = await getPageContent("evenements");
+
   return (
     <>
       <PageHero
         eyebrow="Événements & réceptions"
-        title="Un cadre unique pour tous vos événements privés"
-        description="Anniversaire, réception, tournage ou dîner privé : le domaine se privatise pour donner vie à votre projet."
+        title={content?.hero_title || DEFAULT_TITLE}
+        description={content?.hero_description || DEFAULT_DESCRIPTION}
       />
 
       <section className="py-20">
