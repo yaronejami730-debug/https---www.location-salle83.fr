@@ -1,69 +1,160 @@
-import Image from "next/image";
+import Link from "next/link";
+import { Container } from "@/components/container";
+import { siteConfig } from "@/lib/site";
 
-export default function Home() {
+const stats = [
+  { value: "3 ha", label: "de domaine" },
+  { value: "15", label: "hébergements" },
+  { value: "180", label: "invités max" },
+  { value: "Fayence", label: "Var" },
+];
+
+const faqs = [
+  {
+    q: "Combien de personnes le domaine peut-il accueillir ?",
+    a: "Le domaine accueille jusqu'à 180 invités pour une réception assise, avec plusieurs espaces modulables en intérieur et extérieur.",
+  },
+  {
+    q: "Peut-on dormir sur place ?",
+    a: "Oui, le domaine dispose de 15 hébergements permettant de loger une partie de vos invités directement sur place.",
+  },
+  {
+    q: "Le domaine est-il privatisable en exclusivité ?",
+    a: "Oui, le domaine se privatise en exclusivité pour votre événement, sans autre réception le même jour.",
+  },
+];
+
+export default function HomePage() {
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert h-5 w-[100px]"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the{" "}
-            <code className="rounded bg-black/[.06] px-1.5 py-0.5 font-mono text-[0.9em] dark:bg-white/[.08]">
-              page.tsx
-            </code>{" "}
-            file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
+    <>
+      <section className="relative flex min-h-[85vh] items-center justify-center overflow-hidden bg-gradient-to-b from-[var(--background-muted)] to-[var(--background)] text-center">
+        <Container className="relative z-10 flex flex-col items-center py-24">
+          <p className="text-sm tracking-[0.2em] text-[var(--accent)] uppercase">
+            {siteConfig.name} — {siteConfig.locality}
           </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert h-[14px] w-4"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={14}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
-    </div>
+          <h1 className="mt-6 max-w-3xl font-serif text-4xl leading-tight text-[var(--foreground)] sm:text-6xl">
+            {siteConfig.tagline}
+          </h1>
+          <p className="mt-6 max-w-xl text-base text-[var(--foreground)]/70">
+            Mariages · Séminaires · Réceptions · Événements privés
+          </p>
+          <div className="mt-10 flex flex-col gap-4 sm:flex-row">
+            <Link href="/domaine" className="rounded-full border border-[var(--foreground)]/20 px-7 py-3.5 text-sm hover:bg-black/5">
+              Découvrir le domaine
+            </Link>
+            <Link href="/contact" className="rounded-full bg-[var(--accent)] px-7 py-3.5 text-sm text-white hover:opacity-90">
+              Préparer mon événement
+            </Link>
+          </div>
+        </Container>
+      </section>
+
+      <section className="py-20">
+        <Container className="max-w-2xl text-center">
+          <h2 className="font-serif text-3xl text-[var(--foreground)]">Le lieu</h2>
+          <p className="mt-5 text-[var(--foreground)]/70">
+            Un domaine pensé pour accueillir vos plus beaux moments : nature préservée, bâtisses en pierre,
+            lumière de Provence et attention portée à chaque détail. Ici, chaque événement devient une expérience.
+          </p>
+        </Container>
+      </section>
+
+      <section className="py-20 bg-[var(--background-muted)]">
+        <Container className="grid gap-8 sm:grid-cols-2">
+          <div className="rounded-2xl bg-[var(--background)] p-10">
+            <h3 className="font-serif text-2xl">Mariage</h3>
+            <p className="mt-3 text-sm text-[var(--foreground)]/70">
+              Votre réception, votre ambiance, vos invités.
+            </p>
+            <Link href="/mariage" className="mt-6 inline-block text-sm text-[var(--accent)] hover:underline">
+              Découvrir les mariages →
+            </Link>
+          </div>
+          <div className="rounded-2xl bg-[var(--background)] p-10">
+            <h3 className="font-serif text-2xl">Séminaire</h3>
+            <p className="mt-3 text-sm text-[var(--foreground)]/70">
+              Travail, détente et cohésion dans un cadre privilégié.
+            </p>
+            <Link href="/seminaire" className="mt-6 inline-block text-sm text-[var(--accent)] hover:underline">
+              Découvrir les séminaires →
+            </Link>
+          </div>
+        </Container>
+      </section>
+
+      <section className="py-20">
+        <Container>
+          <h2 className="text-center font-serif text-3xl text-[var(--foreground)]">Le domaine en quelques chiffres</h2>
+          <div className="mt-12 grid grid-cols-2 gap-8 sm:grid-cols-4">
+            {stats.map((s) => (
+              <div key={s.label} className="text-center">
+                <p className="font-serif text-3xl text-[var(--accent)]">{s.value}</p>
+                <p className="mt-1 text-sm text-[var(--foreground)]/60">{s.label}</p>
+              </div>
+            ))}
+          </div>
+        </Container>
+      </section>
+
+      <section className="py-20 bg-[var(--background-muted)]">
+        <Container>
+          <h2 className="font-serif text-3xl text-[var(--foreground)]">Galerie</h2>
+          <div className="mt-10 grid grid-cols-2 gap-4 sm:grid-cols-3">
+            {Array.from({ length: 6 }).map((_, i) => (
+              <div key={i} className="aspect-[4/3] rounded-xl bg-gradient-to-br from-[var(--accent)]/20 to-[var(--accent-warm)]/20" />
+            ))}
+          </div>
+          <div className="mt-8 text-center">
+            <Link href="/galerie" className="text-sm text-[var(--accent)] hover:underline">
+              Voir la galerie complète →
+            </Link>
+          </div>
+        </Container>
+      </section>
+
+      <section className="py-20">
+        <Container className="grid items-center gap-10 sm:grid-cols-2">
+          <div className="aspect-[4/3] rounded-xl bg-gradient-to-br from-[var(--accent-warm)]/20 to-[var(--accent)]/20" />
+          <div>
+            <h2 className="font-serif text-3xl text-[var(--foreground)]">Hébergement</h2>
+            <p className="mt-4 text-[var(--foreground)]/70">
+              15 mazets et chambres répartis sur le domaine pour prolonger la fête et accueillir vos proches
+              directement sur place.
+            </p>
+            <Link href="/hebergement" className="mt-6 inline-block text-sm text-[var(--accent)] hover:underline">
+              Découvrir l'hébergement →
+            </Link>
+          </div>
+        </Container>
+      </section>
+
+      <section className="py-20 bg-[var(--background-muted)]">
+        <Container>
+          <h2 className="text-center font-serif text-3xl text-[var(--foreground)]">Questions fréquentes</h2>
+          <div className="mx-auto mt-10 max-w-2xl divide-y divide-black/5">
+            {faqs.map((f) => (
+              <details key={f.q} className="group py-5">
+                <summary className="cursor-pointer list-none font-medium text-[var(--foreground)]">
+                  {f.q}
+                </summary>
+                <p className="mt-3 text-sm text-[var(--foreground)]/70">{f.a}</p>
+              </details>
+            ))}
+          </div>
+        </Container>
+      </section>
+
+      <section className="py-24 text-center">
+        <Container className="max-w-xl">
+          <h2 className="font-serif text-3xl text-[var(--foreground)]">Parlons de votre projet</h2>
+          <p className="mt-4 text-[var(--foreground)]/70">
+            Recevez une proposition personnalisée sous 48h.
+          </p>
+          <Link href="/contact" className="mt-8 inline-flex rounded-full bg-[var(--accent)] px-8 py-3.5 text-sm text-white hover:opacity-90">
+            Demander un devis
+          </Link>
+        </Container>
+      </section>
+    </>
   );
 }
