@@ -6,7 +6,7 @@ import { useState } from "react";
 import { z } from "zod";
 import { DatePicker } from "./date-picker";
 import { computeQuote, findBracket, pricingBrackets } from "@/lib/pricing";
-import { submitLead } from "@/app/contact/actions";
+import { submitLead } from "@/app/(site)/contact/actions";
 
 const schema = z.object({
   eventType: z.enum(["mariage", "seminaire", "reception", "autre"]),
