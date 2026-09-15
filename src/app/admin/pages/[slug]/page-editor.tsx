@@ -277,6 +277,16 @@ export function PageEditor({
                 ))}
               </Container>
             </section>
+
+            {schema.slug === "mariage" && (
+              <section className="py-12 bg-[var(--background-muted)]">
+                <Container className="grid gap-4 sm:grid-cols-3">
+                  {Array.from({ length: 3 }).map((_, i) => (
+                    <div key={i} className="aspect-[4/3] rounded-xl bg-gradient-to-br from-[var(--accent)]/20 to-[var(--accent-warm)]/20" />
+                  ))}
+                </Container>
+              </section>
+            )}
           </>
         )}
 
