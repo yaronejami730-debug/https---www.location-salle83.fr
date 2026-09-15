@@ -1,9 +1,10 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import { useState } from "react";
 import { z } from "zod";
+import { DatePicker } from "./date-picker";
 
 const schema = z.object({
   eventType: z.enum(["mariage", "seminaire", "reception", "autre"]),
@@ -30,6 +31,7 @@ export function ContactForm() {
   const {
     register,
     handleSubmit,
+    control,
     formState: { errors },
     reset,
   } = useForm<FormValues>({
@@ -87,7 +89,11 @@ export function ContactForm() {
       <div className="grid gap-6 sm:grid-cols-2">
         <div>
           <label className="mb-2 block text-sm text-[var(--foreground)]/80">Date souhaitée</label>
-          <input type="date" {...register("eventDate")} className="w-full rounded-lg border border-black/10 px-4 py-3 text-sm" />
+          <Controller
+            name="eventDate"
+            control={control}
+            render={({ field }) => <DatePicker value={field.value} onChange={field.onChange} />}
+          />
         </div>
         <div>
           <label className="mb-2 block text-sm text-[var(--foreground)]/80">Nombre de personnes</label>
