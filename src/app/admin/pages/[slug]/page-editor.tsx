@@ -60,25 +60,28 @@ function EditablePhotoGrid({ photos, page, aspect = "aspect-square" }: { photos:
   const [pending, startTransition] = useTransition();
   const [order, setOrder] = useState(photos);
   const [dragId, setDragId] = useState<string | null>(null);
-  const [overId, setOverId] = useState<string | null>(null);
+  const dragging = dragId !== null;
 
-  useEffect(() => setOrder(photos), [photos]);
+  useEffect(() => {
+    if (!dragging) setOrder(photos);
+  }, [photos, dragging]);
 
-  function handleDrop(targetId: string) {
-    if (!dragId || dragId === targetId) {
-      setDragId(null);
-      setOverId(null);
-      return;
-    }
-    const next = [...order];
-    const fromIndex = next.findIndex((p) => p.id === dragId);
-    const toIndex = next.findIndex((p) => p.id === targetId);
-    const [moved] = next.splice(fromIndex, 1);
-    next.splice(toIndex, 0, moved);
-    setOrder(next);
+  function moveOver(targetId: string) {
+    if (!dragId || dragId === targetId) return;
+    setOrder((current) => {
+      const fromIndex = current.findIndex((p) => p.id === dragId);
+      const toIndex = current.findIndex((p) => p.id === targetId);
+      if (fromIndex === -1 || toIndex === -1) return current;
+      const next = [...current];
+      const [moved] = next.splice(fromIndex, 1);
+      next.splice(toIndex, 0, moved);
+      return next;
+    });
+  }
+
+  function commitOrder() {
+    if (dragId) startTransition(() => reorderPhotos(page, order.map((p) => p.id)));
     setDragId(null);
-    setOverId(null);
-    startTransition(() => reorderPhotos(page, next.map((p) => p.id)));
   }
 
   return (
@@ -90,17 +93,16 @@ function EditablePhotoGrid({ photos, page, aspect = "aspect-square" }: { photos:
           onDragStart={() => setDragId(p.id)}
           onDragOver={(e) => {
             e.preventDefault();
-            if (overId !== p.id) setOverId(p.id);
+            moveOver(p.id);
           }}
-          onDragLeave={() => setOverId((cur) => (cur === p.id ? null : cur))}
-          onDrop={() => handleDrop(p.id)}
-          onDragEnd={() => {
-            setDragId(null);
-            setOverId(null);
+          onDrop={(e) => {
+            e.preventDefault();
+            commitOrder();
           }}
-          className={`group relative ${aspect} overflow-hidden rounded-xl bg-black/5 ring-2 transition-all ${
-            overId === p.id ? "ring-[var(--accent)]" : "ring-transparent"
-          } ${dragId === p.id ? "opacity-40" : ""}`}
+          onDragEnd={commitOrder}
+          className={`group relative ${aspect} overflow-hidden rounded-xl bg-black/5 transition-transform ${
+            dragId === p.id ? "scale-95 opacity-50" : ""
+          }`}
         >
           <Image src={mediaUrl(p.storage_path)} alt={p.alt ?? ""} fill className="object-cover" sizes="300px" />
 
