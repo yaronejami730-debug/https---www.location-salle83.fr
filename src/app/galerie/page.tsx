@@ -5,7 +5,7 @@ import { CtaSection } from "@/components/cta-section";
 import { Container } from "@/components/container";
 import { getPageContent, getMedia } from "@/lib/content";
 import { mediaUrl } from "@/lib/supabase-public";
-import { staticGalleryPhotos } from "@/lib/static-gallery";
+import { staticGalleryPhotos, staticHebergementPhotos } from "@/lib/static-gallery";
 import { getSchema, fieldValue } from "@/lib/page-schemas";
 
 const schema = getSchema("galerie")!;
@@ -20,27 +20,44 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function GaleriePage() {
-  const [pageContent, photos] = await Promise.all([getPageContent("galerie"), getMedia("galerie")]);
+  const [pageContent, eventPhotos, hebergementPhotos] = await Promise.all([
+    getPageContent("galerie"),
+    getMedia("galerie"),
+    getMedia("hebergement"),
+  ]);
   const c = pageContent?.content ?? {};
   const f = (key: string) => fieldValue(c, schema.fields.find((x) => x.key === key)!);
+
+  const events = eventPhotos.length > 0 ? eventPhotos.map((p) => ({ key: p.id, src: mediaUrl(p.storage_path), alt: p.alt ?? "" })) : staticGalleryPhotos.map((p) => ({ key: p.src, ...p }));
+  const hebergement = hebergementPhotos.length > 0 ? hebergementPhotos.map((p) => ({ key: p.id, src: mediaUrl(p.storage_path), alt: p.alt ?? "" })) : staticHebergementPhotos.map((p) => ({ key: p.src, ...p }));
 
   return (
     <>
       <PageHero eyebrow="Galerie" title={f("hero_title")} description={f("hero_description")} />
 
       <section className="py-20">
-        <Container className="grid grid-cols-2 gap-4 sm:grid-cols-3">
-          {photos.length > 0
-            ? photos.map((p) => (
-                <div key={p.id} className="relative aspect-square overflow-hidden rounded-xl">
-                  <Image src={mediaUrl(p.storage_path)} alt={p.alt ?? ""} fill className="object-cover" sizes="400px" />
-                </div>
-              ))
-            : staticGalleryPhotos.map((p) => (
-                <div key={p.src} className="relative aspect-square overflow-hidden rounded-xl">
-                  <Image src={p.src} alt={p.alt} fill className="object-cover" sizes="400px" />
-                </div>
-              ))}
+        <Container>
+          <h2 className="font-serif text-2xl text-[var(--foreground)]">{f("events_title")}</h2>
+          <div className="mt-6 grid grid-cols-2 gap-4 sm:grid-cols-3">
+            {events.map((p) => (
+              <div key={p.key} className="relative aspect-square overflow-hidden rounded-xl">
+                <Image src={p.src} alt={p.alt} fill className="object-cover" sizes="400px" />
+              </div>
+            ))}
+          </div>
+        </Container>
+      </section>
+
+      <section className="pb-20">
+        <Container>
+          <h2 className="font-serif text-2xl text-[var(--foreground)]">{f("hebergement_title")}</h2>
+          <div className="mt-6 grid grid-cols-2 gap-4 sm:grid-cols-3">
+            {hebergement.map((p) => (
+              <div key={p.key} className="relative aspect-square overflow-hidden rounded-xl">
+                <Image src={p.src} alt={p.alt} fill className="object-cover" sizes="400px" />
+              </div>
+            ))}
+          </div>
         </Container>
       </section>
 

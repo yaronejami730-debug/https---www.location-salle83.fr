@@ -99,6 +99,8 @@ export const pageSchemas: PageSchema[] = [
     fields: [
       { key: "hero_title", label: "Hero — titre", type: "text", default: "Le domaine en images" },
       { key: "hero_description", label: "Hero — sous-titre", type: "textarea", default: "Un aperçu des lieux, des réceptions et des hébergements du domaine." },
+      { key: "events_title", label: "Section 1 — titre", type: "text", default: "Mariages & séminaires" },
+      { key: "hebergement_title", label: "Section 2 — titre", type: "text", default: "Hébergement" },
     ],
   },
   {
