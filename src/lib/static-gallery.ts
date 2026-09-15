@@ -16,3 +16,8 @@ export const staticGalleryPhotos = [
   "IMG_7462.jpg",
   "IMG_7464.jpg",
 ].map((file) => ({ src: `/images/galerie/${file}`, alt: "Photo du Domaine de la Bégude" }));
+
+export const staticHebergementPhotos = [1, 2, 3, 4, 5].map((n) => ({
+  src: `/images/hebergement/hebergement-${n}.jpg`,
+  alt: "Hébergement du Domaine de la Bégude",
+}));

@@ -23,6 +23,8 @@ export default async function AdminDashboard() {
               <th className="px-4 py-3 font-medium">Contact</th>
               <th className="px-4 py-3 font-medium">Événement</th>
               <th className="px-4 py-3 font-medium">Invités</th>
+              <th className="px-4 py-3 font-medium">Options</th>
+              <th className="px-4 py-3 font-medium">Estimation</th>
               <th className="px-4 py-3 font-medium">Statut</th>
             </tr>
           </thead>
@@ -40,6 +42,20 @@ export default async function AdminDashboard() {
                 </td>
                 <td className="px-4 py-3 text-[var(--foreground)]/70">{lead.event_date ?? "—"}</td>
                 <td className="px-4 py-3 text-[var(--foreground)]/70">{lead.guest_count ?? "—"}</td>
+                <td className="px-4 py-3 text-xs text-[var(--foreground)]/70">
+                  {[
+                    lead.option_lendemain && "Lendemain",
+                    lead.option_piscine && "Piscine",
+                    lead.option_vaisselle && "Vaisselle",
+                    lead.option_cuisine && "Cuisine",
+                    lead.option_chapiteau_count > 0 && `${lead.option_chapiteau_count} chapiteau(x)`,
+                  ]
+                    .filter(Boolean)
+                    .join(", ") || "—"}
+                </td>
+                <td className="px-4 py-3 font-medium text-[var(--foreground)]">
+                  {lead.estimated_total ? `${lead.estimated_total} €` : "—"}
+                </td>
                 <td className="px-4 py-3">
                   <LeadStatusSelect id={lead.id} status={lead.status} />
                 </td>
@@ -47,7 +63,7 @@ export default async function AdminDashboard() {
             ))}
             {(leads ?? []).length === 0 && (
               <tr>
-                <td colSpan={7} className="px-4 py-10 text-center text-[var(--foreground)]/50">
+                <td colSpan={9} className="px-4 py-10 text-center text-[var(--foreground)]/50">
                   Aucune demande pour le moment.
                 </td>
               </tr>

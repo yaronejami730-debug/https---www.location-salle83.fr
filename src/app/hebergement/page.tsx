@@ -5,6 +5,7 @@ import { CtaSection } from "@/components/cta-section";
 import { Container } from "@/components/container";
 import { getPageContent, getMedia } from "@/lib/content";
 import { mediaUrl } from "@/lib/supabase-public";
+import { staticHebergementPhotos } from "@/lib/static-gallery";
 
 const DEFAULT_TITLE = "15 hébergements au cœur du domaine";
 const DEFAULT_DESCRIPTION =
@@ -39,8 +40,10 @@ export default async function HebergementPage() {
                   <Image src={mediaUrl(p.storage_path)} alt={p.alt ?? ""} fill className="object-cover" sizes="400px" />
                 </div>
               ))
-            : Array.from({ length: 6 }).map((_, i) => (
-                <div key={i} className="aspect-[4/3] rounded-xl bg-gradient-to-br from-[var(--accent-warm)]/20 to-[var(--accent)]/20" />
+            : staticHebergementPhotos.map((p) => (
+                <div key={p.src} className="relative aspect-[4/3] overflow-hidden rounded-xl">
+                  <Image src={p.src} alt={p.alt} fill className="object-cover" sizes="400px" />
+                </div>
               ))}
         </Container>
       </section>

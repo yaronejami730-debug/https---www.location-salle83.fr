@@ -5,7 +5,7 @@ import { Container } from "@/components/container";
 import { siteConfig } from "@/lib/site";
 import { getPageContent, getFaqs, getReviews, getMedia } from "@/lib/content";
 import { mediaUrl } from "@/lib/supabase-public";
-import { staticGalleryPhotos } from "@/lib/static-gallery";
+import { staticGalleryPhotos, staticHebergementPhotos } from "@/lib/static-gallery";
 
 const stats = [
   { value: "3 ha", label: "de domaine" },
@@ -157,7 +157,9 @@ export default async function HomePage() {
 
       <section className="py-20">
         <Container className="grid items-center gap-10 sm:grid-cols-2">
-          <div className="aspect-[4/3] rounded-xl bg-gradient-to-br from-[var(--accent-warm)]/20 to-[var(--accent)]/20" />
+          <div className="relative aspect-[4/3] overflow-hidden rounded-xl">
+            <Image src={staticHebergementPhotos[0].src} alt={staticHebergementPhotos[0].alt} fill className="object-cover" sizes="500px" />
+          </div>
           <div>
             <h2 className="font-serif text-3xl text-[var(--foreground)]">Hébergement</h2>
             <p className="mt-4 text-[var(--foreground)]/70">
