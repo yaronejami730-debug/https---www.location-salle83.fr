@@ -5,6 +5,7 @@ import { CtaSection } from "@/components/cta-section";
 import { Container } from "@/components/container";
 import { getPageContent, getMedia } from "@/lib/content";
 import { mediaUrl } from "@/lib/supabase-public";
+import { staticGalleryPhotos } from "@/lib/static-gallery";
 
 const DEFAULT_TITLE = "Le domaine en images";
 const DEFAULT_DESCRIPTION = "Un aperçu des lieux, des réceptions et des hébergements du domaine.";
@@ -37,8 +38,10 @@ export default async function GaleriePage() {
                   <Image src={mediaUrl(p.storage_path)} alt={p.alt ?? ""} fill className="object-cover" sizes="400px" />
                 </div>
               ))
-            : Array.from({ length: 12 }).map((_, i) => (
-                <div key={i} className="aspect-square rounded-xl bg-gradient-to-br from-[var(--accent)]/20 to-[var(--accent-warm)]/20" />
+            : staticGalleryPhotos.map((p) => (
+                <div key={p.src} className="relative aspect-square overflow-hidden rounded-xl">
+                  <Image src={p.src} alt={p.alt} fill className="object-cover" sizes="400px" />
+                </div>
               ))}
         </Container>
       </section>

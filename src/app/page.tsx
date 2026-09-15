@@ -5,6 +5,7 @@ import { Container } from "@/components/container";
 import { siteConfig } from "@/lib/site";
 import { getPageContent, getFaqs, getReviews, getMedia } from "@/lib/content";
 import { mediaUrl } from "@/lib/supabase-public";
+import { staticGalleryPhotos } from "@/lib/static-gallery";
 
 const stats = [
   { value: "3 ha", label: "de domaine" },
@@ -140,8 +141,10 @@ export default async function HomePage() {
                     <Image src={mediaUrl(p.storage_path)} alt={p.alt ?? ""} fill className="object-cover" sizes="400px" />
                   </div>
                 ))
-              : Array.from({ length: 6 }).map((_, i) => (
-                  <div key={i} className="aspect-[4/3] rounded-xl bg-gradient-to-br from-[var(--accent)]/20 to-[var(--accent-warm)]/20" />
+              : staticGalleryPhotos.slice(0, 6).map((p) => (
+                  <div key={p.src} className="relative aspect-[4/3] overflow-hidden rounded-xl">
+                    <Image src={p.src} alt={p.alt} fill className="object-cover" sizes="400px" />
+                  </div>
                 ))}
           </div>
           <div className="mt-8 text-center">
