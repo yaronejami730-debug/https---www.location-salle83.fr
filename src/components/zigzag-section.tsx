@@ -9,12 +9,14 @@ export function ZigzagSection({
   text,
   images,
   intervalMs = 6000,
+  startDelayMs = 0,
   reverse = false,
 }: {
   title: string;
   text: string;
   images: { src: string; alt: string }[];
   intervalMs?: number;
+  startDelayMs?: number;
   reverse?: boolean;
 }) {
   const ref = useRef<HTMLElement>(null);
@@ -41,7 +43,7 @@ export function ZigzagSection({
             visible ? "translate-y-0 opacity-100" : "translate-y-8 opacity-0"
           }`}
         >
-          <FadeCarousel photos={images} intervalMs={intervalMs} />
+          <FadeCarousel photos={images} intervalMs={intervalMs} startDelayMs={startDelayMs} />
         </div>
         <div
           className={`transition-all duration-1000 ease-out ${visible ? "translate-y-0 opacity-100" : "translate-y-8 opacity-0"}`}

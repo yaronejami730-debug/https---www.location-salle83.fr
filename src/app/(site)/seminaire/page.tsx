@@ -36,9 +36,9 @@ export default async function SeminairePage() {
       : [staticGalleryPhotos[fallbackIndex % staticGalleryPhotos.length]];
 
   const features = [
-    { n: 1, title: f("feature1_title"), text: f("feature1_text"), images: toImages(zigzag1, 3), interval: Number(f("feature1_interval")) * 1000 },
-    { n: 2, title: f("feature2_title"), text: f("feature2_text"), images: toImages(zigzag2, 4), interval: Number(f("feature2_interval")) * 1000 },
-    { n: 3, title: f("feature3_title"), text: f("feature3_text"), images: toImages(zigzag3, 5), interval: Number(f("feature3_interval")) * 1000 },
+    { n: 1, title: f("feature1_title"), text: f("feature1_text"), images: toImages(zigzag1, 3), interval: Number(f("feature1_interval")) * 1000, delay: 0 },
+    { n: 2, title: f("feature2_title"), text: f("feature2_text"), images: toImages(zigzag2, 4), interval: Number(f("feature2_interval")) * 1000, delay: 2200 },
+    { n: 3, title: f("feature3_title"), text: f("feature3_text"), images: toImages(zigzag3, 5), interval: Number(f("feature3_interval")) * 1000, delay: 4400 },
   ];
 
   return (
@@ -48,7 +48,7 @@ export default async function SeminairePage() {
       <IntroSection title={f("intro_title")} text={f("intro_text")} />
 
       {features.map((ft) => (
-        <ZigzagSection key={ft.n} title={ft.title} text={ft.text} images={ft.images} intervalMs={ft.interval} reverse={ft.n % 2 === 0} />
+        <ZigzagSection key={ft.n} title={ft.title} text={ft.text} images={ft.images} intervalMs={ft.interval} startDelayMs={ft.delay} reverse={ft.n % 2 === 0} />
       ))}
 
       <CtaSection />

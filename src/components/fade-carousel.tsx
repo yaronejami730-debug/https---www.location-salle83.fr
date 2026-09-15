@@ -3,14 +3,29 @@
 import Image from "next/image";
 import { useEffect, useState } from "react";
 
-export function FadeCarousel({ photos, intervalMs = 6000 }: { photos: { src: string; alt: string }[]; intervalMs?: number }) {
+export function FadeCarousel({
+  photos,
+  intervalMs = 6000,
+  startDelayMs = 0,
+}: {
+  photos: { src: string; alt: string }[];
+  intervalMs?: number;
+  startDelayMs?: number;
+}) {
   const [index, setIndex] = useState(0);
 
   useEffect(() => {
     if (photos.length <= 1) return;
-    const id = setInterval(() => setIndex((i) => (i + 1) % photos.length), intervalMs);
-    return () => clearInterval(id);
-  }, [photos.length, intervalMs]);
+    let intervalId: ReturnType<typeof setInterval>;
+    const timeoutId = setTimeout(() => {
+      setIndex((i) => (i + 1) % photos.length);
+      intervalId = setInterval(() => setIndex((i) => (i + 1) % photos.length), intervalMs);
+    }, startDelayMs);
+    return () => {
+      clearTimeout(timeoutId);
+      clearInterval(intervalId);
+    };
+  }, [photos.length, intervalMs, startDelayMs]);
 
   if (photos.length === 0) return null;
 
@@ -22,7 +37,7 @@ export function FadeCarousel({ photos, intervalMs = 6000 }: { photos: { src: str
           src={p.src}
           alt={p.alt}
           fill
-          className={`object-cover transition-opacity duration-1000 ${i === index ? "opacity-100" : "opacity-0"}`}
+          className={`object-cover transition-opacity ease-in-out duration-[2200ms] ${i === index ? "opacity-100" : "opacity-0"}`}
           sizes="500px"
         />
       ))}
