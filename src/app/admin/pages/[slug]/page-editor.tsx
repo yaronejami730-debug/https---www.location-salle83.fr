@@ -2,10 +2,10 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useState, useTransition } from "react";
+import { useEffect, useState, useTransition } from "react";
 import { EditableText } from "../editable-text";
 import { savePageContent } from "../actions";
-import { uploadPhoto, deletePhoto, reorderPhoto, replacePhoto } from "../../(dashboard)/photos/actions";
+import { uploadPhoto, deletePhoto, reorderPhotos, replacePhoto } from "../../(dashboard)/photos/actions";
 import type { PageSchema } from "@/lib/page-schemas";
 import { pricingBrackets } from "@/lib/pricing";
 import { mediaUrl } from "@/lib/supabase-public";
@@ -29,45 +29,88 @@ function ManagedBadge({ label, href }: { label: string; href: string }) {
   );
 }
 
+function GripIcon() {
+  return (
+    <svg width="14" height="14" viewBox="0 0 14 14" fill="currentColor">
+      {[2, 7, 12].flatMap((cy) => [3, 7, 11].map((cx) => <circle key={`${cx}-${cy}`} cx={cx} cy={cy} r="1.3" />))}
+    </svg>
+  );
+}
+
+function PencilIcon() {
+  return (
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M12 20h9" />
+      <path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z" />
+    </svg>
+  );
+}
+
+function TrashIcon() {
+  return (
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M3 6h18" />
+      <path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
+      <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6" />
+    </svg>
+  );
+}
+
 function EditablePhotoGrid({ photos, page, aspect = "aspect-square" }: { photos: MediaRow[]; page: string; aspect?: string }) {
   const [pending, startTransition] = useTransition();
+  const [order, setOrder] = useState(photos);
+  const [dragId, setDragId] = useState<string | null>(null);
+  const [overId, setOverId] = useState<string | null>(null);
+
+  useEffect(() => setOrder(photos), [photos]);
+
+  function handleDrop(targetId: string) {
+    if (!dragId || dragId === targetId) {
+      setDragId(null);
+      setOverId(null);
+      return;
+    }
+    const next = [...order];
+    const fromIndex = next.findIndex((p) => p.id === dragId);
+    const toIndex = next.findIndex((p) => p.id === targetId);
+    const [moved] = next.splice(fromIndex, 1);
+    next.splice(toIndex, 0, moved);
+    setOrder(next);
+    setDragId(null);
+    setOverId(null);
+    startTransition(() => reorderPhotos(page, next.map((p) => p.id)));
+  }
 
   return (
     <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
-      {photos.map((p, i) => (
-        <div key={p.id} className={`group relative ${aspect} overflow-hidden rounded-xl bg-black/5`}>
+      {order.map((p) => (
+        <div
+          key={p.id}
+          draggable
+          onDragStart={() => setDragId(p.id)}
+          onDragOver={(e) => {
+            e.preventDefault();
+            if (overId !== p.id) setOverId(p.id);
+          }}
+          onDragLeave={() => setOverId((cur) => (cur === p.id ? null : cur))}
+          onDrop={() => handleDrop(p.id)}
+          onDragEnd={() => {
+            setDragId(null);
+            setOverId(null);
+          }}
+          className={`group relative ${aspect} overflow-hidden rounded-xl bg-black/5 ring-2 transition-all ${
+            overId === p.id ? "ring-[var(--accent)]" : "ring-transparent"
+          } ${dragId === p.id ? "opacity-40" : ""}`}
+        >
           <Image src={mediaUrl(p.storage_path)} alt={p.alt ?? ""} fill className="object-cover" sizes="300px" />
-          <div className="absolute inset-0 flex flex-col justify-between bg-black/0 p-2 opacity-0 transition-opacity group-hover:bg-black/25 group-hover:opacity-100">
-            <div className="flex items-start justify-between">
-              <div className="flex gap-1">
-                <button
-                  type="button"
-                  disabled={pending || i === 0}
-                  onClick={() => startTransition(() => reorderPhoto(p.id, page, "up"))}
-                  className="flex h-6 w-6 items-center justify-center rounded-full bg-black/70 text-xs text-white disabled:opacity-30"
-                >
-                  ←
-                </button>
-                <button
-                  type="button"
-                  disabled={pending || i === photos.length - 1}
-                  onClick={() => startTransition(() => reorderPhoto(p.id, page, "down"))}
-                  className="flex h-6 w-6 items-center justify-center rounded-full bg-black/70 text-xs text-white disabled:opacity-30"
-                >
-                  →
-                </button>
-              </div>
-              <button
-                type="button"
-                disabled={pending}
-                onClick={() => startTransition(() => deletePhoto(p.id, p.storage_path))}
-                className="flex h-6 w-6 items-center justify-center rounded-full bg-black/70 text-xs text-white disabled:opacity-30"
-              >
-                ✕
-              </button>
-            </div>
-            <label className="cursor-pointer self-center rounded-full bg-white px-3 py-1.5 text-center text-xs text-black">
-              Remplacer
+
+          <div className="absolute left-2 top-2 flex h-7 w-7 cursor-grab items-center justify-center rounded-md bg-black/70 text-white active:cursor-grabbing">
+            <GripIcon />
+          </div>
+
+          <div className="absolute right-2 top-2 flex gap-1 opacity-0 transition-opacity group-hover:opacity-100">
+            <label className="flex h-7 w-7 cursor-pointer items-center justify-center rounded-md bg-black/70 text-white hover:bg-black/90">
+              <PencilIcon />
               <input
                 type="file"
                 accept="image/*"
@@ -81,15 +124,23 @@ function EditablePhotoGrid({ photos, page, aspect = "aspect-square" }: { photos:
                 }}
               />
             </label>
+            <button
+              type="button"
+              disabled={pending}
+              onClick={() => startTransition(() => deletePhoto(p.id, p.storage_path))}
+              className="flex h-7 w-7 items-center justify-center rounded-md bg-black/70 text-white hover:bg-red-600 disabled:opacity-30"
+            >
+              <TrashIcon />
+            </button>
           </div>
         </div>
       ))}
 
       <label
-        className={`flex ${aspect} cursor-pointer flex-col items-center justify-center gap-1 rounded-xl border-2 border-dashed border-black/15 text-xs text-[var(--foreground)]/50 hover:border-[var(--accent)]/50 hover:text-[var(--accent)]`}
+        className={`flex ${aspect} cursor-pointer flex-col items-center justify-center gap-1 rounded-xl border-2 border-dashed border-[var(--accent)]/30 text-xs text-[var(--foreground)]/50 hover:border-[var(--accent)]/60 hover:text-[var(--accent)]`}
       >
         <span className="text-xl leading-none">+</span>
-        Ajouter
+        Ajouter une photo
         <input
           type="file"
           accept="image/*"
@@ -148,14 +199,22 @@ export function PageEditor({
   }
 
   return (
-    <div>
+    <div className="relative">
+      <div className="fixed inset-x-0 top-0 z-40 h-1.5 bg-[var(--accent)]" />
+
       <div className="fixed right-4 top-4 z-50 flex flex-col items-end gap-2">
         {toolbarOpen ? (
           <div className="flex items-center gap-2 rounded-full border border-black/10 bg-[var(--background)]/95 px-2 py-1.5 shadow-lg backdrop-blur">
             <Link href="/admin/pages" className="rounded-full px-2.5 py-1.5 text-xs text-[var(--foreground)]/60 hover:bg-black/5" title="Toutes les pages">
               ←
             </Link>
-            <span className="pr-1 text-xs font-medium text-[var(--foreground)]/70">{schema.label}</span>
+            <span className="flex items-center gap-1.5 pr-1 text-xs font-medium text-[var(--foreground)]">
+              <span className="relative flex h-2 w-2">
+                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[var(--accent)] opacity-75" />
+                <span className="relative inline-flex h-2 w-2 rounded-full bg-[var(--accent)]" />
+              </span>
+              Mode édition — {schema.label}
+            </span>
             <button
               type="button"
               onClick={() => setSeoOpen((v) => !v)}

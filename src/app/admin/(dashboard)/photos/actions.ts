@@ -51,6 +51,12 @@ export async function reorderPhoto(id: string, page: string, direction: "up" | "
   revalidatePath("/", "layout");
 }
 
+export async function reorderPhotos(page: string, orderedIds: string[]) {
+  const supabase = supabaseAdmin();
+  await Promise.all(orderedIds.map((id, index) => supabase.from("media").update({ sort_order: index }).eq("id", id)));
+  revalidatePath("/", "layout");
+}
+
 export async function deletePhoto(id: string, storagePath: string) {
   const supabase = supabaseAdmin();
   await supabase.storage.from("media").remove([storagePath]);
