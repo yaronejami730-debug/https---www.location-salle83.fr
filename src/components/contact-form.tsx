@@ -5,7 +5,8 @@ import { Controller, useForm } from "react-hook-form";
 import { useState } from "react";
 import { z } from "zod";
 import { DatePicker } from "./date-picker";
-import { computeQuote } from "@/lib/pricing";
+import { computeQuote, findBracket, pricingBrackets } from "@/lib/pricing";
+import { submitLead } from "@/app/contact/actions";
 
 const schema = z.object({
   eventType: z.enum(["mariage", "seminaire", "reception", "autre"]),
@@ -31,11 +32,16 @@ const eventOptions: { value: FormValues["eventType"]; label: string }[] = [
   { value: "autre", label: "Autre" },
 ];
 
-const optionFields: { name: "lendemain" | "piscine" | "vaisselle" | "cuisine"; label: string }[] = [
-  { name: "lendemain", label: "Accès le lendemain" },
-  { name: "piscine", label: "Accès piscine" },
-  { name: "vaisselle", label: "Vaisselle (assiettes, verres, couverts)" },
-  { name: "cuisine", label: "Cuisine professionnelle" },
+const optionFields: {
+  name: "lendemain" | "piscine" | "vaisselle" | "cuisine";
+  label: string;
+  icon: string;
+  priceKey: "lendemain" | "piscine" | "vaisselle" | "cuisine";
+}[] = [
+  { name: "lendemain", label: "Accès le lendemain", icon: "🌅", priceKey: "lendemain" },
+  { name: "piscine", label: "Accès piscine", icon: "🏊", priceKey: "piscine" },
+  { name: "vaisselle", label: "Vaisselle complète", icon: "🍽️", priceKey: "vaisselle" },
+  { name: "cuisine", label: "Cuisine professionnelle", icon: "👩‍🍳", priceKey: "cuisine" },
 ];
 
 export function ContactForm() {
@@ -63,6 +69,7 @@ export function ContactForm() {
   });
 
   const watched = watch();
+  const previewBracket = findBracket(Number(watched.guestCount) || 0) ?? pricingBrackets[0];
   const quote = computeQuote({
     guestCount: Number(watched.guestCount) || 0,
     lendemain: watched.lendemain,
@@ -74,31 +81,9 @@ export function ContactForm() {
 
   async function onSubmit(values: FormValues) {
     setStatus("loading");
-    const computed = computeQuote({
-      guestCount: Number(values.guestCount) || 0,
-      lendemain: values.lendemain,
-      piscine: values.piscine,
-      vaisselle: values.vaisselle,
-      cuisine: values.cuisine,
-      chapiteauCount: Number(values.chapiteauCount) || 0,
-    });
-
     try {
-      const res = await fetch(process.env.NEXT_PUBLIC_SUPABASE_EDGE_URL!, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          apikey: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-        },
-        body: JSON.stringify({
-          ...values,
-          chapiteauCount: Number(values.chapiteauCount) || 0,
-          pricingBracket: computed?.bracket.key ?? null,
-          estimatedTotal: computed?.total ?? null,
-        }),
-      });
-      if (!res.ok) throw new Error("request_failed");
-      setLastQuote(computed);
+      const quote = await submitLead(values);
+      setLastQuote(quote);
       setStatus("success");
       reset();
     } catch {
@@ -165,24 +150,55 @@ export function ContactForm() {
         </div>
       </div>
 
-      <div className="rounded-xl border border-black/10 p-5">
-        <p className="mb-3 text-sm text-[var(--foreground)]/80">Options souhaitées</p>
+      <div>
+        <span className="mb-2 block text-sm text-[var(--foreground)]/80">Options souhaitées</span>
         <div className="grid gap-3 sm:grid-cols-2">
           {optionFields.map((opt) => (
-            <label key={opt.name} className="flex items-center gap-2 text-sm text-[var(--foreground)]">
-              <input type="checkbox" {...register(opt.name)} className="h-4 w-4 accent-[var(--accent)]" />
-              {opt.label}
+            <label
+              key={opt.name}
+              className="flex cursor-pointer items-center gap-3 rounded-xl border border-black/10 px-4 py-3.5 text-sm has-[:checked]:border-[var(--accent)] has-[:checked]:bg-[var(--accent)]/8"
+            >
+              <input type="checkbox" {...register(opt.name)} className="peer sr-only" />
+              <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-md border border-black/20 text-[10px] text-transparent peer-checked:border-[var(--accent)] peer-checked:bg-[var(--accent)] peer-checked:text-white">
+                ✓
+              </span>
+              <span className="text-lg leading-none">{opt.icon}</span>
+              <span className="flex-1 text-[var(--foreground)]">{opt.label}</span>
+              <span className="text-xs text-[var(--foreground)]/50">+{previewBracket[opt.priceKey]} €</span>
             </label>
           ))}
         </div>
-        <div className="mt-4">
-          <label className="mb-1.5 block text-sm text-[var(--foreground)]/80">Chapiteaux (200 €/pièce)</label>
-          <input
-            type="number"
-            min={0}
-            max={5}
-            {...register("chapiteauCount")}
-            className="w-24 rounded-lg border border-black/10 px-3 py-2 text-sm"
+
+        <div className="mt-3 flex items-center justify-between rounded-xl border border-black/10 px-4 py-3.5">
+          <span className="flex items-center gap-3 text-sm text-[var(--foreground)]">
+            <span className="text-lg leading-none">⛺</span>
+            Chapiteaux <span className="text-xs text-[var(--foreground)]/50">(200 €/pièce)</span>
+          </span>
+          <Controller
+            name="chapiteauCount"
+            control={control}
+            render={({ field }) => {
+              const count = Number(field.value) || 0;
+              return (
+                <div className="flex items-center gap-3">
+                  <button
+                    type="button"
+                    onClick={() => field.onChange(String(Math.max(0, count - 1)))}
+                    className="flex h-8 w-8 items-center justify-center rounded-full border border-black/15 text-[var(--foreground)] hover:bg-black/5"
+                  >
+                    −
+                  </button>
+                  <span className="w-4 text-center text-sm text-[var(--foreground)]">{count}</span>
+                  <button
+                    type="button"
+                    onClick={() => field.onChange(String(Math.min(5, count + 1)))}
+                    className="flex h-8 w-8 items-center justify-center rounded-full border border-black/15 text-[var(--foreground)] hover:bg-black/5"
+                  >
+                    +
+                  </button>
+                </div>
+              );
+            }}
           />
         </div>
       </div>
