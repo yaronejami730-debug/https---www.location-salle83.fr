@@ -4,10 +4,8 @@ import { PhotoTile } from "./photo-tile";
 import { UploadForm } from "./upload-form";
 
 const pageOptions = [
-  { value: "galerie", label: "Galerie — mariages & séminaires" },
+  { value: "galerie", label: "Galerie — mariages, accueil & réceptions" },
   { value: "hebergement", label: "Hébergement" },
-  { value: "home", label: "Accueil" },
-  { value: "mariage", label: "Mariage" },
   { value: "seminaire", label: "Séminaire" },
   { value: "domaine", label: "Le domaine" },
 ];

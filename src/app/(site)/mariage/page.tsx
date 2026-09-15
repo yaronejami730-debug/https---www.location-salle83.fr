@@ -3,6 +3,7 @@ import { PageHero } from "@/components/page-hero";
 import { CtaSection } from "@/components/cta-section";
 import { Container } from "@/components/container";
 import { ZigzagSection } from "@/components/zigzag-section";
+import { IntroSection } from "@/components/intro-section";
 import { getPageContent, getMedia } from "@/lib/content";
 import { mediaUrl } from "@/lib/supabase-public";
 import { staticGalleryPhotos } from "@/lib/static-gallery";
@@ -21,13 +22,19 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function MariagePage() {
-  const [pageContent, media] = await Promise.all([getPageContent("mariage"), getMedia("galerie")]);
+  const [pageContent, zigzag1, zigzag2, zigzag3] = await Promise.all([
+    getPageContent("mariage"),
+    getMedia("mariage-zigzag-1"),
+    getMedia("mariage-zigzag-2"),
+    getMedia("mariage-zigzag-3"),
+  ]);
   const c = pageContent?.content ?? {};
   const f = (key: string) => fieldValue(c, schema.fields.find((x) => x.key === key)!);
 
-  const photos =
-    media.length > 0 ? media.map((m) => ({ src: mediaUrl(m.storage_path), alt: m.alt ?? "" })) : staticGalleryPhotos;
-  const photo = (i: number) => photos[i % photos.length];
+  const toImages = (rows: typeof zigzag1, fallbackIndex: number) =>
+    rows.length > 0
+      ? rows.map((m) => ({ src: mediaUrl(m.storage_path), alt: m.alt ?? "" }))
+      : [staticGalleryPhotos[fallbackIndex % staticGalleryPhotos.length]];
 
   const features = [
     { title: f("feature1_title"), text: f("feature1_text") },
@@ -44,11 +51,7 @@ export default async function MariagePage() {
         image={{ src: "/images/mariage-hero.jpg", alt: "Bouquet de fleurs blanches pour décoration de mariage" }}
       />
 
-      <section className="py-16">
-        <Container className="max-w-2xl">
-          <p className="whitespace-pre-line text-[var(--foreground)]/70">{f("intro_text")}</p>
-        </Container>
-      </section>
+      <IntroSection title={f("intro_title")} text={f("intro_text")} />
 
       <section className="py-20">
         <Container className="grid gap-8 sm:grid-cols-3">
@@ -61,9 +64,9 @@ export default async function MariagePage() {
         </Container>
       </section>
 
-      <ZigzagSection title={f("zigzag1_title")} text={f("zigzag1_text")} image={photo(0)} reverse />
-      <ZigzagSection title={f("zigzag2_title")} text={f("zigzag2_text")} image={photo(1)} />
-      <ZigzagSection title={f("zigzag3_title")} text={f("zigzag3_text")} image={photo(2)} reverse />
+      <ZigzagSection title={f("zigzag1_title")} text={f("zigzag1_text")} images={toImages(zigzag1, 0)} intervalMs={Number(f("zigzag1_interval")) * 1000} reverse />
+      <ZigzagSection title={f("zigzag2_title")} text={f("zigzag2_text")} images={toImages(zigzag2, 1)} intervalMs={Number(f("zigzag2_interval")) * 1000} />
+      <ZigzagSection title={f("zigzag3_title")} text={f("zigzag3_text")} images={toImages(zigzag3, 2)} intervalMs={Number(f("zigzag3_interval")) * 1000} reverse />
 
       <CtaSection />
     </>

@@ -16,6 +16,7 @@
   --color-accent-warm: var(--accent-warm);
   --font-sans: var(--font-sans);
   --font-serif: var(--font-serif);
+  --font-display: var(--font-display);
 }
 
 body {
@@ -26,6 +27,10 @@ body {
 
 .font-serif {
   font-family: var(--font-serif), Georgia, serif;
+}
+
+.font-display {
+  font-family: var(--font-display), Georgia, serif;
 }
 
 .editable-field {

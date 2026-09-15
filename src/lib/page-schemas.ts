@@ -41,7 +41,8 @@ export const pageSchemas: PageSchema[] = [
     fields: [
       { key: "hero_title", label: "Hero — titre", type: "text", default: "Votre réception, votre ambiance, vos invités" },
       { key: "hero_description", label: "Hero — sous-titre", type: "textarea", default: "Un cadre authentiquement provençal pour célébrer votre union entourés des vôtres, du vin d'honneur à la soirée dansante." },
-      { key: "intro_text", label: "Introduction", type: "textarea", default: "Pour l'organisation de vos fêtes privées, la décoration, les accessoires, l'air de fête, pour \"marier\" ambiance, loisirs et jeux d'enfants, visitez le Domaine de la Bégude à Fayence. La salle de votre mariage se prête à tous les plans de table, à tous les placements d'invités. La table des mariés ou table d'honneur est centrale, accessible à la vue de tous vos invités. Les mariés doivent pouvoir se lever et tourner entre les tables. Votre but est de faire plaisir, d'obtenir une ambiance gaie et détendue, de faciliter photos et vidéos..." },
+      { key: "intro_title", label: "Introduction — titre", type: "text", default: "Une fête à votre image" },
+      { key: "intro_text", label: "Introduction — texte", type: "textarea", default: "Pour l'organisation de vos fêtes privées, la décoration, les accessoires, l'air de fête, pour \"marier\" ambiance, loisirs et jeux d'enfants, visitez le Domaine de la Bégude à Fayence. La salle de votre mariage se prête à tous les plans de table, à tous les placements d'invités. La table des mariés ou table d'honneur est centrale, accessible à la vue de tous vos invités. Les mariés doivent pouvoir se lever et tourner entre les tables. Votre but est de faire plaisir, d'obtenir une ambiance gaie et détendue, de faciliter photos et vidéos..." },
       { key: "feature1_title", label: "Atout 1 — titre", type: "text", default: "Cérémonie" },
       { key: "feature1_text", label: "Atout 1 — texte", type: "textarea", default: "Un cadre naturel pour une cérémonie laïque ou religieuse, en extérieur ou sous une charpente en pierre." },
       { key: "feature2_title", label: "Atout 2 — titre", type: "text", default: "Réception & décoration" },
@@ -54,6 +55,9 @@ export const pageSchemas: PageSchema[] = [
       { key: "zigzag2_text", label: "Section détail 2 — texte", type: "textarea", default: "La décoration de la salle et des tables est essentielle : elle crée une ambiance inoubliable pour ce jour de fête unique. Fleurs, voyages, musique, cinéma, sport... mettez vos passions en avant, déclinées table par table et même invité par invité ! Nous vous aidons, si vous le souhaitez, à choisir votre décoration et vos accessoires, à élaborer le plan et l'organisation qui correspondent le mieux à l'ambiance que vous visez." },
       { key: "zigzag3_title", label: "Section détail 3 — titre", type: "text", default: "Vos invités bien installés" },
       { key: "zigzag3_text", label: "Section détail 3 — texte", type: "textarea", default: "C'est votre fête et celle de vos invités : elle doit être une réussite pour tout le monde. À votre disposition, 15 mazets de 2 à 6 personnes pour vous et vos invités." },
+      { key: "zigzag1_interval", label: "Section détail 1 — vitesse fondu (s)", type: "text", default: "6" },
+      { key: "zigzag2_interval", label: "Section détail 2 — vitesse fondu (s)", type: "text", default: "6" },
+      { key: "zigzag3_interval", label: "Section détail 3 — vitesse fondu (s)", type: "text", default: "6" },
     ],
   },
   {
@@ -62,13 +66,17 @@ export const pageSchemas: PageSchema[] = [
     fields: [
       { key: "hero_title", label: "Hero — titre", type: "text", default: "Travail, détente et cohésion dans un cadre privilégié" },
       { key: "hero_description", label: "Hero — sous-titre", type: "textarea", default: "Séminaires, formations, événements d'entreprise, incentive : à 30 minutes de Grasse, Antibes, Cannes, Fréjus-Saint-Raphaël ou Draguignan." },
-      { key: "intro_text", label: "Introduction", type: "textarea", default: "Vous cherchez un lieu de séminaire à la fois original, calme et agréable pour l'organisation d'un événement professionnel, tout en restant proche des Alpes-Maritimes, dans l'Est du Var ? Vous souhaitez une salle en location pour vous réunir ou réaliser une formation avec possibilité de restauration, un hébergement associé, des activités de team building, une animation événementielle, bref un lieu vous permettant d'associer travail et détente ou encore incentive et tourisme ?" },
+      { key: "intro_title", label: "Introduction — titre", type: "text", default: "Un cadre propice au travail" },
+      { key: "intro_text", label: "Introduction — texte", type: "textarea", default: "Vous cherchez un lieu de séminaire à la fois original, calme et agréable pour l'organisation d'un événement professionnel, tout en restant proche des Alpes-Maritimes, dans l'Est du Var ? Vous souhaitez une salle en location pour vous réunir ou réaliser une formation avec possibilité de restauration, un hébergement associé, des activités de team building, une animation événementielle, bref un lieu vous permettant d'associer travail et détente ou encore incentive et tourisme ?" },
       { key: "feature1_title", label: "Atout 1 — titre", type: "text", default: "Salles de travail" },
       { key: "feature1_text", label: "Atout 1 — texte", type: "textarea", default: "Espaces équipés, lumineux et modulables pour réunions, ateliers et conférences." },
       { key: "feature2_title", label: "Atout 2 — titre", type: "text", default: "Team building" },
       { key: "feature2_text", label: "Atout 2 — texte", type: "textarea", default: "Piscine, boulodrome, terrain de volley et 3 hectares de nature pour renforcer la cohésion d'équipe." },
       { key: "feature3_title", label: "Atout 3 — titre", type: "text", default: "Hébergement sur place" },
       { key: "feature3_text", label: "Atout 3 — texte", type: "textarea", default: "15 hébergements permettent de loger vos équipes sans quitter le domaine." },
+      { key: "feature1_interval", label: "Atout 1 — vitesse fondu (s)", type: "text", default: "6" },
+      { key: "feature2_interval", label: "Atout 2 — vitesse fondu (s)", type: "text", default: "6" },
+      { key: "feature3_interval", label: "Atout 3 — vitesse fondu (s)", type: "text", default: "6" },
     ],
   },
   {
@@ -77,7 +85,8 @@ export const pageSchemas: PageSchema[] = [
     fields: [
       { key: "hero_title", label: "Hero — titre", type: "text", default: "Un cadre unique pour tous vos événements privés" },
       { key: "hero_description", label: "Hero — sous-titre", type: "textarea", default: "Entre Cannes et Draguignan, un lieu privatif pour vos soirées et réceptions : nous vous mettons en relation avec traiteurs, DJ et photographes selon vos besoins." },
-      { key: "intro_text", label: "Introduction", type: "textarea", default: "Vous souhaitez organiser une soirée originale avec ou sans animation, dans un lieu privatif pour vous et vos amis ? Pour vos soirées, réceptions, banquets, soirées à thème, soirées dansantes, soirées de gala, soirées jeu ou quiz, dans un lieu calme et agréable avec possibilité de restauration et d'hébergement, nous vous mettons en relation directe avec des traiteurs, cuisiniers, animateurs, artistes, décorateurs, DJ, photographes et prestataires de spectacles." },
+      { key: "intro_title", label: "Introduction — titre", type: "text", default: "Une soirée sur mesure" },
+      { key: "intro_text", label: "Introduction — texte", type: "textarea", default: "Vous souhaitez organiser une soirée originale avec ou sans animation, dans un lieu privatif pour vous et vos amis ? Pour vos soirées, réceptions, banquets, soirées à thème, soirées dansantes, soirées de gala, soirées jeu ou quiz, dans un lieu calme et agréable avec possibilité de restauration et d'hébergement, nous vous mettons en relation directe avec des traiteurs, cuisiniers, animateurs, artistes, décorateurs, DJ, photographes et prestataires de spectacles." },
       { key: "event1", label: "Type d'événement 1", type: "text", default: "Anniversaires, communions & baptêmes" },
       { key: "event2", label: "Type d'événement 2", type: "text", default: "Soirées à thème & réveillon" },
       { key: "event3", label: "Type d'événement 3", type: "text", default: "Tournages & shootings" },

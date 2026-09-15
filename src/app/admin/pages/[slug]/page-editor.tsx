@@ -176,6 +176,7 @@ export function PageEditor({
   reviews,
   media,
   hebergementMedia,
+  zigzagMedia,
 }: {
   schema: PageSchema;
   initialContent: Record<string, string>;
@@ -185,6 +186,7 @@ export function PageEditor({
   reviews: ReviewRow[];
   media: MediaRow[];
   hebergementMedia: MediaRow[];
+  zigzagMedia: Record<string, MediaRow[]>;
 }) {
   const [content, setContent] = useState<Record<string, string>>(initialContent);
   const [seoTitle, setSeoTitle] = useState(initialSeoTitle);
@@ -404,34 +406,24 @@ export function PageEditor({
         </>
       )}
 
-      {["mariage", "seminaire"].includes(schema.slug) && (
+      {schema.slug === "mariage" && (
         <>
           <section className="relative flex h-[45vh] min-h-[360px] items-center justify-center overflow-hidden text-center">
-            {schema.slug === "mariage" && <Image src="/images/mariage-hero.jpg" alt="" fill className="object-cover" sizes="100vw" />}
-            {schema.slug === "seminaire" && <div className="absolute inset-0 bg-[var(--background-muted)]" />}
-            {schema.slug === "mariage" && <div className="absolute inset-0 bg-black/45" />}
+            <Image src="/images/mariage-hero.jpg" alt="" fill className="object-cover" sizes="100vw" />
+            <div className="absolute inset-0 bg-black/45" />
             <Container className="relative z-10 max-w-2xl">
-              <EditableText
-                as="h1"
-                value={val("hero_title")}
-                onChange={set("hero_title")}
-                className={`font-serif text-4xl ${schema.slug === "mariage" ? "text-white" : "text-[var(--foreground)]"}`}
-              />
-              <EditableText
-                value={val("hero_description")}
-                onChange={set("hero_description")}
-                className={`mt-4 ${schema.slug === "mariage" ? "text-white/85" : "text-[var(--foreground)]/70"}`}
-              />
+              <EditableText as="h1" value={val("hero_title")} onChange={set("hero_title")} className="font-serif text-4xl text-white" />
+              <EditableText value={val("hero_description")} onChange={set("hero_description")} className="mt-4 text-white/85" />
             </Container>
           </section>
 
-          {schema.slug === "mariage" && (
-            <section className="py-16">
-              <Container className="max-w-2xl">
-                <EditableText value={val("intro_text")} onChange={set("intro_text")} className="whitespace-pre-line text-[var(--foreground)]/70" />
-              </Container>
-            </section>
-          )}
+          <section className="py-16 text-center">
+            <Container className="max-w-2xl">
+              <span className="mx-auto block h-px w-12 bg-[var(--accent-warm)]/50" />
+              <EditableText as="h2" value={val("intro_title")} onChange={set("intro_title")} className="mt-5 font-display text-3xl italic text-[var(--accent-warm)]" />
+              <EditableText value={val("intro_text")} onChange={set("intro_text")} className="mt-5 whitespace-pre-line text-[var(--foreground)]/70" />
+            </Container>
+          </section>
 
           <section className="py-16">
             <Container className="grid gap-6 sm:grid-cols-3">
@@ -444,38 +436,86 @@ export function PageEditor({
             </Container>
           </section>
 
-          {schema.slug === "mariage" &&
-            [1, 2, 3].map((n) => {
-              const photo = media[(n - 1) % Math.max(media.length, 1)];
-              return (
-                <section key={n} className="py-14">
-                  <Container className={`grid items-center gap-10 sm:grid-cols-2 ${n % 2 === 0 ? "" : "sm:[&>*:first-child]:order-2"}`}>
-                    <div className="relative aspect-[4/3] overflow-hidden rounded-2xl bg-black/5">
-                      {photo && <Image src={mediaUrl(photo.storage_path)} alt={photo.alt ?? ""} fill className="object-cover" sizes="500px" />}
+          {[1, 2, 3].map((n) => {
+            const category = `mariage-zigzag-${n}`;
+            return (
+              <section key={n} className="py-14 bg-[var(--background-muted)]/40">
+                <Container>
+                  <div className={`grid items-start gap-10 sm:grid-cols-2 ${n % 2 === 0 ? "" : "sm:[&>*:first-child]:order-2"}`}>
+                    <div>
+                      <div className="mb-2 flex items-center justify-between">
+                        <p className="text-xs font-medium text-[var(--accent)]">Photo(s) de ce bloc (fondu si plusieurs)</p>
+                        <select
+                          value={val(`zigzag${n}_interval`)}
+                          onChange={(e) => set(`zigzag${n}_interval`)(e.target.value)}
+                          className="rounded-md border border-black/10 bg-[var(--background)] px-2 py-1 text-xs text-[var(--foreground)]/70"
+                        >
+                          <option value="4">Fondu 4s</option>
+                          <option value="6">Fondu 6s</option>
+                          <option value="8">Fondu 8s</option>
+                        </select>
+                      </div>
+                      <EditablePhotoGrid photos={zigzagMedia[category] ?? []} page={category} aspect="aspect-[4/3]" />
                     </div>
                     <div>
-                      <EditableText
-                        as="h2"
-                        value={val(`zigzag${n}_title`)}
-                        onChange={set(`zigzag${n}_title`)}
-                        className="font-serif text-3xl italic text-[var(--accent-warm)]"
-                      />
-                      <EditableText
-                        value={val(`zigzag${n}_text`)}
-                        onChange={set(`zigzag${n}_text`)}
-                        className="mt-4 whitespace-pre-line text-[var(--foreground)]/70"
-                      />
+                      <EditableText as="h2" value={val(`zigzag${n}_title`)} onChange={set(`zigzag${n}_title`)} className="font-display text-3xl italic text-[var(--accent-warm)]" />
+                      <EditableText value={val(`zigzag${n}_text`)} onChange={set(`zigzag${n}_text`)} className="mt-4 whitespace-pre-line text-[var(--foreground)]/70" />
                     </div>
-                  </Container>
-                </section>
-              );
-            })}
+                  </div>
+                </Container>
+              </section>
+            );
+          })}
+        </>
+      )}
 
-          {schema.slug === "mariage" && (
-            <p className="pb-8 text-center text-xs text-[var(--foreground)]/40">
-              Photos partagées avec la Galerie — modifiez-les depuis l&apos;éditeur Galerie.
-            </p>
-          )}
+      {schema.slug === "seminaire" && (
+        <>
+          <section className="flex h-[45vh] min-h-[360px] items-center justify-center bg-[var(--background-muted)] text-center">
+            <Container className="max-w-2xl">
+              <EditableText as="h1" value={val("hero_title")} onChange={set("hero_title")} className="font-serif text-4xl text-[var(--foreground)]" />
+              <EditableText value={val("hero_description")} onChange={set("hero_description")} className="mt-4 text-[var(--foreground)]/70" />
+            </Container>
+          </section>
+
+          <section className="py-16 text-center">
+            <Container className="max-w-2xl">
+              <span className="mx-auto block h-px w-12 bg-[var(--accent-warm)]/50" />
+              <EditableText as="h2" value={val("intro_title")} onChange={set("intro_title")} className="mt-5 font-display text-3xl italic text-[var(--accent-warm)]" />
+              <EditableText value={val("intro_text")} onChange={set("intro_text")} className="mt-5 whitespace-pre-line text-[var(--foreground)]/70" />
+            </Container>
+          </section>
+
+          {[1, 2, 3].map((n) => {
+            const category = `seminaire-zigzag-${n}`;
+            return (
+              <section key={n} className="py-14 bg-[var(--background-muted)]/40">
+                <Container>
+                  <div className={`grid items-start gap-10 sm:grid-cols-2 ${n % 2 === 0 ? "" : "sm:[&>*:first-child]:order-2"}`}>
+                    <div>
+                      <div className="mb-2 flex items-center justify-between">
+                        <p className="text-xs font-medium text-[var(--accent)]">Photo(s) de ce bloc (fondu si plusieurs)</p>
+                        <select
+                          value={val(`feature${n}_interval`)}
+                          onChange={(e) => set(`feature${n}_interval`)(e.target.value)}
+                          className="rounded-md border border-black/10 bg-[var(--background)] px-2 py-1 text-xs text-[var(--foreground)]/70"
+                        >
+                          <option value="4">Fondu 4s</option>
+                          <option value="6">Fondu 6s</option>
+                          <option value="8">Fondu 8s</option>
+                        </select>
+                      </div>
+                      <EditablePhotoGrid photos={zigzagMedia[category] ?? []} page={category} aspect="aspect-[4/3]" />
+                    </div>
+                    <div>
+                      <EditableText as="h2" value={val(`feature${n}_title`)} onChange={set(`feature${n}_title`)} className="font-display text-3xl italic text-[var(--accent-warm)]" />
+                      <EditableText value={val(`feature${n}_text`)} onChange={set(`feature${n}_text`)} className="mt-4 whitespace-pre-line text-[var(--foreground)]/70" />
+                    </div>
+                  </div>
+                </Container>
+              </section>
+            );
+          })}
         </>
       )}
 

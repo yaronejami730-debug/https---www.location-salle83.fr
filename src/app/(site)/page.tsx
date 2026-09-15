@@ -41,7 +41,7 @@ export default async function HomePage() {
     getPageContent("home"),
     getFaqs("home"),
     getReviews(),
-    getMedia("home"),
+    getMedia("galerie"),
   ]);
 
   const c = pageContent?.content ?? {};
