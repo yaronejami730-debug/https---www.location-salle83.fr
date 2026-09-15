@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import { Container } from "@/components/container";
 import { siteConfig } from "@/lib/site";
@@ -27,19 +28,28 @@ const faqs = [
 export default function HomePage() {
   return (
     <>
-      <section className="relative flex min-h-[85vh] items-center justify-center overflow-hidden bg-gradient-to-b from-[var(--background-muted)] to-[var(--background)] text-center">
+      <section className="relative flex min-h-[85vh] items-center justify-center overflow-hidden text-center">
+        <Image
+          src="/images/mariage-hero.jpg"
+          alt="Décoration florale du Domaine de la Bégude"
+          fill
+          priority
+          sizes="100vw"
+          className="object-cover"
+        />
+        <div className="absolute inset-0 bg-black/50" />
         <Container className="relative z-10 flex flex-col items-center py-24">
-          <p className="text-sm tracking-[0.2em] text-[var(--accent)] uppercase">
+          <p className="text-sm tracking-[0.2em] text-white/85 uppercase">
             {siteConfig.name} — {siteConfig.locality}
           </p>
-          <h1 className="mt-6 max-w-3xl font-serif text-4xl leading-tight text-[var(--foreground)] sm:text-6xl">
+          <h1 className="mt-6 max-w-3xl font-serif text-4xl leading-tight text-white sm:text-6xl">
             {siteConfig.tagline}
           </h1>
-          <p className="mt-6 max-w-xl text-base text-[var(--foreground)]/70">
+          <p className="mt-6 max-w-xl text-base text-white/85">
             Mariages · Séminaires · Réceptions · Événements privés
           </p>
           <div className="mt-10 flex flex-col gap-4 sm:flex-row">
-            <Link href="/domaine" className="rounded-full border border-[var(--foreground)]/20 px-7 py-3.5 text-sm hover:bg-black/5">
+            <Link href="/domaine" className="rounded-full border border-white/40 px-7 py-3.5 text-sm text-white hover:bg-white/10">
               Découvrir le domaine
             </Link>
             <Link href="/contact" className="rounded-full bg-[var(--accent)] px-7 py-3.5 text-sm text-white hover:opacity-90">
