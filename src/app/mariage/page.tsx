@@ -21,6 +21,7 @@ export default function MariagePage() {
         eyebrow="Mariage"
         title="Votre réception, votre ambiance, vos invités"
         description="Un domaine privé en Provence pour célébrer votre union entourés des vôtres, du vin d'honneur à la soirée dansante."
+        image={{ src: "/images/mariage-hero.jpg", alt: "Bouquet de fleurs blanches pour décoration de mariage" }}
       />
 
       <section className="py-20">
