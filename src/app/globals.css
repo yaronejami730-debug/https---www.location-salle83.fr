@@ -27,3 +27,22 @@ body {
 .font-serif {
   font-family: var(--font-serif), Georgia, serif;
 }
+
+.editable-field {
+  cursor: text;
+  transition: background-color 0.15s, box-shadow 0.15s;
+}
+
+.editable-field:hover {
+  background-color: rgba(107, 125, 95, 0.08);
+}
+
+.editable-field:focus {
+  background-color: rgba(107, 125, 95, 0.12);
+  box-shadow: 0 0 0 2px var(--accent);
+}
+
+.editable-field:empty:before {
+  content: attr(data-placeholder);
+  opacity: 0.4;
+}
