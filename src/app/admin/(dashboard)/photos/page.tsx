@@ -1,7 +1,7 @@
 import { supabaseAdmin } from "@/lib/supabase-admin";
 import { mediaUrl } from "@/lib/supabase-public";
-import { uploadPhoto } from "./actions";
 import { PhotoTile } from "./photo-tile";
+import { UploadForm } from "./upload-form";
 
 const pageOptions = [
   { value: "galerie", label: "Galerie — mariages & séminaires" },
@@ -30,25 +30,7 @@ export default async function AdminPhotosPage() {
         Gérez les photos affichées sur le site. Survolez une photo pour la déplacer ou la supprimer.
       </p>
 
-      <form action={uploadPhoto} className="mt-8 flex max-w-xl flex-wrap items-end gap-4 rounded-2xl border border-black/5 bg-[var(--background)] p-6">
-        <div>
-          <label className="mb-1.5 block text-sm text-[var(--foreground)]/80">Catégorie</label>
-          <select name="page" defaultValue="galerie" className="rounded-lg border border-black/10 px-3 py-2.5 text-sm">
-            {pageOptions.map((p) => (
-              <option key={p.value} value={p.value}>
-                {p.label}
-              </option>
-            ))}
-          </select>
-        </div>
-        <div className="flex-1">
-          <label className="mb-1.5 block text-sm text-[var(--foreground)]/80">Fichier</label>
-          <input type="file" name="file" accept="image/*" required className="w-full text-sm" />
-        </div>
-        <button type="submit" className="rounded-full bg-[var(--accent)] px-5 py-2.5 text-sm text-white hover:opacity-90">
-          Envoyer
-        </button>
-      </form>
+      <UploadForm />
 
       <div className="mt-10 space-y-10">
         {pageOptions.map((opt) => {

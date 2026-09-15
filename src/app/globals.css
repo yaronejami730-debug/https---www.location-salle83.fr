@@ -46,3 +46,7 @@ body {
   content: attr(data-placeholder);
   opacity: 0.4;
 }
+
+.editable-field::selection {
+  background-color: rgba(107, 125, 95, 0.35);
+}

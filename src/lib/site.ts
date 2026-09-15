@@ -3,8 +3,8 @@ export const siteConfig = {
   tagline: "Un lieu d'exception pour vos moments inoubliables",
   locality: "Fayence, Var",
   domain: "https://www.domainedelabegude.fr",
-  phone: "+33 4 00 00 00 00",
-  email: "contact@domainedelabegude.fr",
+  phone: "+33 6 08 06 72 34",
+  email: "domainedelabegude@orange.fr",
 };
 
 export type NavItem = { label: string; href: string };

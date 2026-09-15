@@ -29,6 +29,17 @@ export default async function DomainePage() {
       <PageHero eyebrow="Le domaine" title={f("hero_title")} description={f("hero_description")} />
 
       <section className="py-20">
+        <Container className="grid gap-8 sm:grid-cols-3">
+          {[1, 2, 3].map((n) => (
+            <div key={n} className="rounded-2xl bg-[var(--background-muted)] p-8">
+              <h3 className="font-serif text-xl text-[var(--foreground)]">{f(`feature${n}_title`)}</h3>
+              <p className="mt-3 text-sm text-[var(--foreground)]/70">{f(`feature${n}_text`)}</p>
+            </div>
+          ))}
+        </Container>
+      </section>
+
+      <section className="pb-20">
         <Container className="grid gap-4 sm:grid-cols-3">
           {photos.length > 0
             ? photos.map((p) => (

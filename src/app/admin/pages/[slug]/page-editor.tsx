@@ -140,18 +140,24 @@ function EditablePhotoGrid({ photos, page, aspect = "aspect-square" }: { photos:
         className={`flex ${aspect} cursor-pointer flex-col items-center justify-center gap-1 rounded-xl border-2 border-dashed border-[var(--accent)]/30 text-xs text-[var(--foreground)]/50 hover:border-[var(--accent)]/60 hover:text-[var(--accent)]`}
       >
         <span className="text-xl leading-none">+</span>
-        Ajouter une photo
+        Ajouter des photos
         <input
           type="file"
           accept="image/*"
+          multiple
           className="hidden"
           onChange={(e) => {
-            const file = e.target.files?.[0];
-            if (!file) return;
-            const fd = new FormData();
-            fd.set("file", file);
-            fd.set("page", page);
-            startTransition(() => uploadPhoto(fd));
+            const files = Array.from(e.target.files ?? []);
+            if (files.length === 0) return;
+            startTransition(async () => {
+              for (const file of files) {
+                const fd = new FormData();
+                fd.set("file", file);
+                fd.set("page", page);
+                await uploadPhoto(fd);
+              }
+            });
+            e.target.value = "";
           }}
         />
       </label>
@@ -499,6 +505,19 @@ export function PageEditor({
               <EditableText value={val("hero_description")} onChange={set("hero_description")} className="mt-4 text-[var(--foreground)]/70" />
             </Container>
           </section>
+
+          {schema.slug === "domaine" && (
+            <section className="py-16">
+              <Container className="grid gap-6 sm:grid-cols-3">
+                {[1, 2, 3].map((n) => (
+                  <div key={n} className="rounded-2xl bg-[var(--background-muted)] p-6">
+                    <EditableText as="h3" value={val(`feature${n}_title`)} onChange={set(`feature${n}_title`)} className="font-serif text-xl text-[var(--foreground)]" />
+                    <EditableText value={val(`feature${n}_text`)} onChange={set(`feature${n}_text`)} className="mt-3 text-sm text-[var(--foreground)]/70" />
+                  </div>
+                ))}
+              </Container>
+            </section>
+          )}
 
           {schema.slug !== "contact" && (
             <section className="py-16">

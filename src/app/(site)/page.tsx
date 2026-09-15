@@ -13,7 +13,7 @@ const fallbackFaqs = [
   {
     id: "fallback-1",
     question: "Combien de personnes le domaine peut-il accueillir ?",
-    answer: "Le domaine accueille jusqu'à 180 invités pour une réception assise, avec plusieurs espaces modulables en intérieur et extérieur.",
+    answer: "Le domaine accueille jusqu'à 150 personnes pour une réception assise, avec plusieurs espaces modulables en intérieur et extérieur.",
   },
   {
     id: "fallback-2",
