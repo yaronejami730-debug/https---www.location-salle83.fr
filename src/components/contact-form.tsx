@@ -7,6 +7,7 @@ import { useState } from "react";
 import { z } from "zod";
 import { DatePicker } from "./date-picker";
 import { computeQuote, findBracket, pricingBrackets } from "@/lib/pricing";
+import { leadReference } from "@/lib/lead-reference";
 import { submitLead } from "@/app/(site)/contact/actions";
 
 const schema = z
@@ -62,6 +63,7 @@ const optionFields: {
 export function ContactForm() {
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
   const [lastQuote, setLastQuote] = useState<ReturnType<typeof computeQuote>>(null);
+  const [lastReference, setLastReference] = useState<string | null>(null);
 
   const {
     register,
@@ -98,8 +100,9 @@ export function ContactForm() {
   async function onSubmit(values: FormValues) {
     setStatus("loading");
     try {
-      const quote = await submitLead({ ...values, fullName: `${values.firstName} ${values.lastName}`.trim() });
+      const { quote, leadId } = await submitLead({ ...values, fullName: `${values.firstName} ${values.lastName}`.trim() });
       setLastQuote(quote);
+      setLastReference(leadReference(leadId));
       setStatus("success");
       reset();
     } catch {
@@ -114,6 +117,11 @@ export function ContactForm() {
         <p className="mt-2 text-sm text-[var(--foreground)]/70">
           Nous revenons vers vous très rapidement pour construire votre projet ensemble.
         </p>
+        {lastReference && (
+          <p className="mt-3 text-sm text-[var(--foreground)]/70">
+            Votre numéro de demande : <span className="font-medium text-[var(--foreground)]">{lastReference}</span>
+          </p>
+        )}
         {lastQuote && (
           <div className="mx-auto mt-6 max-w-xs rounded-xl bg-[var(--background)] p-5 text-left text-sm">
             <p className="flex justify-between text-[var(--foreground)]/70">

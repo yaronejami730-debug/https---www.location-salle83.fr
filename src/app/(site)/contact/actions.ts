@@ -34,24 +34,28 @@ export async function submitLead(input: SubmitLeadInput) {
   });
 
   const supabase = supabaseAdmin();
-  const { error } = await supabase.from("leads").insert({
-    event_type: values.eventType,
-    event_date: values.eventDate || null,
-    guest_count: Number(values.guestCount) || null,
-    full_name: values.fullName,
-    phone: values.phone,
-    email: values.email,
-    message: values.message || null,
-    pricing_bracket: quote?.bracket.key ?? null,
-    estimated_total: quote?.total ?? null,
-    option_lendemain: values.lendemain,
-    option_piscine: values.piscine,
-    option_vaisselle: values.vaisselle,
-    option_cuisine: values.cuisine,
-    option_chapiteau_count: Number(values.chapiteauCount) || 0,
-  });
+  const { data, error } = await supabase
+    .from("leads")
+    .insert({
+      event_type: values.eventType,
+      event_date: values.eventDate || null,
+      guest_count: Number(values.guestCount) || null,
+      full_name: values.fullName,
+      phone: values.phone,
+      email: values.email,
+      message: values.message || null,
+      pricing_bracket: quote?.bracket.key ?? null,
+      estimated_total: quote?.total ?? null,
+      option_lendemain: values.lendemain,
+      option_piscine: values.piscine,
+      option_vaisselle: values.vaisselle,
+      option_cuisine: values.cuisine,
+      option_chapiteau_count: Number(values.chapiteauCount) || 0,
+    })
+    .select("id")
+    .single();
 
   if (error) throw new Error("insert_failed");
 
-  return quote;
+  return { quote, leadId: data.id as string };
 }
