@@ -593,6 +593,16 @@ export function PageEditor({
 
           {schema.slug === "domaine" && (
             <section className="py-16">
+              <Container>
+                <div className="relative aspect-[16/9] w-full overflow-hidden rounded-3xl">
+                  <Image src="/images/domaine-pool.jpg" alt="" fill className="object-cover" sizes="1200px" />
+                </div>
+              </Container>
+            </section>
+          )}
+
+          {schema.slug === "domaine" && (
+            <section className="py-16">
               <Container className="max-w-xl">
                 <div className="relative aspect-[3/4] w-full overflow-hidden rounded-3xl">
                   <Image src="/images/domaine-featured.jpg" alt="" fill className="object-cover" sizes="600px" />
