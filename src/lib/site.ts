@@ -5,6 +5,8 @@ export const siteConfig = {
   domain: "https://www.domainedelabegude.fr",
   phone: "+33 6 08 06 72 34",
   email: "domainedelabegude@orange.fr",
+  lat: 43.58489007966609,
+  lng: 6.652272484118086,
 };
 
 export type NavItem = { label: string; href: string };
