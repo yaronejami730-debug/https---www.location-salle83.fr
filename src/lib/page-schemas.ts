@@ -128,6 +128,14 @@ export const pageSchemas: PageSchema[] = [
     fields: [
       { key: "hero_title", label: "Hero — titre", type: "text", default: "15 mazets au cœur du domaine" },
       { key: "hero_description", label: "Hero — sous-titre", type: "textarea", default: "15 mazets de 2 à 6 personnes, literie 4 étoiles, wifi et télévision, pour accueillir vos proches et prolonger la fête sans quitter les lieux." },
+      { key: "intro_title", label: "Section équipements — titre", type: "text", default: "Un confort pensé pour prolonger la fête" },
+      { key: "intro_text", label: "Section équipements — texte", type: "textarea", default: "Chaque mazet dispose d'une literie 4 étoiles, d'une salle de bain privative et de tout le nécessaire pour un séjour confortable. Idéal pour loger vos proches directement sur place, sans quitter l'ambiance de votre événement." },
+      { key: "amenities_title", label: "Équipements — titre", type: "text", default: "Équipements" },
+      { key: "amenity1", label: "Équipement 1", type: "text", default: "Wifi inclus" },
+      { key: "amenity2", label: "Équipement 2", type: "text", default: "Parking inclus" },
+      { key: "amenity3", label: "Équipement 3", type: "text", default: "Cuisine équipée" },
+      { key: "amenity4", label: "Équipement 4", type: "text", default: "Accès à la piscine" },
+      { key: "gallery_cta", label: "Bouton vers la galerie", type: "text", default: "Voir la galerie photo" },
     ],
   },
   {

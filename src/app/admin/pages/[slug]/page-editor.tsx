@@ -320,13 +320,21 @@ export function PageEditor({
           </section>
 
           <section className="py-16 bg-[var(--background-muted)]">
-            <Container className="grid items-center gap-10 sm:grid-cols-2">
-              <div className="sm:order-2">
-                <EditablePhotoGrid photos={zigzagMedia["home-histoire"] ?? []} page="home-histoire" aspect="aspect-[4/3]" />
-              </div>
-              <div>
-                <EditableText as="h2" value={val("histoire_title")} onChange={set("histoire_title")} className="font-serif text-3xl text-[var(--foreground)]" />
-                <EditableText value={val("histoire_text")} onChange={set("histoire_text")} className="mt-5 text-[var(--foreground)]/70" />
+            <Container>
+              <EditableText as="h2" value={val("choices_title")} onChange={set("choices_title")} className="text-center font-serif text-3xl text-[var(--foreground)]" />
+              <div className="mt-10 grid gap-6 sm:grid-cols-3">
+                {[
+                  { key: "home-choice-mariage", label: "choice_mariage_label" },
+                  { key: "home-choice-evenements", label: "choice_evenements_label" },
+                  { key: "home-choice-domaine", label: "choice_domaine_label" },
+                ].map((choice) => (
+                  <div key={choice.key}>
+                    <EditablePhotoGrid photos={zigzagMedia[choice.key] ?? []} page={choice.key} aspect="aspect-[3/4]" />
+                    <div className="mt-2 text-center">
+                      <EditableText value={val(choice.label)} onChange={set(choice.label)} className="text-sm text-[var(--foreground)]" />
+                    </div>
+                  </div>
+                ))}
               </div>
             </Container>
           </section>
@@ -346,21 +354,13 @@ export function PageEditor({
           </section>
 
           <section className="py-16 bg-[var(--background-muted)]">
-            <Container>
-              <EditableText as="h2" value={val("choices_title")} onChange={set("choices_title")} className="text-center font-serif text-3xl text-[var(--foreground)]" />
-              <div className="mt-10 grid gap-6 sm:grid-cols-3">
-                {[
-                  { key: "home-choice-mariage", label: "choice_mariage_label" },
-                  { key: "home-choice-evenements", label: "choice_evenements_label" },
-                  { key: "home-choice-domaine", label: "choice_domaine_label" },
-                ].map((choice) => (
-                  <div key={choice.key}>
-                    <EditablePhotoGrid photos={zigzagMedia[choice.key] ?? []} page={choice.key} aspect="aspect-[3/4]" />
-                    <div className="mt-2 text-center">
-                      <EditableText value={val(choice.label)} onChange={set(choice.label)} className="text-sm text-[var(--foreground)]" />
-                    </div>
-                  </div>
-                ))}
+            <Container className="grid items-center gap-10 sm:grid-cols-2">
+              <div className="sm:order-2">
+                <EditablePhotoGrid photos={zigzagMedia["home-histoire"] ?? []} page="home-histoire" aspect="aspect-[4/3]" />
+              </div>
+              <div>
+                <EditableText as="h2" value={val("histoire_title")} onChange={set("histoire_title")} className="font-serif text-3xl text-[var(--foreground)]" />
+                <EditableText value={val("histoire_text")} onChange={set("histoire_text")} className="mt-5 text-[var(--foreground)]/70" />
               </div>
             </Container>
           </section>
@@ -384,21 +384,6 @@ export function PageEditor({
           </section>
 
           <LogoMarquee />
-
-          <section className="relative py-16 bg-[var(--background-muted)]">
-            <ManagedBadge label="Gérer la FAQ" href="/admin/faq" />
-            <Container>
-              <EditableText as="h2" value={val("faq_title")} onChange={set("faq_title")} className="text-center font-serif text-3xl text-[var(--foreground)]" />
-              <div className="mx-auto mt-8 max-w-2xl divide-y divide-black/5">
-                {(faqs.length > 0 ? faqs : [{ id: "x", question: "Aucune question publiée pour le moment", answer: "Ajoutez-en dans l'onglet FAQ." }]).map((fq) => (
-                  <div key={fq.id} className="py-4">
-                    <p className="font-medium text-[var(--foreground)]">{fq.question}</p>
-                    <p className="mt-2 text-sm text-[var(--foreground)]/70">{fq.answer}</p>
-                  </div>
-                ))}
-              </div>
-            </Container>
-          </section>
         </>
       )}
 
@@ -588,6 +573,37 @@ export function PageEditor({
             </Container>
           </section>
 
+          {schema.slug === "hebergement" && (
+            <section className="py-16">
+              <Container className="grid items-center gap-10 sm:grid-cols-2">
+                <div>
+                  <p className="mb-2 text-xs font-medium text-[var(--accent)]">Photos (défilent en fondu sur le site)</p>
+                  <EditablePhotoGrid photos={hebergementMedia} page="hebergement" aspect="aspect-[4/3]" />
+                </div>
+                <div>
+                  <EditableText as="h2" value={val("intro_title")} onChange={set("intro_title")} className="font-serif text-3xl text-[var(--foreground)]" />
+                  <EditableText value={val("intro_text")} onChange={set("intro_text")} className="mt-4 text-[var(--foreground)]/70" />
+                  <EditableText
+                    value={val("amenities_title")}
+                    onChange={set("amenities_title")}
+                    className="mt-8 text-xs font-medium uppercase tracking-[0.15em] text-[var(--accent)]"
+                  />
+                  <div className="mt-4 grid grid-cols-2 gap-4">
+                    {(["wifi", "parking", "kitchen", "pool"] as const).map((icon, i) => (
+                      <div key={icon} className="flex items-center gap-2.5">
+                        <span className="text-[var(--accent)]">
+                          <AmenityIcon name={icon} />
+                        </span>
+                        <EditableText value={val(`amenity${i + 1}`)} onChange={set(`amenity${i + 1}`)} className="text-sm text-[var(--foreground)]/70" />
+                      </div>
+                    ))}
+                  </div>
+                  <EditableText value={val("gallery_cta")} onChange={set("gallery_cta")} className="mt-8 inline-block text-sm text-[var(--accent)]" />
+                </div>
+              </Container>
+            </section>
+          )}
+
           {schema.slug === "domaine" && (
             <section className="py-16">
               <Container>
@@ -624,14 +640,10 @@ export function PageEditor({
             </section>
           )}
 
-          {schema.slug !== "contact" && (
+          {!["contact", "hebergement"].includes(schema.slug) && (
             <section className="py-16">
               <Container>
-                <EditablePhotoGrid
-                  photos={schema.slug === "hebergement" ? hebergementMedia : media}
-                  page={schema.slug}
-                  aspect="aspect-[4/3]"
-                />
+                <EditablePhotoGrid photos={media} page={schema.slug} aspect="aspect-[4/3]" />
               </Container>
             </section>
           )}
