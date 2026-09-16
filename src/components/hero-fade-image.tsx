@@ -5,7 +5,7 @@ import Image from "next/image";
 
 export function HeroFadeImage({ src, alt }: { src: string; alt: string }) {
   const ref = useRef<HTMLDivElement>(null);
-  const [opacity, setOpacity] = useState(1);
+  const [progress, setProgress] = useState(0);
 
   useEffect(() => {
     const el = ref.current;
@@ -13,8 +13,7 @@ export function HeroFadeImage({ src, alt }: { src: string; alt: string }) {
 
     const onScroll = () => {
       const height = el.offsetHeight || 1;
-      const next = 1 - Math.min(Math.max(window.scrollY / height, 0), 1);
-      setOpacity(next);
+      setProgress(Math.min(Math.max(window.scrollY / height, 0), 1));
     };
 
     onScroll();
@@ -22,8 +21,14 @@ export function HeroFadeImage({ src, alt }: { src: string; alt: string }) {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
+  const mask = `linear-gradient(to bottom, transparent 0%, transparent ${progress * 100}%, black ${progress * 100}%, black 100%)`;
+
   return (
-    <div ref={ref} className="absolute inset-0" style={{ opacity }}>
+    <div
+      ref={ref}
+      className="absolute inset-0"
+      style={{ WebkitMaskImage: mask, maskImage: mask }}
+    >
       <Image src={src} alt={alt} fill priority sizes="100vw" className="object-cover" />
     </div>
   );
