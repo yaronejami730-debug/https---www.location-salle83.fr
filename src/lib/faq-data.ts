@@ -49,10 +49,16 @@ export const chatbotFaq: FaqEntry[] = [
       "La salle de 90 m² et sa terrasse couverte prennent le relais. Deux chapiteaux de 8 × 4 m (32 personnes chacun) et trois de 4 × 4 m (16 personnes) sont disponibles à 200 € l'unité pour couvrir une partie de la terrasse extérieure, soit 48 personnes.",
   },
   {
-    keywords: ["traiteur", "impose", "cuisine", "restauration", "cuisinier", "repas"],
+    keywords: ["traiteur", "impose", "restauration", "cuisinier", "repas"],
     question: "Faut-il prendre un traiteur imposé ?",
     answer:
-      "Non. Ni restauration ni traiteur ne sont imposés. Une cuisine professionnelle de 49 m² est mise à disposition en supplément (200 à 290 € selon le nombre de convives) pour votre traiteur, votre cuisinier à domicile ou vous-même.",
+      "Non. Ni restauration ni traiteur ne sont imposés. Une cuisine professionnelle est mise à disposition en supplément (200 à 290 € selon le nombre de convives) pour votre traiteur, votre cuisinier à domicile ou vous-même.",
+  },
+  {
+    keywords: ["cuisine", "compose", "equipement cuisine", "frigo", "four", "piano", "glacon"],
+    question: "Comment se compose la grande cuisine professionnelle ?",
+    answer:
+      "Un espace de 50 m², avec : cinq frigos, deux micro-ondes, deux étuves et un grill, deux brûleurs professionnels avec piano, un grand four à gaz (gaz en bouteille non inclus), une plonge professionnelle avec lave-vaisselle, de nombreuses tables et tablettes en inox, une machine à glaçons (25 kg/24h) et un congélateur.",
   },
   {
     keywords: ["heure", "fete", "musique", "bruit", "fin de soiree", "duree soiree"],
