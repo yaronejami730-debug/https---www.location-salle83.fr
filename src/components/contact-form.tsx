@@ -6,6 +6,7 @@ import { Controller, useForm } from "react-hook-form";
 import { useState } from "react";
 import { z } from "zod";
 import { DatePicker } from "./date-picker";
+import { AddressAutocomplete } from "./address-autocomplete";
 import { computeQuote, findBracket, pricingBrackets } from "@/lib/pricing";
 import { leadReference } from "@/lib/lead-reference";
 import { submitLead } from "@/app/(site)/contact/actions";
@@ -306,11 +307,16 @@ export function ContactForm() {
 
       <div>
         <label className="mb-2 block text-sm text-[var(--foreground)]/80">Adresse postale</label>
-        <input
-          {...register("address")}
-          autoComplete="street-address"
-          placeholder="Numéro, rue, code postal, ville"
-          className="w-full rounded-lg border border-black/10 px-4 py-3 text-sm"
+        <Controller
+          name="address"
+          control={control}
+          render={({ field }) => (
+            <AddressAutocomplete
+              value={field.value}
+              onChange={field.onChange}
+              className="w-full rounded-lg border border-black/10 px-4 py-3 text-sm"
+            />
+          )}
         />
         {errors.address && <p className="mt-1 text-xs text-red-600">{errors.address.message}</p>}
       </div>
