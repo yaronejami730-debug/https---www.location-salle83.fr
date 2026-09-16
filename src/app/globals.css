@@ -43,7 +43,8 @@ body {
     transform: translateX(0);
   }
   to {
-    transform: translateX(-50%);
+    /* 1/6 — the marquee renders 6 identical copies of the logo set, so this shifts by exactly one copy-width */
+    transform: translateX(-16.6667%);
   }
 }
 

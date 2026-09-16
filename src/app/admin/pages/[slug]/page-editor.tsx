@@ -304,41 +304,18 @@ export function PageEditor({
                 as="h1"
                 value={val("hero_title")}
                 onChange={set("hero_title")}
-                className="max-w-4xl font-serif text-5xl leading-[1.1] text-white sm:text-7xl"
+                className="max-w-4xl font-script text-5xl leading-[1.3] text-white sm:text-7xl"
               />
               <EditableText
                 value={val("hero_accent")}
                 onChange={set("hero_accent")}
-                className="mt-3 font-script text-6xl leading-[1.3] text-white sm:text-7xl"
+                className="mt-2 font-script text-5xl leading-[1.3] text-white sm:text-7xl"
               />
               <EditableText
                 value={val("hero_description")}
                 onChange={set("hero_description")}
                 className="mt-8 max-w-xl text-base text-white/85"
               />
-            </Container>
-          </section>
-
-          <section className="py-16 bg-[var(--background-muted)]">
-            <Container className="max-w-md">
-              <div className="rounded-2xl bg-[var(--background)] p-8 text-center">
-                <EditableText as="h3" value={val("mariage_card_title")} onChange={set("mariage_card_title")} className="font-serif text-2xl" />
-                <EditableText value={val("mariage_card_text")} onChange={set("mariage_card_text")} className="mt-3 text-sm text-[var(--foreground)]/70" />
-              </div>
-            </Container>
-          </section>
-
-          <section className="py-16">
-            <Container>
-              <EditableText as="h2" value={val("stats_title")} onChange={set("stats_title")} className="text-center font-serif text-3xl text-[var(--foreground)]" />
-              <div className="mt-10 grid grid-cols-2 gap-6 sm:grid-cols-4">
-                {[1, 2, 3, 4].map((n) => (
-                  <div key={n} className="text-center">
-                    <EditableText value={val(`stat${n}_value`)} onChange={set(`stat${n}_value`)} className="font-serif text-3xl text-[var(--accent)]" />
-                    <EditableText value={val(`stat${n}_label`)} onChange={set(`stat${n}_label`)} className="mt-1 text-sm text-[var(--foreground)]/60" />
-                  </div>
-                ))}
-              </div>
             </Container>
           </section>
 
@@ -355,6 +332,20 @@ export function PageEditor({
           </section>
 
           <section className="py-16">
+            <Container>
+              <EditableText as="h2" value={val("stats_title")} onChange={set("stats_title")} className="text-center font-serif text-3xl text-[var(--foreground)]" />
+              <div className="mt-10 grid grid-cols-2 divide-x divide-y divide-black/10 overflow-hidden rounded-2xl border border-black/10 sm:grid-cols-4 sm:divide-y-0">
+                {[1, 2, 3, 4].map((n) => (
+                  <div key={n} className="flex flex-col items-center justify-center gap-1.5 px-4 py-8 text-center">
+                    <EditableText value={val(`stat${n}_value`)} onChange={set(`stat${n}_value`)} className="font-serif text-4xl text-[var(--accent)]" />
+                    <EditableText value={val(`stat${n}_label`)} onChange={set(`stat${n}_label`)} className="text-xs uppercase tracking-[0.15em] text-[var(--foreground)]/50" />
+                  </div>
+                ))}
+              </div>
+            </Container>
+          </section>
+
+          <section className="py-16 bg-[var(--background-muted)]">
             <Container className="grid items-center gap-8 sm:grid-cols-2">
               <div className="relative aspect-[4/3] overflow-hidden rounded-xl">
                 {hebergementMedia[0] && <Image src={mediaUrl(hebergementMedia[0].storage_path)} alt="" fill className="object-cover" sizes="500px" />}

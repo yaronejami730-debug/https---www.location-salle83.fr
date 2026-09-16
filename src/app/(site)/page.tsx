@@ -66,38 +66,6 @@ export default async function HomePage() {
 
       <section className="py-20 bg-[var(--background-muted)]">
         <Reveal>
-          <Container className="max-w-md">
-            <div className="rounded-2xl bg-[var(--background)] p-10 text-center">
-              <h3 className="font-serif text-2xl">{f("mariage_card_title")}</h3>
-              <p className="mt-3 text-sm text-[var(--foreground)]/70">{f("mariage_card_text")}</p>
-              <Link href="/mariage" className="mt-6 inline-block text-sm text-[var(--accent)] hover:underline">
-                Découvrir les mariages →
-              </Link>
-            </div>
-          </Container>
-        </Reveal>
-      </section>
-
-      <section className="py-20">
-        <Reveal>
-          <Container>
-            <h2 className="text-center font-serif text-3xl text-[var(--foreground)]">{f("stats_title")}</h2>
-            <div className="mt-12 grid grid-cols-2 gap-8 sm:grid-cols-4">
-              {stats.map((s, i) => (
-                <Reveal key={s.label} delayMs={i * 100}>
-                  <div className="text-center">
-                    <p className="font-serif text-3xl text-[var(--accent)]">{s.value}</p>
-                    <p className="mt-1 text-sm text-[var(--foreground)]/60">{s.label}</p>
-                  </div>
-                </Reveal>
-              ))}
-            </div>
-          </Container>
-        </Reveal>
-      </section>
-
-      <section className="py-20 bg-[var(--background-muted)]">
-        <Reveal>
           <Container className="grid items-center gap-10 sm:grid-cols-2">
             <div className="relative aspect-[4/3] overflow-hidden rounded-2xl sm:order-2">
               <Image src={histoirePhoto} alt="Notre histoire" fill className="object-cover" sizes="(min-width: 640px) 500px, 100vw" />
@@ -111,6 +79,24 @@ export default async function HomePage() {
       </section>
 
       <section className="py-20">
+        <Reveal>
+          <Container>
+            <h2 className="text-center font-serif text-3xl text-[var(--foreground)]">{f("stats_title")}</h2>
+            <div className="mt-12 grid grid-cols-2 divide-x divide-y divide-black/10 overflow-hidden rounded-2xl border border-black/10 sm:grid-cols-4 sm:divide-y-0">
+              {stats.map((s, i) => (
+                <Reveal key={s.label} delayMs={i * 100}>
+                  <div className="flex flex-col items-center justify-center gap-1.5 px-4 py-10 text-center">
+                    <p className="font-serif text-4xl text-[var(--accent)]">{s.value}</p>
+                    <p className="text-xs uppercase tracking-[0.15em] text-[var(--foreground)]/50">{s.label}</p>
+                  </div>
+                </Reveal>
+              ))}
+            </div>
+          </Container>
+        </Reveal>
+      </section>
+
+      <section className="py-20 bg-[var(--background-muted)]">
         <Reveal>
           <Container className="grid items-center gap-10 sm:grid-cols-2">
             <div className="relative aspect-[4/3] overflow-hidden rounded-xl">

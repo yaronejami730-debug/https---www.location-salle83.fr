@@ -6,8 +6,11 @@ const logos = [
   { src: "/images/logos/booking-logo.svg", alt: "Booking.com" },
 ];
 
+// Rendered 6x (not 2x): on wide viewports, 2 copies run out of content before
+// the loop point and show a blank gap. 6 copies keeps the track always wider
+// than the viewport, so the -1/6-width shift below never exposes an edge.
 export function LogoMarquee() {
-  const track = [...logos, ...logos];
+  const track = [...logos, ...logos, ...logos, ...logos, ...logos, ...logos];
 
   return (
     <section className="overflow-hidden border-y border-black/5 bg-[var(--background-muted)] py-8">

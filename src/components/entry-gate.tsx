@@ -20,8 +20,8 @@ function GateContent({ offset, heroTitle, heroAccent, heroDescription }: { offse
       <Image src="/images/entry-gate.jpg" alt="" fill priority className="object-cover" sizes="100vw" />
       <div className="absolute inset-0 bg-black/45" />
       <div className="absolute inset-0 flex flex-col items-center justify-center px-4 text-center text-white">
-        <h1 className="max-w-4xl font-serif text-5xl leading-[1.1] sm:text-7xl">{heroTitle}</h1>
-        <p className="mt-3 font-script text-6xl leading-[1.3] sm:text-7xl">{heroAccent}</p>
+        <h1 className="max-w-4xl font-script text-5xl leading-[1.3] sm:text-7xl">{heroTitle}</h1>
+        <p className="mt-2 font-script text-5xl leading-[1.3] sm:text-7xl">{heroAccent}</p>
         <p className="mt-8 max-w-xl text-base text-white/85">{heroDescription}</p>
       </div>
     </div>
@@ -42,7 +42,7 @@ export function EntryGate({ heroTitle, heroAccent, heroDescription }: EntryGateP
 
   useEffect(() => {
     if (phase !== "opening") return;
-    const t = setTimeout(() => setPhase("open"), 900);
+    const t = setTimeout(() => setPhase("open"), 1800);
     return () => clearTimeout(t);
   }, [phase]);
 
@@ -54,29 +54,29 @@ export function EntryGate({ heroTitle, heroAccent, heroDescription }: EntryGateP
   return (
     <div className="fixed inset-0 z-50">
       <div
-        className={`absolute inset-y-0 left-0 w-1/2 overflow-hidden transition-transform duration-[900ms] ease-in-out ${
+        className={`absolute inset-y-0 left-0 w-1/2 overflow-hidden transition-transform duration-[1800ms] ease-[cubic-bezier(0.83,0,0.17,1)] ${
           opening ? "-translate-x-full" : "translate-x-0"
         }`}
       >
         <GateContent offset="0" {...contentProps} />
       </div>
       <div
-        className={`absolute inset-y-0 right-0 w-1/2 overflow-hidden transition-transform duration-[900ms] ease-in-out ${
+        className={`absolute inset-y-0 right-0 w-1/2 overflow-hidden transition-transform duration-[1800ms] ease-[cubic-bezier(0.83,0,0.17,1)] ${
           opening ? "translate-x-full" : "translate-x-0"
         }`}
       >
         <GateContent offset="-50vw" {...contentProps} />
       </div>
 
-      {!opening && (
-        <button
-          type="button"
-          onClick={() => setPhase("opening")}
-          className="absolute bottom-[15%] left-1/2 z-10 -translate-x-1/2 rounded-full border border-white/60 px-8 py-3.5 text-sm tracking-wide text-white transition-colors hover:bg-white hover:text-[var(--foreground)]"
-        >
-          Entrer
-        </button>
-      )}
+      <button
+        type="button"
+        onClick={() => setPhase("opening")}
+        className={`absolute bottom-[15%] left-1/2 z-10 -translate-x-1/2 rounded-full border border-white/60 px-8 py-3.5 text-sm tracking-wide text-white transition-opacity duration-300 hover:bg-white hover:text-[var(--foreground)] ${
+          opening ? "pointer-events-none opacity-0" : "opacity-100"
+        }`}
+      >
+        Accéder au site
+      </button>
     </div>
   );
 }
