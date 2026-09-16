@@ -82,7 +82,7 @@ export default async function HomePage() {
                       sizes="(min-width: 640px) 33vw, 100vw"
                     />
                     <div className="absolute inset-0 bg-black/30 transition-colors duration-500 group-hover:bg-black/50" />
-                    <span className="relative z-10 mb-8 inline-flex items-center gap-2 rounded-full border border-white/60 px-6 py-3 text-sm tracking-wide text-white transition-colors group-hover:bg-white group-hover:text-[var(--foreground)]">
+                    <span className="relative z-10 mb-12 inline-flex items-center gap-2 rounded-full border border-white/60 px-6 py-3 text-sm tracking-wide text-white transition-colors group-hover:bg-white group-hover:text-[var(--foreground)]">
                       {choice.label}
                       <span className="transition-transform duration-300 group-hover:translate-x-1">→</span>
                     </span>
