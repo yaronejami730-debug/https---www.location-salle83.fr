@@ -6,6 +6,10 @@ import { Container } from "@/components/container";
 import { getPageContent, getMedia } from "@/lib/content";
 import { mediaUrl } from "@/lib/supabase-public";
 import { getSchema, fieldValue } from "@/lib/page-schemas";
+import { AmenityIcon } from "@/components/amenity-icon";
+import { LocationMap } from "@/components/location-map";
+
+const amenityIcons = ["wifi", "parking", "pool", "paw", "child", "restaurant", "kitchen", "fitness"] as const;
 
 const schema = getSchema("domaine")!;
 
@@ -50,6 +54,28 @@ export default async function DomainePage() {
             : Array.from({ length: 6 }).map((_, i) => (
                 <div key={i} className="aspect-[4/3] rounded-xl bg-gradient-to-br from-[var(--accent)]/20 to-[var(--accent-warm)]/20" />
               ))}
+        </Container>
+      </section>
+
+      <section className="py-16 bg-[var(--background-muted)]">
+        <Container>
+          <h2 className="text-center font-serif text-2xl text-[var(--foreground)]">{f("amenities_title")}</h2>
+          <div className="mx-auto mt-8 grid max-w-3xl grid-cols-2 gap-x-6 gap-y-6 sm:grid-cols-4">
+            {amenityIcons.map((icon, i) => (
+              <div key={icon} className="flex flex-col items-center gap-2 text-center">
+                <span className="flex h-11 w-11 items-center justify-center rounded-full bg-[var(--background)] text-[var(--accent)]">
+                  <AmenityIcon name={icon} />
+                </span>
+                <p className="text-xs text-[var(--foreground)]/70">{f(`amenity${i + 1}`)}</p>
+              </div>
+            ))}
+          </div>
+        </Container>
+      </section>
+
+      <section className="py-16">
+        <Container>
+          <LocationMap />
         </Container>
       </section>
 

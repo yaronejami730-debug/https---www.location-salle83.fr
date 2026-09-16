@@ -9,6 +9,10 @@ import { uploadPhoto, deletePhoto, reorderPhotos, replacePhoto } from "../../(da
 import type { PageSchema } from "@/lib/page-schemas";
 import { pricingBrackets } from "@/lib/pricing";
 import { mediaUrl } from "@/lib/supabase-public";
+import { AmenityIcon } from "@/components/amenity-icon";
+import { LocationMap } from "@/components/location-map";
+
+const amenityIcons = ["wifi", "parking", "pool", "paw", "child", "restaurant", "kitchen", "fitness"] as const;
 
 type MediaRow = { id: string; storage_path: string; alt: string | null; page: string; sort_order: number };
 type FaqRow = { id: string; question: string; answer: string };
@@ -610,6 +614,33 @@ export function PageEditor({
                 />
               </Container>
             </section>
+          )}
+
+          {schema.slug === "domaine" && (
+            <>
+              <section className="py-16 bg-[var(--background-muted)]">
+                <Container>
+                  <EditableText as="h2" value={val("amenities_title")} onChange={set("amenities_title")} className="text-center font-serif text-2xl text-[var(--foreground)]" />
+                  <div className="mx-auto mt-8 grid max-w-3xl grid-cols-2 gap-x-6 gap-y-6 sm:grid-cols-4">
+                    {amenityIcons.map((icon, i) => (
+                      <div key={icon} className="flex flex-col items-center gap-2 text-center">
+                        <span className="flex h-11 w-11 items-center justify-center rounded-full bg-[var(--background)] text-[var(--accent)]">
+                          <AmenityIcon name={icon} />
+                        </span>
+                        <EditableText value={val(`amenity${i + 1}`)} onChange={set(`amenity${i + 1}`)} className="text-xs text-[var(--foreground)]/70" />
+                      </div>
+                    ))}
+                  </div>
+                </Container>
+              </section>
+
+              <section className="py-16">
+                <Container>
+                  <p className="mb-3 text-xs text-[var(--foreground)]/40">Carte non éditable — coordonnées fixées dans le code.</p>
+                  <LocationMap />
+                </Container>
+              </section>
+            </>
           )}
 
           {schema.slug === "contact" && (
