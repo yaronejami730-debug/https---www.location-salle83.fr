@@ -40,18 +40,16 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function HomePage() {
-  const [pageContent, faqs, reviews, lieuPhotos, domainePhotos, histoirePhotos] = await Promise.all([
+  const [pageContent, faqs, reviews, domainePhotos, histoirePhotos] = await Promise.all([
     getPageContent("home"),
     getFaqs("home"),
     getReviews(),
-    getMedia("home-lieu"),
     getMedia("home-domaine"),
     getMedia("home-histoire"),
   ]);
 
   const c = pageContent?.content ?? {};
   const f = (key: string) => fieldValue(c, schema.fields.find((x) => x.key === key)!);
-  const lieuPhoto = lieuPhotos[0] ? mediaUrl(lieuPhotos[0].storage_path) : "/images/domaine-pool.jpg";
   const domainePhoto = domainePhotos[0] ? mediaUrl(domainePhotos[0].storage_path) : "/images/domaine-featured.jpg";
   const histoirePhoto = histoirePhotos[0] ? mediaUrl(histoirePhotos[0].storage_path) : "/images/mariage-hero.jpg";
 
@@ -82,23 +80,9 @@ export default async function HomePage() {
         </Link>
       </section>
 
-      <section className="pt-24 pb-14 sm:pt-28">
-        <Reveal>
-          <Container className="grid items-center gap-10 sm:grid-cols-2">
-            <div className="relative aspect-[4/3] overflow-hidden rounded-2xl">
-              <Image src={lieuPhoto} alt="Le domaine" fill className="object-cover" sizes="(min-width: 640px) 500px, 100vw" />
-            </div>
-            <div>
-              <h2 className="font-serif text-3xl text-[var(--foreground)]">{f("lieu_title")}</h2>
-              <p className="mt-5 text-[var(--foreground)]/70">{f("lieu_text")}</p>
-            </div>
-          </Container>
-        </Reveal>
-      </section>
-
       <Link
         href="/domaine"
-        className="group relative flex h-[60vh] min-h-[380px] items-center justify-center overflow-hidden text-center"
+        className="group relative mt-24 flex h-[60vh] min-h-[380px] items-center justify-center overflow-hidden text-center sm:mt-28"
       >
         <Image
           src={domainePhoto}

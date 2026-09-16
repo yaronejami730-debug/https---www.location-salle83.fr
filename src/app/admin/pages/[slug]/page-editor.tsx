@@ -321,16 +321,6 @@ export function PageEditor({
             </div>
           </section>
 
-          <section className="pt-24 pb-14 sm:pt-28">
-            <Container className="grid items-center gap-10 sm:grid-cols-2">
-              <EditablePhotoGrid photos={zigzagMedia["home-lieu"] ?? []} page="home-lieu" aspect="aspect-[4/3]" />
-              <div>
-                <EditableText as="h2" value={val("lieu_title")} onChange={set("lieu_title")} className="font-serif text-3xl text-[var(--foreground)]" />
-                <EditableText value={val("lieu_text")} onChange={set("lieu_text")} className="mt-5 text-[var(--foreground)]/70" />
-              </div>
-            </Container>
-          </section>
-
           <section className="py-16">
             <Container>
               <p className="mb-2 text-xs font-medium text-[var(--accent)]">Bannière "Accéder au domaine" (grande photo pleine largeur)</p>

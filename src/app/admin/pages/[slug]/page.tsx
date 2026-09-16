@@ -18,7 +18,7 @@ export default async function AdminPageEditorRoute({ params }: { params: Promise
     : slug === "domaine"
       ? ["domaine-pool", "domaine-featured"]
       : slug === "home"
-        ? ["home-lieu", "home-domaine", "home-histoire"]
+        ? ["home-domaine", "home-histoire"]
         : [];
 
   const [{ data: row }, { data: faqs }, { data: reviews }, { data: media }, { data: hebergementMedia }, zigzagRows] = await Promise.all([
