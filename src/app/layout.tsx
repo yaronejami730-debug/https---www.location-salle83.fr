@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Cormorant_Garamond, Inter, Playfair_Display } from "next/font/google";
+import { Cormorant_Garamond, Inter, Playfair_Display, Alex_Brush } from "next/font/google";
 import { siteConfig } from "@/lib/site";
 import "./globals.css";
 
@@ -21,6 +21,12 @@ const inter = Inter({
   subsets: ["latin"],
 });
 
+const alexBrush = Alex_Brush({
+  variable: "--font-script",
+  subsets: ["latin"],
+  weight: "400",
+});
+
 export const metadata: Metadata = {
   metadataBase: new URL(siteConfig.domain),
   title: {
@@ -37,7 +43,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="fr" className={`${cormorant.variable} ${playfair.variable} ${inter.variable} h-full antialiased`}>
+    <html lang="fr" className={`${cormorant.variable} ${playfair.variable} ${inter.variable} ${alexBrush.variable} h-full antialiased`}>
       <body className="min-h-full flex flex-col">{children}</body>
     </html>
   );

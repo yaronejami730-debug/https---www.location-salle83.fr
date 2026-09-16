@@ -9,8 +9,10 @@ export const pageSchemas: PageSchema[] = [
     slug: "home",
     label: "Accueil",
     fields: [
-      { key: "hero_title", label: "Hero — titre", type: "text", default: "Un lieu d'exception pour vos moments inoubliables" },
+      { key: "hero_title", label: "Hero — titre", type: "text", default: "Vivez l'expérience" },
+      { key: "hero_accent", label: "Hero — signature", type: "text", default: "la Bégude" },
       { key: "hero_description", label: "Hero — sous-titre", type: "text", default: "Mariages · Séminaires · Réceptions · Événements privés" },
+      { key: "hero_cta", label: "Hero — bouton", type: "text", default: "Préparer mon événement" },
       { key: "lieu_title", label: "Section \"Le lieu\" — titre", type: "text", default: "Le lieu" },
       { key: "lieu_text", label: "Section \"Le lieu\" — texte", type: "textarea", default: "Un domaine pensé pour accueillir vos plus beaux moments : nature préservée, bâtisses en pierre, lumière de Provence et attention portée à chaque détail. Ici, chaque événement devient une expérience." },
       { key: "mariage_card_title", label: "Carte Mariage — titre", type: "text", default: "Mariage" },

@@ -292,25 +292,33 @@ export function PageEditor({
 
       {schema.slug === "home" && (
         <>
-          <section className="relative flex min-h-[70vh] items-center justify-center overflow-hidden text-center">
+          <section className="relative flex min-h-[90vh] items-center justify-center overflow-hidden text-center">
             <Image src="/images/home-hero.jpg" alt="" fill className="object-cover" sizes="100vw" />
-            <div className="absolute inset-0 bg-black/50" />
-            <Container className="relative z-10 flex flex-col items-center py-20">
+            <div className="absolute inset-0 bg-black/45" />
+            <Container className="relative z-10 flex flex-col items-center px-4">
               <EditableText
                 as="h1"
                 value={val("hero_title")}
                 onChange={set("hero_title")}
-                className="mt-6 max-w-3xl font-serif text-4xl leading-tight text-white sm:text-6xl"
+                className="max-w-4xl font-serif text-5xl leading-[1.1] text-white sm:text-7xl"
+              />
+              <EditableText
+                value={val("hero_accent")}
+                onChange={set("hero_accent")}
+                className="mt-2 font-script text-5xl leading-none text-white sm:text-6xl"
               />
               <EditableText
                 value={val("hero_description")}
                 onChange={set("hero_description")}
-                className="mt-6 max-w-xl text-base text-white/85"
+                className="mt-8 max-w-xl text-base text-white/85"
               />
             </Container>
+            <div className="absolute bottom-0 left-1/2 z-20 inline-flex -translate-x-1/2 translate-y-1/2 items-center rounded-full bg-[var(--accent)] px-10 py-4 text-sm tracking-wide text-white shadow-lg">
+              <EditableText value={val("hero_cta")} onChange={set("hero_cta")} className="text-white" />
+            </div>
           </section>
 
-          <section className="py-16">
+          <section className="pt-24 pb-16 sm:pt-28">
             <Container className="max-w-2xl text-center">
               <EditableText as="h2" value={val("lieu_title")} onChange={set("lieu_title")} className="font-serif text-3xl text-[var(--foreground)]" />
               <EditableText value={val("lieu_text")} onChange={set("lieu_text")} className="mt-5 text-[var(--foreground)]/70" />
