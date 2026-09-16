@@ -2,7 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { supabaseAdmin } from "@/lib/supabase-admin";
-import { watermarkImage } from "@/lib/watermark";
+import { processUploadedImage } from "@/lib/watermark";
 
 export async function uploadPhoto(formData: FormData) {
   const file = formData.get("file") as File | null;
@@ -11,9 +11,9 @@ export async function uploadPhoto(formData: FormData) {
 
   const supabase = supabaseAdmin();
   const path = `${page}/${crypto.randomUUID()}.jpg`;
-  const watermarked = await watermarkImage(Buffer.from(await file.arrayBuffer()));
+  const processed = await processUploadedImage(Buffer.from(await file.arrayBuffer()));
 
-  const { error } = await supabase.storage.from("media").upload(path, watermarked, {
+  const { error } = await supabase.storage.from("media").upload(path, processed, {
     contentType: "image/jpeg",
   });
   if (error) throw error;
@@ -26,7 +26,7 @@ export async function uploadPhoto(formData: FormData) {
     .limit(1);
   const nextOrder = (existing?.[0]?.sort_order ?? -1) + 1;
 
-  await supabase.from("media").insert({ storage_path: path, page, alt: file.name, sort_order: nextOrder, watermarked: true });
+  await supabase.from("media").insert({ storage_path: path, page, alt: file.name, sort_order: nextOrder });
   revalidatePath("/", "layout");
 }
 
@@ -71,12 +71,12 @@ export async function replacePhoto(id: string, oldStoragePath: string, page: str
 
   const supabase = supabaseAdmin();
   const newPath = `${page}/${crypto.randomUUID()}.jpg`;
-  const watermarked = await watermarkImage(Buffer.from(await file.arrayBuffer()));
+  const processed = await processUploadedImage(Buffer.from(await file.arrayBuffer()));
 
-  const { error } = await supabase.storage.from("media").upload(newPath, watermarked, { contentType: "image/jpeg" });
+  const { error } = await supabase.storage.from("media").upload(newPath, processed, { contentType: "image/jpeg" });
   if (error) throw error;
 
-  await supabase.from("media").update({ storage_path: newPath, alt: file.name, watermarked: true }).eq("id", id);
+  await supabase.from("media").update({ storage_path: newPath, alt: file.name }).eq("id", id);
   await supabase.storage.from("media").remove([oldStoragePath]);
 
   revalidatePath("/", "layout");
