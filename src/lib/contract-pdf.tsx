@@ -4,30 +4,30 @@ import { siteConfig } from "@/lib/site";
 import type { PricingBracket } from "@/lib/pricing";
 
 const styles = StyleSheet.create({
-  page: { padding: 40, paddingBottom: 60, fontSize: 9.5, fontFamily: "Helvetica", color: "#2b2a26" },
-  header: { flexDirection: "row", alignItems: "center", justifyContent: "space-between", marginBottom: 18 },
-  logo: { width: 62, height: 62 },
-  title: { fontSize: 15, fontFamily: "Helvetica-Bold" },
-  subtitle: { fontSize: 8.5, color: "#6b6a63", marginTop: 2 },
-  section: { marginTop: 14 },
-  sectionTitle: { fontSize: 10.5, fontFamily: "Helvetica-Bold", marginBottom: 5, color: "#6b7d5f" },
-  row: { flexDirection: "row", justifyContent: "space-between", marginBottom: 3 },
+  page: { padding: 36, paddingBottom: 50, fontSize: 9, fontFamily: "Helvetica", color: "#2b2a26" },
+  header: { flexDirection: "row", alignItems: "center", justifyContent: "space-between", marginBottom: 10 },
+  logo: { width: 52, height: 52 },
+  title: { fontSize: 14, fontFamily: "Helvetica-Bold" },
+  subtitle: { fontSize: 8, color: "#6b6a63", marginTop: 1 },
+  section: { marginTop: 8 },
+  sectionTitle: { fontSize: 10, fontFamily: "Helvetica-Bold", marginBottom: 3, color: "#6b7d5f" },
+  row: { flexDirection: "row", justifyContent: "space-between", marginBottom: 2 },
   label: { color: "#6b6a63" },
   value: { fontFamily: "Helvetica-Bold" },
-  table: { marginTop: 6, borderWidth: 1, borderColor: "#e5e2da" },
+  table: { marginTop: 4, borderWidth: 1, borderColor: "#e5e2da" },
   tHeadRow: { flexDirection: "row", backgroundColor: "#f2ede4", borderBottomWidth: 1, borderBottomColor: "#e5e2da" },
   tRow: { flexDirection: "row", borderBottomWidth: 1, borderBottomColor: "#e5e2da" },
   tRowLast: { flexDirection: "row" },
   tRowActive: { flexDirection: "row", backgroundColor: "#eef1ea", borderBottomWidth: 1, borderBottomColor: "#e5e2da" },
-  tCell: { flex: 1, padding: 5, fontSize: 8 },
-  tCellHead: { flex: 1, padding: 5, fontSize: 8, fontFamily: "Helvetica-Bold" },
-  totalRow: { flexDirection: "row", justifyContent: "space-between", marginTop: 10, paddingTop: 8, borderTopWidth: 1, borderTopColor: "#2b2a26" },
-  totalLabel: { fontSize: 12, fontFamily: "Helvetica-Bold" },
-  totalValue: { fontSize: 14, fontFamily: "Helvetica-Bold", color: "#6b7d5f" },
-  paragraph: { marginBottom: 6, lineHeight: 1.45 },
-  bullet: { flexDirection: "row", marginBottom: 3 },
+  tCell: { flex: 1, padding: 4, fontSize: 7.5 },
+  tCellHead: { flex: 1, padding: 4, fontSize: 7.5, fontFamily: "Helvetica-Bold" },
+  totalRow: { flexDirection: "row", justifyContent: "space-between", marginTop: 6, paddingTop: 5, borderTopWidth: 1, borderTopColor: "#2b2a26" },
+  totalLabel: { fontSize: 11, fontFamily: "Helvetica-Bold" },
+  totalValue: { fontSize: 13, fontFamily: "Helvetica-Bold", color: "#6b7d5f" },
+  paragraph: { marginBottom: 3, lineHeight: 1.25 },
+  bullet: { flexDirection: "row", marginBottom: 1.5 },
   bulletDot: { width: 10 },
-  bulletText: { flex: 1, lineHeight: 1.4 },
+  bulletText: { flex: 1, lineHeight: 1.2 },
   footer: { position: "absolute", bottom: 24, left: 40, right: 40, fontSize: 7.5, color: "#9a988f", textAlign: "center" },
   pageNumber: { position: "absolute", bottom: 24, right: 40, fontSize: 7.5, color: "#9a988f" },
 });
@@ -182,7 +182,7 @@ export function ContractPdfDocument({
           </View>
         </View>
 
-        <View style={styles.section} break>
+        <View style={styles.section}>
           <Text style={styles.sectionTitle}>2) MENAGE :</Text>
           <Text style={styles.paragraph}>Le ménage doit être fait par le locataire</Text>
           <Text style={styles.paragraph}>Ou payé selon l&apos;état de la salle : Tarif en vigueur = 30 € de l&apos;heure</Text>
@@ -233,7 +233,7 @@ export function ContractPdfDocument({
           <Bullet>Un espace plonge équipée (Machine à laver et d&apos;un double évier en inox)</Bullet>
         </View>
 
-        <View style={styles.section} break>
+        <View style={styles.section}>
           <Text style={styles.paragraph}>
             Supplément utilisation de la vaisselle forfait de 110 à 150 euros. (sur demande la vaisselle :
             assiettes, verres, couverts). Un inventaire sera signé par le locataire.
@@ -282,7 +282,7 @@ export function ContractPdfDocument({
           <Bullet>Règlement de la Piscine : Horaire d&apos;ouverture 9H à 20H</Bullet>
         </View>
 
-        <View style={styles.section} break>
+        <View style={styles.section}>
           <Text style={styles.paragraph}>
             La piscine n&apos;étant pas surveillée, nous prions les parents de bien vouloir accompagner les enfants
             de moins de 15 ans, même s&apos;ils savent nager. Un accident est si vite arrivé ! Le Bailleur décline
@@ -336,7 +336,7 @@ export function ContractPdfDocument({
           <Text style={styles.paragraph}>Le solde et la caution doivent être payés à l&apos;arrivée dans les lieux.</Text>
         </View>
 
-        <View style={styles.section} break>
+        <View style={styles.section}>
           <Text style={styles.paragraph}>Fayence, le _______________</Text>
           <Text style={[styles.paragraph, { marginTop: 16, fontFamily: "Helvetica-Bold" }]}>« Bon pour acceptation »</Text>
           <View style={[styles.row, { marginTop: 24 }]}>
