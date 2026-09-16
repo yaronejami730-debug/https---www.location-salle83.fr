@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import { PageHero } from "@/components/page-hero";
 import { Container } from "@/components/container";
 import { FadeCarousel } from "@/components/fade-carousel";
@@ -62,21 +61,15 @@ export default async function HebergementPage() {
       </section>
 
       <section className="py-20 text-center">
-        <Container className="flex flex-col items-center justify-center gap-4 sm:flex-row">
+        <Container>
           <a
             href="https://www.domainedelabegude.com/fr"
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex rounded-full bg-[var(--accent)] px-8 py-3.5 text-sm text-white hover:opacity-90"
+            className="inline-flex rounded-full bg-[var(--accent)] px-12 py-5 text-base tracking-wide text-white hover:opacity-90"
           >
             {f("booking_cta")}
           </a>
-          <Link
-            href="/galerie"
-            className="inline-flex rounded-full border border-black/15 px-8 py-3.5 text-sm text-[var(--foreground)] hover:bg-black/5"
-          >
-            {f("gallery_cta")}
-          </Link>
         </Container>
       </section>
     </>
