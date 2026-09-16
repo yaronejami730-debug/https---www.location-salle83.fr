@@ -4,8 +4,8 @@ import convertHeic from "heic-convert";
 import { readFile } from "fs/promises";
 import { join } from "path";
 
-const OPACITY = 0.55;
-const WATERMARK_WIDTH_RATIO = 0.16;
+const OPACITY = 0.6;
+const WATERMARK_WIDTH_RATIO = 0.11;
 const MARGIN_RATIO = 0.03;
 
 let logoBuffer: Buffer | null = null;
