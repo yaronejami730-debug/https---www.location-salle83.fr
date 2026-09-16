@@ -307,7 +307,7 @@ export function PageEditor({
               <EditableText
                 value={val("hero_accent")}
                 onChange={set("hero_accent")}
-                className="mt-2 font-script text-5xl leading-none text-white sm:text-6xl"
+                className="mt-3 font-script text-6xl leading-[1.3] text-white sm:text-7xl"
               />
               <EditableText
                 value={val("hero_description")}

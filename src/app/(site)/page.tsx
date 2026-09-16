@@ -72,7 +72,7 @@ export default async function HomePage() {
         </div>
         <Container className="relative z-10 flex flex-col items-center px-4">
           <h1 className="max-w-4xl font-serif text-5xl leading-[1.1] text-white sm:text-7xl">{f("hero_title")}</h1>
-          <p className="mt-2 font-script text-5xl leading-none text-white sm:text-6xl">{f("hero_accent")}</p>
+          <p className="mt-3 font-script text-6xl leading-[1.3] text-white sm:text-7xl">{f("hero_accent")}</p>
           <p className="mt-8 max-w-xl text-base text-white/85">{f("hero_description")}</p>
         </Container>
         <Link
