@@ -346,13 +346,21 @@ export function PageEditor({
           </section>
 
           <section className="py-16 bg-[var(--background-muted)]">
-            <Container className="grid items-center gap-8 sm:grid-cols-2">
-              <div className="relative aspect-[4/3] overflow-hidden rounded-xl">
-                {hebergementMedia[0] && <Image src={mediaUrl(hebergementMedia[0].storage_path)} alt="" fill className="object-cover" sizes="500px" />}
-              </div>
-              <div>
-                <EditableText as="h2" value={val("hebergement_title")} onChange={set("hebergement_title")} className="font-serif text-3xl text-[var(--foreground)]" />
-                <EditableText value={val("hebergement_text")} onChange={set("hebergement_text")} className="mt-4 text-[var(--foreground)]/70" />
+            <Container>
+              <EditableText as="h2" value={val("choices_title")} onChange={set("choices_title")} className="text-center font-serif text-3xl text-[var(--foreground)]" />
+              <div className="mt-10 grid gap-6 sm:grid-cols-3">
+                {[
+                  { key: "home-choice-mariage", label: "choice_mariage_label" },
+                  { key: "home-choice-evenements", label: "choice_evenements_label" },
+                  { key: "home-choice-domaine", label: "choice_domaine_label" },
+                ].map((choice) => (
+                  <div key={choice.key}>
+                    <EditablePhotoGrid photos={zigzagMedia[choice.key] ?? []} page={choice.key} aspect="aspect-[3/4]" />
+                    <div className="mt-2 text-center">
+                      <EditableText value={val(choice.label)} onChange={set(choice.label)} className="text-sm text-[var(--foreground)]" />
+                    </div>
+                  </div>
+                ))}
               </div>
             </Container>
           </section>

@@ -7,7 +7,6 @@ import { LogoMarquee } from "@/components/logo-marquee";
 import { Reveal } from "@/components/reveal";
 import { getPageContent, getFaqs, getReviews, getMedia } from "@/lib/content";
 import { mediaUrl } from "@/lib/supabase-public";
-import { staticHebergementPhotos } from "@/lib/static-gallery";
 import { getSchema, fieldValue } from "@/lib/page-schemas";
 
 const schema = getSchema("home")!;
@@ -40,16 +39,37 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function HomePage() {
-  const [pageContent, faqs, reviews, histoirePhotos] = await Promise.all([
+  const [pageContent, faqs, reviews, histoirePhotos, choiceMariagePhotos, choiceEvenementsPhotos, choiceDomainePhotos] = await Promise.all([
     getPageContent("home"),
     getFaqs("home"),
     getReviews(),
     getMedia("home-histoire"),
+    getMedia("home-choice-mariage"),
+    getMedia("home-choice-evenements"),
+    getMedia("home-choice-domaine"),
   ]);
 
   const c = pageContent?.content ?? {};
   const f = (key: string) => fieldValue(c, schema.fields.find((x) => x.key === key)!);
   const histoirePhoto = histoirePhotos[0] ? mediaUrl(histoirePhotos[0].storage_path) : "/images/mariage-hero.jpg";
+
+  const choices = [
+    {
+      label: f("choice_mariage_label"),
+      href: "/mariage",
+      photo: choiceMariagePhotos[0] ? mediaUrl(choiceMariagePhotos[0].storage_path) : "/images/mariage-hero.jpg",
+    },
+    {
+      label: f("choice_evenements_label"),
+      href: "/evenements",
+      photo: choiceEvenementsPhotos[0] ? mediaUrl(choiceEvenementsPhotos[0].storage_path) : "/images/domaine-featured.jpg",
+    },
+    {
+      label: f("choice_domaine_label"),
+      href: "/domaine",
+      photo: choiceDomainePhotos[0] ? mediaUrl(choiceDomainePhotos[0].storage_path) : "/images/domaine-pool.jpg",
+    },
+  ];
 
   const displayFaqs = faqs.length > 0 ? faqs.map((fq) => ({ id: fq.id, question: fq.question, answer: fq.answer })) : fallbackFaqs;
 
@@ -98,16 +118,30 @@ export default async function HomePage() {
 
       <section className="py-20 bg-[var(--background-muted)]">
         <Reveal>
-          <Container className="grid items-center gap-10 sm:grid-cols-2">
-            <div className="relative aspect-[4/3] overflow-hidden rounded-xl">
-              <Image src={staticHebergementPhotos[0].src} alt={staticHebergementPhotos[0].alt} fill className="object-cover" sizes="500px" />
-            </div>
-            <div>
-              <h2 className="font-serif text-3xl text-[var(--foreground)]">{f("hebergement_title")}</h2>
-              <p className="mt-4 text-[var(--foreground)]/70">{f("hebergement_text")}</p>
-              <Link href="/hebergement" className="mt-6 inline-block text-sm text-[var(--accent)] hover:underline">
-                Découvrir l&apos;hébergement →
-              </Link>
+          <Container>
+            <h2 className="text-center font-serif text-3xl text-[var(--foreground)]">{f("choices_title")}</h2>
+            <div className="mt-10 grid gap-5 sm:grid-cols-3">
+              {choices.map((choice, i) => (
+                <Reveal key={choice.href} delayMs={i * 100}>
+                  <Link
+                    href={choice.href}
+                    className="group relative flex aspect-[3/4] items-end justify-center overflow-hidden rounded-2xl text-center"
+                  >
+                    <Image
+                      src={choice.photo}
+                      alt={choice.label}
+                      fill
+                      className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"
+                      sizes="(min-width: 640px) 33vw, 100vw"
+                    />
+                    <div className="absolute inset-0 bg-black/30 transition-colors duration-500 group-hover:bg-black/50" />
+                    <span className="relative z-10 mb-8 inline-flex items-center gap-2 rounded-full border border-white/60 px-6 py-3 text-sm tracking-wide text-white transition-colors group-hover:bg-white group-hover:text-[var(--foreground)]">
+                      {choice.label}
+                      <span className="transition-transform duration-300 group-hover:translate-x-1">→</span>
+                    </span>
+                  </Link>
+                </Reveal>
+              ))}
             </div>
           </Container>
         </Reveal>

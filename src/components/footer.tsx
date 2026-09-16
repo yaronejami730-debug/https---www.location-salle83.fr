@@ -9,7 +9,15 @@ export async function Footer() {
   return (
     <footer className="mt-auto border-t border-black/5 bg-[var(--background-muted)] py-14">
       <Container className="flex flex-col gap-10 sm:flex-row sm:justify-between">
-        <div className="max-w-sm">
+        <nav className="flex flex-col gap-2">
+          {navItems.map((item) => (
+            <Link key={item.href} href={item.href} className="text-sm text-[var(--foreground)]/70 hover:text-[var(--accent)]">
+              {item.label}
+            </Link>
+          ))}
+        </nav>
+
+        <div className="max-w-sm sm:text-right">
           <p className="font-serif text-lg text-[var(--foreground)]">{siteConfig.name}</p>
           <p className="mt-2 text-sm text-[var(--foreground)]/70">{settings.tagline}</p>
           <p className="mt-4 text-sm text-[var(--foreground)]/70">{siteConfig.address}</p>
@@ -29,14 +37,6 @@ export async function Footer() {
             </a>
           </p>
         </div>
-
-        <nav className="flex flex-col gap-2">
-          {navItems.map((item) => (
-            <Link key={item.href} href={item.href} className="text-sm text-[var(--foreground)]/70 hover:text-[var(--accent)]">
-              {item.label}
-            </Link>
-          ))}
-        </nav>
       </Container>
 
       <Container className="mt-10 flex flex-col gap-3 border-t border-black/5 pt-6 sm:flex-row sm:items-center sm:justify-between">
