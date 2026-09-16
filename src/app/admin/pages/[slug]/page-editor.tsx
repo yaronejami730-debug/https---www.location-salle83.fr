@@ -295,10 +295,11 @@ export function PageEditor({
         <>
           <section className="relative flex min-h-[90vh] items-center justify-center text-center">
             <div className="absolute inset-0 overflow-hidden">
-              <Image src="/images/home-hero.jpg" alt="" fill className="object-cover" sizes="100vw" />
+              <Image src="/images/entry-gate.jpg" alt="" fill className="object-cover" sizes="100vw" />
               <div className="absolute inset-0 bg-black/45" />
             </div>
             <Container className="relative z-10 flex flex-col items-center px-4">
+              <p className="mb-3 text-xs font-medium text-white/70">Contenu affiché sur le portail d&apos;entrée (portes qui s&apos;ouvrent)</p>
               <EditableText
                 as="h1"
                 value={val("hero_title")}
@@ -315,20 +316,6 @@ export function PageEditor({
                 onChange={set("hero_description")}
                 className="mt-8 max-w-xl text-base text-white/85"
               />
-            </Container>
-            <div className="absolute bottom-0 left-1/2 z-20 inline-flex -translate-x-1/2 translate-y-1/2 items-center rounded-full bg-[var(--accent)] px-10 py-4 text-sm tracking-wide text-white shadow-lg">
-              <EditableText value={val("hero_cta")} onChange={set("hero_cta")} className="text-white" />
-            </div>
-          </section>
-
-          <section className="py-16">
-            <Container>
-              <p className="mb-2 text-xs font-medium text-[var(--accent)]">Bannière "Accéder au domaine" (grande photo pleine largeur)</p>
-              <EditablePhotoGrid photos={zigzagMedia["home-domaine"] ?? []} page="home-domaine" aspect="aspect-[16/9]" />
-              <div className="mt-3 inline-flex items-center gap-3 rounded-full border border-black/20 px-6 py-2.5 text-sm tracking-wide text-[var(--foreground)]">
-                <EditableText value={val("domaine_cta_label")} onChange={set("domaine_cta_label")} />
-                →
-              </div>
             </Container>
           </section>
 

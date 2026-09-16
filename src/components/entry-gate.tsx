@@ -2,27 +2,33 @@
 
 import { useEffect, useState } from "react";
 import Image from "next/image";
-import { siteConfig } from "@/lib/site";
+
+type EntryGateProps = {
+  heroTitle: string;
+  heroAccent: string;
+  heroDescription: string;
+};
 
 // The panel below always has a `transform` (even translate-x-0 at rest), which per spec
 // makes it the containing block for `fixed` descendants. So this content is positioned
 // relative to the PANEL, not the viewport — `offset` corrects for that per side, so both
-// panels render the exact same full-viewport photo+logo, split down the middle by the
+// panels render the exact same full-viewport photo+headline, split down the middle by the
 // panels' own overflow-hidden clipping, and it travels with its door as it slides open.
-function GateContent({ offset }: { offset: string }) {
+function GateContent({ offset, heroTitle, heroAccent, heroDescription }: { offset: string } & EntryGateProps) {
   return (
     <div className="fixed inset-y-0 top-0 h-full w-screen" style={{ left: offset }}>
       <Image src="/images/entry-gate.jpg" alt="" fill priority className="object-cover" sizes="100vw" />
-      <div className="absolute inset-0 bg-black/55" />
-      <div className="absolute inset-0 flex flex-col items-center justify-center gap-4 text-white">
-        <Image src="/images/logo.png" alt={siteConfig.name} width={72} height={74} className="h-16 w-auto" />
-        <p className="font-serif text-2xl tracking-wide">{siteConfig.name}</p>
+      <div className="absolute inset-0 bg-black/45" />
+      <div className="absolute inset-0 flex flex-col items-center justify-center px-4 text-center text-white">
+        <h1 className="max-w-4xl font-serif text-5xl leading-[1.1] sm:text-7xl">{heroTitle}</h1>
+        <p className="mt-3 font-script text-6xl leading-[1.3] sm:text-7xl">{heroAccent}</p>
+        <p className="mt-8 max-w-xl text-base text-white/85">{heroDescription}</p>
       </div>
     </div>
   );
 }
 
-export function EntryGate() {
+export function EntryGate({ heroTitle, heroAccent, heroDescription }: EntryGateProps) {
   const [phase, setPhase] = useState<"closed" | "opening" | "open">("closed");
 
   useEffect(() => {
@@ -43,6 +49,7 @@ export function EntryGate() {
   if (phase === "open") return null;
 
   const opening = phase === "opening";
+  const contentProps = { heroTitle, heroAccent, heroDescription };
 
   return (
     <div className="fixed inset-0 z-50">
@@ -51,14 +58,14 @@ export function EntryGate() {
           opening ? "-translate-x-full" : "translate-x-0"
         }`}
       >
-        <GateContent offset="0" />
+        <GateContent offset="0" {...contentProps} />
       </div>
       <div
         className={`absolute inset-y-0 right-0 w-1/2 overflow-hidden transition-transform duration-[900ms] ease-in-out ${
           opening ? "translate-x-full" : "translate-x-0"
         }`}
       >
-        <GateContent offset="-50vw" />
+        <GateContent offset="-50vw" {...contentProps} />
       </div>
 
       {!opening && (

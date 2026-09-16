@@ -5,7 +5,6 @@ import { Container } from "@/components/container";
 import { EntryGate } from "@/components/entry-gate";
 import { LogoMarquee } from "@/components/logo-marquee";
 import { Reveal } from "@/components/reveal";
-import { HeroFadeImage } from "@/components/hero-fade-image";
 import { getPageContent, getFaqs, getReviews, getMedia } from "@/lib/content";
 import { mediaUrl } from "@/lib/supabase-public";
 import { staticHebergementPhotos } from "@/lib/static-gallery";
@@ -41,17 +40,15 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function HomePage() {
-  const [pageContent, faqs, reviews, domainePhotos, histoirePhotos] = await Promise.all([
+  const [pageContent, faqs, reviews, histoirePhotos] = await Promise.all([
     getPageContent("home"),
     getFaqs("home"),
     getReviews(),
-    getMedia("home-domaine"),
     getMedia("home-histoire"),
   ]);
 
   const c = pageContent?.content ?? {};
   const f = (key: string) => fieldValue(c, schema.fields.find((x) => x.key === key)!);
-  const domainePhoto = domainePhotos[0] ? mediaUrl(domainePhotos[0].storage_path) : "/images/domaine-featured.jpg";
   const histoirePhoto = histoirePhotos[0] ? mediaUrl(histoirePhotos[0].storage_path) : "/images/mariage-hero.jpg";
 
   const displayFaqs = faqs.length > 0 ? faqs.map((fq) => ({ id: fq.id, question: fq.question, answer: fq.answer })) : fallbackFaqs;
@@ -65,41 +62,7 @@ export default async function HomePage() {
 
   return (
     <>
-      <EntryGate />
-
-      <section className="relative flex min-h-screen items-center justify-center text-center">
-        <HeroFadeImage src="/images/home-hero.jpg" alt="Étang et jardins du Domaine de la Bégude" />
-        <div className="absolute inset-0 bg-black/45" />
-        <Container className="relative z-10 flex flex-col items-center px-4">
-          <h1 className="max-w-4xl font-serif text-5xl leading-[1.1] text-white sm:text-7xl">{f("hero_title")}</h1>
-          <p className="mt-3 font-script text-6xl leading-[1.3] text-white sm:text-7xl">{f("hero_accent")}</p>
-          <p className="mt-8 max-w-xl text-base text-white/85">{f("hero_description")}</p>
-        </Container>
-        <Link
-          href="/contact"
-          className="absolute bottom-0 left-1/2 z-20 inline-flex -translate-x-1/2 translate-y-1/2 items-center rounded-full bg-[var(--accent)] px-10 py-4 text-sm tracking-wide text-white shadow-lg hover:opacity-90"
-        >
-          {f("hero_cta")}
-        </Link>
-      </section>
-
-      <Link
-        href="/domaine"
-        className="group relative mt-24 flex h-[60vh] min-h-[380px] items-center justify-center overflow-hidden text-center sm:mt-28"
-      >
-        <Image
-          src={domainePhoto}
-          alt="Le domaine"
-          fill
-          className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"
-          sizes="100vw"
-        />
-        <div className="absolute inset-0 bg-black/35 transition-colors duration-500 group-hover:bg-black/50" />
-        <span className="relative z-10 inline-flex items-center gap-3 rounded-full border border-white/60 px-8 py-3.5 text-sm tracking-wide text-white transition-colors group-hover:bg-white group-hover:text-[var(--foreground)]">
-          {f("domaine_cta_label")}
-          <span className="transition-transform duration-300 group-hover:translate-x-1">→</span>
-        </span>
-      </Link>
+      <EntryGate heroTitle={f("hero_title")} heroAccent={f("hero_accent")} heroDescription={f("hero_description")} />
 
       <section className="py-20 bg-[var(--background-muted)]">
         <Reveal>

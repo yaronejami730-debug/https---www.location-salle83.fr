@@ -11,11 +11,9 @@ export const pageSchemas: PageSchema[] = [
     fields: [
       { key: "hero_title", label: "Hero — titre", type: "text", default: "Vivez l'expérience" },
       { key: "hero_accent", label: "Hero — signature", type: "text", default: "la Bégude" },
-      { key: "hero_description", label: "Hero — sous-titre", type: "text", default: "Mariages · Séminaires · Réceptions · Événements privés" },
-      { key: "hero_cta", label: "Hero — bouton", type: "text", default: "Préparer mon événement" },
+      { key: "hero_description", label: "Hero — sous-titre", type: "text", default: "Mariages · Réceptions · Événements privés" },
       { key: "lieu_title", label: "Section \"Le lieu\" — titre", type: "text", default: "Le lieu" },
       { key: "lieu_text", label: "Section \"Le lieu\" — texte", type: "textarea", default: "Un domaine pensé pour accueillir vos plus beaux moments : nature préservée, bâtisses en pierre, lumière de Provence et attention portée à chaque détail. Ici, chaque événement devient une expérience." },
-      { key: "domaine_cta_label", label: "Bannière domaine — bouton", type: "text", default: "Accéder" },
       { key: "histoire_title", label: "Section \"Notre histoire\" — titre", type: "text", default: "Notre histoire" },
       { key: "histoire_text", label: "Section \"Notre histoire\" — texte", type: "textarea", default: "Parlons un peu de nous. Depuis plusieurs générations, le domaine s'est transmis avec la même volonté : préserver un lieu authentique et le partager avec ceux qui viennent y célébrer leurs plus beaux moments." },
       { key: "mariage_card_title", label: "Carte Mariage — titre", type: "text", default: "Mariage" },
