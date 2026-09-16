@@ -4,13 +4,20 @@ import { useEffect, useState } from "react";
 import Image from "next/image";
 import { siteConfig } from "@/lib/site";
 
-// A transform on an ancestor makes it the containing block for `fixed`
-// descendants, so the logo below travels with its half-door as it slides.
-function DoorContent() {
+// The panel below always has a `transform` (even translate-x-0 at rest), which per spec
+// makes it the containing block for `fixed` descendants. So this content is positioned
+// relative to the PANEL, not the viewport — `offset` corrects for that per side, so both
+// panels render the exact same full-viewport photo+logo, split down the middle by the
+// panels' own overflow-hidden clipping, and it travels with its door as it slides open.
+function GateContent({ offset }: { offset: string }) {
   return (
-    <div className="fixed inset-0 flex flex-col items-center justify-center gap-4 text-white">
-      <Image src="/images/logo.png" alt={siteConfig.name} width={72} height={74} className="h-16 w-auto" />
-      <p className="font-serif text-2xl tracking-wide">{siteConfig.name}</p>
+    <div className="fixed inset-y-0 top-0 h-full w-screen" style={{ left: offset }}>
+      <Image src="/images/entry-gate.jpg" alt="" fill priority className="object-cover" sizes="100vw" />
+      <div className="absolute inset-0 bg-black/55" />
+      <div className="absolute inset-0 flex flex-col items-center justify-center gap-4 text-white">
+        <Image src="/images/logo.png" alt={siteConfig.name} width={72} height={74} className="h-16 w-auto" />
+        <p className="font-serif text-2xl tracking-wide">{siteConfig.name}</p>
+      </div>
     </div>
   );
 }
@@ -40,18 +47,18 @@ export function EntryGate() {
   return (
     <div className="fixed inset-0 z-50">
       <div
-        className={`absolute inset-y-0 left-0 w-1/2 overflow-hidden bg-[var(--foreground)] transition-transform duration-[900ms] ease-in-out ${
+        className={`absolute inset-y-0 left-0 w-1/2 overflow-hidden transition-transform duration-[900ms] ease-in-out ${
           opening ? "-translate-x-full" : "translate-x-0"
         }`}
       >
-        <DoorContent />
+        <GateContent offset="0" />
       </div>
       <div
-        className={`absolute inset-y-0 right-0 w-1/2 overflow-hidden bg-[var(--foreground)] transition-transform duration-[900ms] ease-in-out ${
+        className={`absolute inset-y-0 right-0 w-1/2 overflow-hidden transition-transform duration-[900ms] ease-in-out ${
           opening ? "translate-x-full" : "translate-x-0"
         }`}
       >
-        <DoorContent />
+        <GateContent offset="-50vw" />
       </div>
 
       {!opening && (
