@@ -50,7 +50,7 @@ export async function generateContractPdf(leadId: string, extra: { address: stri
   const reference = leadReference(lead.id);
   let qrCodeDataUri: string | null = null;
   try {
-    qrCodeDataUri = await QRCode.toDataURL(`${siteConfig.domain}/api/contrat/${reference}`, { margin: 1, width: 200 });
+    qrCodeDataUri = await QRCode.toDataURL(`${siteConfig.appUrl}/api/contrat/${reference}`, { margin: 1, width: 200 });
   } catch {
     qrCodeDataUri = null;
   }
