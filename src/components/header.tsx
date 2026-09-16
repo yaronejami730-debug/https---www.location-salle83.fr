@@ -13,13 +13,9 @@ export function Header() {
 
   return (
     <header className="sticky top-0 z-50 border-b border-black/5 bg-[var(--background)]/90 backdrop-blur">
-      <Container className="flex h-28 items-center justify-between">
-        <Link href="/" className="flex items-center gap-2">
-          <Image src="/images/logo.png" alt={siteConfig.name} width={104} height={106} className="h-24 w-auto" priority />
-        </Link>
-
-        <nav className="hidden lg:flex items-center gap-7">
-          {navItems.slice(1, -1).map((item) => (
+      <Container className="flex h-28 items-center justify-between gap-6">
+        <nav className="hidden lg:flex items-center gap-6">
+          {navItems.slice(0, -1).map((item) => (
             <Link
               key={item.href}
               href={item.href}
@@ -30,14 +26,13 @@ export function Header() {
               {item.label}
             </Link>
           ))}
+          <Link
+            href="/contact"
+            className="inline-flex items-center rounded-full bg-[var(--accent)] px-5 py-2.5 text-sm text-white transition-opacity hover:opacity-90"
+          >
+            Demander un devis
+          </Link>
         </nav>
-
-        <Link
-          href="/contact"
-          className="hidden lg:inline-flex items-center rounded-full bg-[var(--accent)] px-5 py-2.5 text-sm text-white transition-opacity hover:opacity-90"
-        >
-          Demander un devis
-        </Link>
 
         <button
           aria-label="Ouvrir le menu"
@@ -48,6 +43,19 @@ export function Header() {
             <path d="M4 7h16M4 12h16M4 17h16" strokeLinecap="round" />
           </svg>
         </button>
+
+        <div className="flex items-center gap-4">
+          <a
+            href={`tel:${siteConfig.phone.replace(/\s/g, "")}`}
+            className="hidden text-sm tracking-wide text-[var(--foreground)]/80 transition-colors hover:text-[var(--accent)] sm:block"
+          >
+            {siteConfig.phone}
+          </a>
+          <Link href="/" className="flex flex-col items-center gap-1">
+            <Image src="/images/logo.png" alt={siteConfig.name} width={68} height={70} className="h-14 w-auto" priority />
+            <span className="hidden whitespace-nowrap text-xs tracking-wide text-[var(--foreground)]/70 sm:block">{siteConfig.name}</span>
+          </Link>
+        </div>
       </Container>
 
       {open && (
