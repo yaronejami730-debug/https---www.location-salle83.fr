@@ -41,10 +41,14 @@ const styles = StyleSheet.create({
   pageNumber: { position: "absolute", bottom: 24, right: 40, fontSize: 7.5, color: "#9a988f" },
   headerRight: { alignItems: "center" },
   qrCode: { width: 52, height: 52, marginTop: 6 },
+  clientCard: { marginTop: 8, padding: 10, borderWidth: 1, borderColor: "#e5e2da", borderRadius: 4, backgroundColor: "#faf8f4" },
+  clientName: { fontSize: 11, fontFamily: "Helvetica-Bold", marginBottom: 3 },
+  clientLine: { fontSize: 8.5, color: "#6b6a63", marginBottom: 1.5 },
 });
 
 export type ContractPdfProps = {
   reference: string;
+  civility: string;
   fullName: string;
   address: string;
   phone: string;
@@ -94,6 +98,7 @@ function Heading({ number, title, children }: { number: string; title: string; c
 
 export function ContractPdfDocument({
   reference,
+  civility,
   fullName,
   address,
   phone,
@@ -132,21 +137,14 @@ export function ContractPdfDocument({
 
         <View style={styles.section} wrap={false}>
           <Text style={styles.sectionTitle}>ET :</Text>
-          <View style={styles.row}>
-            <Text style={styles.label}>Mr et Mme</Text>
-            <Text style={styles.value}>{fullName || "……………………………"}</Text>
-          </View>
-          <View style={styles.row}>
-            <Text style={styles.label}>Domicilié à</Text>
-            <Text style={styles.value}>{address || "……………………………"}</Text>
-          </View>
-          <View style={styles.row}>
-            <Text style={styles.label}>Tél / Port</Text>
-            <Text style={styles.value}>{phone || "……………………………"}</Text>
-          </View>
-          <View style={styles.row}>
-            <Text style={styles.label}>Email</Text>
-            <Text style={styles.value}>{email || "……………………………"}</Text>
+          <View style={styles.clientCard}>
+            <Text style={styles.clientName}>
+              {civility ? `${civility} ` : ""}
+              {fullName || "……………………………"}
+            </Text>
+            <Text style={styles.clientLine}>Domicilié(e) à : {address || "……………………………"}</Text>
+            <Text style={styles.clientLine}>Tél / Port : {phone || "……………………………"}</Text>
+            <Text style={styles.clientLine}>Email : {email || "……………………………"}</Text>
           </View>
         </View>
 

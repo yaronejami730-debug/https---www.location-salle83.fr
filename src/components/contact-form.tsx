@@ -20,8 +20,10 @@ const schema = z
     vaisselle: z.boolean(),
     cuisine: z.boolean(),
     chapiteauCount: z.string(),
+    civility: z.enum(["madame", "monsieur"]),
     firstName: z.string().min(2, "Prénom requis"),
     lastName: z.string().min(2, "Nom requis"),
+    address: z.string().min(5, "Adresse requise"),
     phone: z.string().min(6, "Téléphone requis"),
     email: z.string().email("Email invalide"),
     message: z.string().optional(),
@@ -82,6 +84,7 @@ export function ContactForm() {
       vaisselle: false,
       cuisine: false,
       chapiteauCount: "0",
+      civility: "madame",
       termsAccepted: false,
     },
   });
@@ -273,6 +276,21 @@ export function ContactForm() {
         )}
       </div>
 
+      <div>
+        <span className="mb-2 block text-sm text-[var(--foreground)]/80">Civilité</span>
+        <div className="flex gap-3">
+          {(["madame", "monsieur"] as const).map((value) => (
+            <label
+              key={value}
+              className="flex flex-1 cursor-pointer items-center justify-center rounded-lg border border-black/10 px-3 py-3 text-center text-sm capitalize has-[:checked]:border-[var(--accent)] has-[:checked]:bg-[var(--accent)]/10"
+            >
+              <input type="radio" value={value} {...register("civility")} className="sr-only" />
+              {value}
+            </label>
+          ))}
+        </div>
+      </div>
+
       <div className="grid gap-6 sm:grid-cols-2">
         <div>
           <label className="mb-2 block text-sm text-[var(--foreground)]/80">Prénom</label>
@@ -284,6 +302,17 @@ export function ContactForm() {
           <input {...register("lastName")} className="w-full rounded-lg border border-black/10 px-4 py-3 text-sm" />
           {errors.lastName && <p className="mt-1 text-xs text-red-600">{errors.lastName.message}</p>}
         </div>
+      </div>
+
+      <div>
+        <label className="mb-2 block text-sm text-[var(--foreground)]/80">Adresse postale</label>
+        <input
+          {...register("address")}
+          autoComplete="street-address"
+          placeholder="Numéro, rue, code postal, ville"
+          className="w-full rounded-lg border border-black/10 px-4 py-3 text-sm"
+        />
+        {errors.address && <p className="mt-1 text-xs text-red-600">{errors.address.message}</p>}
       </div>
 
       <div className="grid gap-6 sm:grid-cols-2">

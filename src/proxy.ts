@@ -6,9 +6,14 @@ export function proxy(req: NextRequest) {
 
   if (pathname === "/admin/login") return NextResponse.next();
 
-  if (pathname.startsWith("/admin")) {
+  if (pathname.startsWith("/admin") || pathname.startsWith("/api/contrat")) {
     const cookie = req.cookies.get(COOKIE_NAME)?.value;
     if (!verifySessionValue(cookie)) {
+      if (pathname.startsWith("/api/contrat")) {
+        return new NextResponse("Authentification requise. Connectez-vous au back-office pour consulter ce contrat.", {
+          status: 401,
+        });
+      }
       const url = req.nextUrl.clone();
       url.pathname = "/admin/login";
       return NextResponse.redirect(url);
@@ -19,5 +24,5 @@ export function proxy(req: NextRequest) {
 }
 
 export const config = {
-  matcher: "/admin/:path*",
+  matcher: ["/admin/:path*", "/api/contrat/:path*"],
 };

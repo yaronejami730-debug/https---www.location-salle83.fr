@@ -17,7 +17,7 @@ export async function updateLeadStatus(id: string, status: string) {
   revalidatePath("/admin");
 }
 
-export async function generateContractPdf(leadId: string, extra: { address: string; eventDateOverride: string }) {
+export async function generateContractPdf(leadId: string, extra: { eventDateOverride: string } = { eventDateOverride: "" }) {
   const supabase = supabaseAdmin();
   const { data: lead, error } = await supabase.from("leads").select("*").eq("id", leadId).single();
   if (error || !lead) throw new Error("lead_not_found");
@@ -58,8 +58,9 @@ export async function generateContractPdf(leadId: string, extra: { address: stri
   const buffer = await renderToBuffer(
     <ContractPdfDocument
       reference={reference}
+      civility={lead.civility ? lead.civility.charAt(0).toUpperCase() + lead.civility.slice(1) : ""}
       fullName={lead.full_name}
-      address={extra.address}
+      address={lead.address ?? ""}
       phone={lead.phone}
       email={lead.email}
       eventDate={extra.eventDateOverride || lead.event_date || ""}
