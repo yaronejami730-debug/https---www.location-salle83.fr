@@ -67,15 +67,22 @@ export const chatbotFaq: FaqEntry[] = [
       "La réservation est actée par la signature du contrat et le versement de 50 % du montant total, non remboursables en cas d'annulation. Le solde et une caution de 1000 € sont réglés à l'arrivée. Il faut également fournir une attestation de responsabilité civile — votre assureur la délivre gratuitement dans la plupart des cas.",
   },
   {
-    keywords: ["ou", "adresse", "localisation", "acces", "fayence", "var", "route", "situe"],
+    keywords: ["ou", "adresse", "localisation", "acces", "fayence", "var", "route", "situe", "distance", "cannes", "aeroport", "nice", "km", "grasse"],
     question: "Où se trouve exactement le domaine ?",
     answer:
-      "Au 4876 route départementale 562, lieu-dit La Bégude, 83440 Fayence, dans le Var. À 35 km de Grasse, 23 km de Fréjus Saint-Raphaël et 30 km de Cannes, par l'autoroute A8, sortie Les Adrets.",
+      "Au 4876 route départementale 562, lieu-dit La Bégude, 83440 Fayence, dans le Var. À 35 km de Grasse, 23 km de Fréjus Saint-Raphaël et 30 km de Cannes, par l'autoroute A8, sorties Les Adrets ou Le Muy.",
   },
   {
-    keywords: ["exclusif", "prive", "seul", "autre mariage", "privatisation"],
+    keywords: ["exclusif", "prive", "seul", "autre mariage", "privatisation", "soiree"],
     question: "Le domaine est-il privatisé en exclusivité ?",
-    answer: "Oui, le domaine se privatise en exclusivité pour votre événement, sans autre réception le même jour.",
+    answer:
+      "Oui, le domaine se privatise en exclusivité pour votre événement, sans autre réception le même jour. La salle, la terrasse et la piste de danse vous sont réservées ; le parc et ses installations restent partagés avec les occupants des mazets, sauf si vous réservez l'ensemble des logements.",
+  },
+  {
+    keywords: ["menage", "nettoyage", "propre", "compris"],
+    question: "Le ménage de la salle et de la cuisine professionnelle est-il compris ?",
+    answer:
+      "Non, il est à la charge du locataire. S'il est laissé au domaine, il est facturé 35 € de l'heure selon l'état de la salle, et déduit de la caution.",
   },
   {
     keywords: ["seminaire", "entreprise", "reunion", "team building"],
