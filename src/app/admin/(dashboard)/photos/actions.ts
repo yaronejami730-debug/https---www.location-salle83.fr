@@ -2,6 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { supabaseAdmin } from "@/lib/supabase-admin";
+import { watermarkImage } from "@/lib/watermark";
 
 export async function uploadPhoto(formData: FormData) {
   const file = formData.get("file") as File | null;
@@ -9,11 +10,11 @@ export async function uploadPhoto(formData: FormData) {
   if (!file || file.size === 0) return;
 
   const supabase = supabaseAdmin();
-  const ext = file.name.split(".").pop() ?? "jpg";
-  const path = `${page}/${crypto.randomUUID()}.${ext}`;
+  const path = `${page}/${crypto.randomUUID()}.jpg`;
+  const watermarked = await watermarkImage(Buffer.from(await file.arrayBuffer()));
 
-  const { error } = await supabase.storage.from("media").upload(path, file, {
-    contentType: file.type,
+  const { error } = await supabase.storage.from("media").upload(path, watermarked, {
+    contentType: "image/jpeg",
   });
   if (error) throw error;
 
@@ -69,10 +70,10 @@ export async function replacePhoto(id: string, oldStoragePath: string, page: str
   if (!file || file.size === 0) return;
 
   const supabase = supabaseAdmin();
-  const ext = file.name.split(".").pop() ?? "jpg";
-  const newPath = `${page}/${crypto.randomUUID()}.${ext}`;
+  const newPath = `${page}/${crypto.randomUUID()}.jpg`;
+  const watermarked = await watermarkImage(Buffer.from(await file.arrayBuffer()));
 
-  const { error } = await supabase.storage.from("media").upload(newPath, file, { contentType: file.type });
+  const { error } = await supabase.storage.from("media").upload(newPath, watermarked, { contentType: "image/jpeg" });
   if (error) throw error;
 
   await supabase.from("media").update({ storage_path: newPath, alt: file.name }).eq("id", id);

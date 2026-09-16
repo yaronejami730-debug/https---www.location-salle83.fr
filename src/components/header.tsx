@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
@@ -13,8 +14,8 @@ export function Header() {
   return (
     <header className="sticky top-0 z-50 border-b border-black/5 bg-[var(--background)]/90 backdrop-blur">
       <Container className="flex h-20 items-center justify-between">
-        <Link href="/" className="font-serif text-xl tracking-wide text-[var(--foreground)]">
-          {siteConfig.name}
+        <Link href="/" className="flex items-center gap-2">
+          <Image src="/images/logo.png" alt={siteConfig.name} width={140} height={66} className="h-12 w-auto" priority />
         </Link>
 
         <nav className="hidden lg:flex items-center gap-7">
