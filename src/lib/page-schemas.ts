@@ -101,6 +101,7 @@ export const pageSchemas: PageSchema[] = [
     fields: [
       { key: "hero_title", label: "Hero — titre", type: "text", default: "3 hectares de nature préservée en plein cœur du Var" },
       { key: "hero_description", label: "Hero — sous-titre", type: "textarea", default: "Bâtisses en pierre, jardins méditerranéens et lumière de Provence : un lieu pensé pour accueillir vos plus beaux moments." },
+      { key: "featured_caption", label: "Grande photo — légende", type: "text", default: "Un cadre qui accompagne chaque instant" },
       { key: "feature1_title", label: "Atout 1 — titre", type: "text", default: "Piscine & espaces extérieurs" },
       { key: "feature1_text", label: "Atout 1 — texte", type: "textarea", default: "Piscine, boulodrome, terrain de volley et espace enfants pour profiter du domaine entre deux réceptions." },
       { key: "feature2_title", label: "Atout 2 — titre", type: "text", default: "Cuisine professionnelle" },

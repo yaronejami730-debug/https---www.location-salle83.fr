@@ -593,6 +593,21 @@ export function PageEditor({
 
           {schema.slug === "domaine" && (
             <section className="py-16">
+              <Container className="max-w-xl">
+                <div className="relative aspect-[3/4] w-full overflow-hidden rounded-3xl">
+                  <Image src="/images/domaine-featured.jpg" alt="" fill className="object-cover" sizes="600px" />
+                </div>
+                <EditableText
+                  value={val("featured_caption")}
+                  onChange={set("featured_caption")}
+                  className="mt-5 text-center font-display text-2xl italic text-[var(--accent-warm)]"
+                />
+              </Container>
+            </section>
+          )}
+
+          {schema.slug === "domaine" && (
+            <section className="py-16">
               <Container className="grid gap-6 sm:grid-cols-3">
                 {[1, 2, 3].map((n) => (
                   <div key={n} className="rounded-2xl bg-[var(--background-muted)] p-6">

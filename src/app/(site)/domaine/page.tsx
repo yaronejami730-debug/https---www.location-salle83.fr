@@ -32,6 +32,21 @@ export default async function DomainePage() {
     <>
       <PageHero eyebrow="Le domaine" title={f("hero_title")} description={f("hero_description")} />
 
+      <section className="py-16">
+        <Container className="max-w-xl">
+          <div className="relative aspect-[3/4] w-full overflow-hidden rounded-3xl">
+            <Image
+              src="/images/domaine-featured.jpg"
+              alt="Voiture de mariage fleurie devant le domaine, mariée et invités dans le jardin"
+              fill
+              className="object-cover"
+              sizes="600px"
+            />
+          </div>
+          <p className="mt-5 text-center font-display text-2xl italic text-[var(--accent-warm)]">{f("featured_caption")}</p>
+        </Container>
+      </section>
+
       <section className="py-20">
         <Container className="grid gap-8 sm:grid-cols-3">
           {[1, 2, 3].map((n) => (
