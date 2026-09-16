@@ -333,14 +333,10 @@ export function PageEditor({
           </section>
 
           <section className="py-16 bg-[var(--background-muted)]">
-            <Container className="grid gap-6 sm:grid-cols-2">
-              <div className="rounded-2xl bg-[var(--background)] p-8">
+            <Container className="max-w-md">
+              <div className="rounded-2xl bg-[var(--background)] p-8 text-center">
                 <EditableText as="h3" value={val("mariage_card_title")} onChange={set("mariage_card_title")} className="font-serif text-2xl" />
                 <EditableText value={val("mariage_card_text")} onChange={set("mariage_card_text")} className="mt-3 text-sm text-[var(--foreground)]/70" />
-              </div>
-              <div className="rounded-2xl bg-[var(--background)] p-8">
-                <EditableText as="h3" value={val("seminaire_card_title")} onChange={set("seminaire_card_title")} className="font-serif text-2xl" />
-                <EditableText value={val("seminaire_card_text")} onChange={set("seminaire_card_text")} className="mt-3 text-sm text-[var(--foreground)]/70" />
               </div>
             </Container>
           </section>

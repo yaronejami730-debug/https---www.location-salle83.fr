@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { Container } from "@/components/container";
+import { EntryGate } from "@/components/entry-gate";
 import { LogoMarquee } from "@/components/logo-marquee";
 import { Reveal } from "@/components/reveal";
 import { HeroFadeImage } from "@/components/hero-fade-image";
@@ -64,6 +65,8 @@ export default async function HomePage() {
 
   return (
     <>
+      <EntryGate />
+
       <section className="relative flex min-h-screen items-center justify-center text-center">
         <HeroFadeImage src="/images/home-hero.jpg" alt="Étang et jardins du Domaine de la Bégude" />
         <div className="absolute inset-0 bg-black/45" />
@@ -100,19 +103,12 @@ export default async function HomePage() {
 
       <section className="py-20 bg-[var(--background-muted)]">
         <Reveal>
-          <Container className="grid gap-8 sm:grid-cols-2">
-            <div className="rounded-2xl bg-[var(--background)] p-10">
+          <Container className="max-w-md">
+            <div className="rounded-2xl bg-[var(--background)] p-10 text-center">
               <h3 className="font-serif text-2xl">{f("mariage_card_title")}</h3>
               <p className="mt-3 text-sm text-[var(--foreground)]/70">{f("mariage_card_text")}</p>
               <Link href="/mariage" className="mt-6 inline-block text-sm text-[var(--accent)] hover:underline">
                 Découvrir les mariages →
-              </Link>
-            </div>
-            <div className="rounded-2xl bg-[var(--background)] p-10">
-              <h3 className="font-serif text-2xl">{f("seminaire_card_title")}</h3>
-              <p className="mt-3 text-sm text-[var(--foreground)]/70">{f("seminaire_card_text")}</p>
-              <Link href="/seminaire" className="mt-6 inline-block text-sm text-[var(--accent)] hover:underline">
-                Découvrir les séminaires →
               </Link>
             </div>
           </Container>
