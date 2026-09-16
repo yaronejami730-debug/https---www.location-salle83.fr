@@ -18,7 +18,7 @@ export function LogoMarquee() {
             key={`${logo.alt}-${i}`}
             src={logo.src}
             alt={logo.alt}
-            className="mr-16 h-8 w-auto shrink-0 opacity-70 grayscale sm:h-10"
+            className="mr-16 h-10 w-auto shrink-0 opacity-70 grayscale sm:h-12"
           />
         ))}
       </div>
