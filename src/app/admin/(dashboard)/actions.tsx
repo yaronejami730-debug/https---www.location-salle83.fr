@@ -4,9 +4,11 @@ import { readFile } from "node:fs/promises";
 import path from "node:path";
 import { revalidatePath } from "next/cache";
 import { renderToBuffer } from "@react-pdf/renderer";
+import QRCode from "qrcode";
 import { supabaseAdmin } from "@/lib/supabase-admin";
 import { pricingBrackets, CHAPITEAU_UNIT_PRICE } from "@/lib/pricing";
 import { leadReference } from "@/lib/lead-reference";
+import { siteConfig } from "@/lib/site";
 import { ContractPdfDocument } from "@/lib/contract-pdf";
 
 export async function updateLeadStatus(id: string, status: string) {
@@ -45,9 +47,17 @@ export async function generateContractPdf(leadId: string, extra: { address: stri
     logoDataUri = null;
   }
 
+  const reference = leadReference(lead.id);
+  let qrCodeDataUri: string | null = null;
+  try {
+    qrCodeDataUri = await QRCode.toDataURL(`${siteConfig.domain}/admin?q=${reference}`, { margin: 1, width: 200 });
+  } catch {
+    qrCodeDataUri = null;
+  }
+
   const buffer = await renderToBuffer(
     <ContractPdfDocument
-      reference={leadReference(lead.id)}
+      reference={reference}
       fullName={lead.full_name}
       address={extra.address}
       phone={lead.phone}
@@ -59,8 +69,16 @@ export async function generateContractPdf(leadId: string, extra: { address: stri
       total={total}
       arrhes={arrhes}
       logoDataUri={logoDataUri}
+      qrCodeDataUri={qrCodeDataUri}
+      options={{
+        lendemain: lead.option_lendemain,
+        piscine: lead.option_piscine,
+        vaisselle: lead.option_vaisselle,
+        cuisine: lead.option_cuisine,
+        chapiteauCount: lead.option_chapiteau_count ?? 0,
+      }}
     />,
   );
 
-  return { base64: buffer.toString("base64"), filename: `contrat-${leadReference(lead.id)}.pdf` };
+  return { base64: buffer.toString("base64"), filename: `contrat-${reference}.pdf` };
 }
