@@ -60,13 +60,13 @@ export default async function HebergementPage() {
         </Container>
       </section>
 
-      <section className="py-20 text-center">
+      <section className="pt-4 pb-20 text-center">
         <Container>
           <a
             href="https://www.domainedelabegude.com/fr"
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex rounded-full bg-[var(--accent)] px-12 py-5 text-base tracking-wide text-white hover:opacity-90"
+            className="inline-flex items-center gap-2 rounded-full bg-[var(--accent)] px-10 py-4 text-base tracking-wide text-white hover:opacity-90"
           >
             {f("booking_cta")}
           </a>

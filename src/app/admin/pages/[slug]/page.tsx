@@ -16,7 +16,7 @@ export default async function AdminPageEditorRoute({ params }: { params: Promise
   const zigzagCategories = ZIGZAG_SLUGS.includes(slug)
     ? [1, 2, 3].map((n) => `${slug}-zigzag-${n}`)
     : slug === "domaine"
-      ? ["domaine-pool", "domaine-featured"]
+      ? ["domaine-pool"]
       : slug === "home"
         ? ["home-histoire", "home-choice-mariage", "home-choice-evenements", "home-choice-domaine"]
         : [];

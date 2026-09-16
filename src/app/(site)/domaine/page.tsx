@@ -24,17 +24,15 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function DomainePage() {
-  const [pageContent, photos, poolPhotos, featuredPhotos] = await Promise.all([
+  const [pageContent, photos, poolPhotos] = await Promise.all([
     getPageContent("domaine"),
     getMedia("domaine"),
     getMedia("domaine-pool"),
-    getMedia("domaine-featured"),
   ]);
   const c = pageContent?.content ?? {};
   const f = (key: string) => fieldValue(c, schema.fields.find((x) => x.key === key)!);
 
   const poolPhoto = poolPhotos[0] ? mediaUrl(poolPhotos[0].storage_path) : "/images/domaine-pool.jpg";
-  const featuredPhoto = featuredPhotos[0] ? mediaUrl(featuredPhotos[0].storage_path) : "/images/domaine-featured.jpg";
 
   return (
     <>
@@ -45,21 +43,6 @@ export default async function DomainePage() {
           <div className="relative aspect-[16/9] w-full overflow-hidden rounded-3xl">
             <Image src={poolPhoto} alt="Piscine extérieure du domaine entourée de transats et d'arbres" fill className="object-cover" sizes="1200px" />
           </div>
-        </Container>
-      </section>
-
-      <section className="py-16">
-        <Container className="max-w-xl">
-          <div className="relative aspect-[3/4] w-full overflow-hidden rounded-3xl">
-            <Image
-              src={featuredPhoto}
-              alt="Voiture de mariage fleurie devant le domaine, mariée et invités dans le jardin"
-              fill
-              className="object-cover"
-              sizes="600px"
-            />
-          </div>
-          <p className="mt-5 text-center font-display text-2xl italic text-[var(--accent-warm)]">{f("featured_caption")}</p>
         </Container>
       </section>
 

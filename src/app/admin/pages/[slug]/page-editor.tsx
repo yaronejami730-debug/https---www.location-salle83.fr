@@ -604,9 +604,9 @@ export function PageEditor({
           )}
 
           {schema.slug === "hebergement" && (
-            <section className="py-16 text-center">
+            <section className="pt-4 pb-16 text-center">
               <Container>
-                <span className="inline-flex rounded-full bg-[var(--accent)] px-12 py-5 text-base tracking-wide text-white">
+                <span className="inline-flex items-center gap-2 rounded-full bg-[var(--accent)] px-10 py-4 text-base tracking-wide text-white">
                   <EditableText value={val("booking_cta")} onChange={set("booking_cta")} className="text-white" />
                 </span>
               </Container>
@@ -618,20 +618,6 @@ export function PageEditor({
               <Container>
                 <p className="mb-2 text-xs font-medium text-[var(--accent)]">Photo piscine (bannière)</p>
                 <EditablePhotoGrid photos={zigzagMedia["domaine-pool"] ?? []} page="domaine-pool" aspect="aspect-[16/9]" />
-              </Container>
-            </section>
-          )}
-
-          {schema.slug === "domaine" && (
-            <section className="py-16">
-              <Container className="max-w-xl">
-                <p className="mb-2 text-xs font-medium text-[var(--accent)]">Photo mise en avant</p>
-                <EditablePhotoGrid photos={zigzagMedia["domaine-featured"] ?? []} page="domaine-featured" aspect="aspect-[3/4]" />
-                <EditableText
-                  value={val("featured_caption")}
-                  onChange={set("featured_caption")}
-                  className="mt-5 text-center font-display text-2xl italic text-[var(--accent-warm)]"
-                />
               </Container>
             </section>
           )}
