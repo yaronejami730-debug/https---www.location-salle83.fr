@@ -29,12 +29,19 @@ export function ChatbotWidget() {
   const [open, setOpen] = useState(false);
   const [messages, setMessages] = useState<Message[]>([WELCOME]);
   const [input, setInput] = useState("");
+  const [typing, setTyping] = useState(false);
 
   function ask(text: string) {
-    if (!text.trim()) return;
+    if (!text.trim() || typing) return;
     const answer = findAnswer(text);
-    setMessages((prev) => [...prev, { role: "user", text }, { role: "bot", text: answer }]);
+    setMessages((prev) => [...prev, { role: "user", text }]);
     setInput("");
+    setTyping(true);
+    const delay = 600 + Math.random() * 900 + Math.min(answer.length * 12, 1800);
+    setTimeout(() => {
+      setTyping(false);
+      setMessages((prev) => [...prev, { role: "bot", text: answer }]);
+    }, delay);
   }
 
   return (
@@ -62,21 +69,33 @@ export function ChatbotWidget() {
               </div>
             ))}
 
-            <div className="flex flex-wrap gap-2 pt-2">
-              {chatbotFaq.slice(0, 4).map((f) => (
-                <button
-                  key={f.question}
-                  onClick={() => ask(f.question)}
-                  className="rounded-full border border-black/10 px-3 py-1.5 text-xs text-[var(--foreground)]/80 hover:bg-black/5"
-                >
-                  {f.question}
-                </button>
-              ))}
-            </div>
+            {typing && (
+              <div className="flex max-w-[85%] items-center gap-1 rounded-xl bg-[var(--background-muted)] px-3 py-2.5">
+                <span className="h-1.5 w-1.5 animate-bounce rounded-full bg-[var(--foreground)]/40 [animation-delay:-0.3s]" />
+                <span className="h-1.5 w-1.5 animate-bounce rounded-full bg-[var(--foreground)]/40 [animation-delay:-0.15s]" />
+                <span className="h-1.5 w-1.5 animate-bounce rounded-full bg-[var(--foreground)]/40" />
+              </div>
+            )}
 
-            <Link href="/contact" className="block pt-2 text-xs text-[var(--accent)] hover:underline">
-              → Demander un devis personnalisé
-            </Link>
+            {!typing && (
+              <>
+                <div className="flex flex-wrap gap-2 pt-2">
+                  {chatbotFaq.slice(0, 4).map((f) => (
+                    <button
+                      key={f.question}
+                      onClick={() => ask(f.question)}
+                      className="rounded-full border border-black/10 px-3 py-1.5 text-xs text-[var(--foreground)]/80 hover:bg-black/5"
+                    >
+                      {f.question}
+                    </button>
+                  ))}
+                </div>
+
+                <Link href="/contact" className="block pt-2 text-xs text-[var(--accent)] hover:underline">
+                  → Demander un devis personnalisé
+                </Link>
+              </>
+            )}
           </div>
 
           <form
@@ -90,9 +109,14 @@ export function ChatbotWidget() {
               value={input}
               onChange={(e) => setInput(e.target.value)}
               placeholder="Votre question..."
-              className="flex-1 rounded-lg border border-black/10 px-3 py-2 text-sm"
+              disabled={typing}
+              className="flex-1 rounded-lg border border-black/10 px-3 py-2 text-sm disabled:opacity-60"
             />
-            <button type="submit" className="rounded-lg bg-[var(--accent)] px-3 py-2 text-sm text-white hover:opacity-90">
+            <button
+              type="submit"
+              disabled={typing}
+              className="rounded-lg bg-[var(--accent)] px-3 py-2 text-sm text-white hover:opacity-90 disabled:opacity-60"
+            >
               →
             </button>
           </form>
