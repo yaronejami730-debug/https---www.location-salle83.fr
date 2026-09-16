@@ -5,7 +5,7 @@ import { readFile } from "fs/promises";
 import { join } from "path";
 
 const OPACITY = 0.6;
-const WATERMARK_WIDTH_RATIO = 0.11;
+const WATERMARK_WIDTH_RATIO = 0.33;
 const MARGIN_RATIO = 0.03;
 
 let logoBuffer: Buffer | null = null;
@@ -50,11 +50,12 @@ export async function watermarkImage(rawInput: Buffer): Promise<Buffer> {
   const width = meta.width ?? 1600;
   const height = meta.height ?? 1200;
 
-  const logoWidth = Math.round(width * WATERMARK_WIDTH_RATIO);
+  const baseSize = Math.min(width, height);
+  const logoWidth = Math.round(baseSize * WATERMARK_WIDTH_RATIO);
   const logo = await fadedLogo(logoWidth);
   const logoMeta = await sharp(logo).metadata();
   const logoHeight = logoMeta.height ?? Math.round(logoWidth * 0.5);
-  const margin = Math.round(width * MARGIN_RATIO);
+  const margin = Math.round(baseSize * MARGIN_RATIO);
 
   return image
     .composite([
