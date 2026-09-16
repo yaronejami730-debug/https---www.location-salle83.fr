@@ -135,7 +135,8 @@ export const pageSchemas: PageSchema[] = [
       { key: "amenity2", label: "Équipement 2", type: "text", default: "Parking inclus" },
       { key: "amenity3", label: "Équipement 3", type: "text", default: "Cuisine équipée" },
       { key: "amenity4", label: "Équipement 4", type: "text", default: "Accès à la piscine" },
-      { key: "gallery_cta", label: "Bouton vers la galerie", type: "text", default: "Voir la galerie photo" },
+      { key: "gallery_cta", label: "Bouton vers la galerie", type: "text", default: "Voir la galerie entière" },
+      { key: "booking_cta", label: "Bouton réserver un hébergement", type: "text", default: "Réserver un hébergement ↗" },
     ],
   },
   {

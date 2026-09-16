@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { PageHero } from "@/components/page-hero";
-import { CtaSection } from "@/components/cta-section";
 import { Container } from "@/components/container";
 import { FadeCarousel } from "@/components/fade-carousel";
 import { AmenityIcon } from "@/components/amenity-icon";
@@ -58,14 +57,28 @@ export default async function HebergementPage() {
               ))}
             </div>
 
-            <Link href="/galerie" className="mt-8 inline-block text-sm text-[var(--accent)] hover:underline">
-              {f("gallery_cta")} →
-            </Link>
           </div>
         </Container>
       </section>
 
-      <CtaSection />
+      <section className="py-20 text-center">
+        <Container className="flex flex-col items-center justify-center gap-4 sm:flex-row">
+          <a
+            href="https://www.domainedelabegude.com/fr"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex rounded-full bg-[var(--accent)] px-8 py-3.5 text-sm text-white hover:opacity-90"
+          >
+            {f("booking_cta")}
+          </a>
+          <Link
+            href="/galerie"
+            className="inline-flex rounded-full border border-black/15 px-8 py-3.5 text-sm text-[var(--foreground)] hover:bg-black/5"
+          >
+            {f("gallery_cta")}
+          </Link>
+        </Container>
+      </section>
     </>
   );
 }

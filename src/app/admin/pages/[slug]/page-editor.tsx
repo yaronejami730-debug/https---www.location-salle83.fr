@@ -598,8 +598,20 @@ export function PageEditor({
                       </div>
                     ))}
                   </div>
-                  <EditableText value={val("gallery_cta")} onChange={set("gallery_cta")} className="mt-8 inline-block text-sm text-[var(--accent)]" />
                 </div>
+              </Container>
+            </section>
+          )}
+
+          {schema.slug === "hebergement" && (
+            <section className="py-16 text-center">
+              <Container className="flex flex-col items-center justify-center gap-4 sm:flex-row">
+                <span className="inline-flex rounded-full bg-[var(--accent)] px-8 py-3.5 text-sm text-white">
+                  <EditableText value={val("booking_cta")} onChange={set("booking_cta")} className="text-white" />
+                </span>
+                <span className="inline-flex rounded-full border border-black/15 px-8 py-3.5 text-sm text-[var(--foreground)]">
+                  <EditableText value={val("gallery_cta")} onChange={set("gallery_cta")} />
+                </span>
               </Container>
             </section>
           )}
