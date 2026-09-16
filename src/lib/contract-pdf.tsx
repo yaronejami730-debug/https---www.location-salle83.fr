@@ -37,9 +37,10 @@ const styles = StyleSheet.create({
   bullet: { flexDirection: "row", marginBottom: 1.5 },
   bulletDot: { width: 10 },
   bulletText: { flex: 1, lineHeight: 1.2 },
-  footer: { position: "absolute", bottom: 24, left: 40, right: 90, fontSize: 7.5, color: "#9a988f" },
+  footer: { position: "absolute", bottom: 24, left: 40, right: 40, fontSize: 7.5, color: "#9a988f", textAlign: "center" },
   pageNumber: { position: "absolute", bottom: 24, right: 40, fontSize: 7.5, color: "#9a988f" },
-  qrCode: { position: "absolute", bottom: 16, right: 60, width: 32, height: 32 },
+  headerRight: { alignItems: "center" },
+  qrCode: { width: 52, height: 52, marginTop: 6 },
 });
 
 export type ContractPdfProps = {
@@ -116,7 +117,10 @@ export function ContractPdfDocument({
             <Text style={styles.subtitle}>{siteConfig.name.toUpperCase()}</Text>
             <Text style={styles.subtitle}>N° de demande : {reference}</Text>
           </View>
-          {logoDataUri && <Image src={logoDataUri} style={styles.logo} />}
+          <View style={styles.headerRight}>
+            {logoDataUri && <Image src={logoDataUri} style={styles.logo} />}
+            {qrCodeDataUri && <Image src={qrCodeDataUri} style={styles.qrCode} />}
+          </View>
         </View>
 
         <Text style={styles.paragraph}>
@@ -383,7 +387,6 @@ export function ContractPdfDocument({
         <Text style={styles.footer} fixed>
           {siteConfig.name} — {siteConfig.address} — {siteConfig.phone} — {siteConfig.email}
         </Text>
-        {qrCodeDataUri && <Image src={qrCodeDataUri} style={styles.qrCode} fixed />}
         <Text
           style={styles.pageNumber}
           fixed
