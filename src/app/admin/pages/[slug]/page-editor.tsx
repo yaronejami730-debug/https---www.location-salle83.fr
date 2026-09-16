@@ -331,6 +331,17 @@ export function PageEditor({
             </Container>
           </section>
 
+          <section className="py-16">
+            <Container>
+              <p className="mb-2 text-xs font-medium text-[var(--accent)]">Bannière "Accéder au domaine" (grande photo pleine largeur)</p>
+              <EditablePhotoGrid photos={zigzagMedia["home-domaine"] ?? []} page="home-domaine" aspect="aspect-[16/9]" />
+              <div className="mt-3 inline-flex items-center gap-3 rounded-full border border-black/20 px-6 py-2.5 text-sm tracking-wide text-[var(--foreground)]">
+                <EditableText value={val("domaine_cta_label")} onChange={set("domaine_cta_label")} />
+                →
+              </div>
+            </Container>
+          </section>
+
           <section className="py-16 bg-[var(--background-muted)]">
             <Container className="grid gap-6 sm:grid-cols-2">
               <div className="rounded-2xl bg-[var(--background)] p-8">
@@ -358,11 +369,14 @@ export function PageEditor({
             </Container>
           </section>
 
-          <section className="relative py-16 bg-[var(--background-muted)]">
-            <Container>
-              <EditableText as="h2" value={val("galerie_title")} onChange={set("galerie_title")} className="font-serif text-3xl text-[var(--foreground)]" />
-              <div className="mt-8">
-                <EditablePhotoGrid photos={media} page="galerie" aspect="aspect-[4/3]" />
+          <section className="py-16 bg-[var(--background-muted)]">
+            <Container className="grid items-center gap-10 sm:grid-cols-2">
+              <div className="sm:order-2">
+                <EditablePhotoGrid photos={zigzagMedia["home-histoire"] ?? []} page="home-histoire" aspect="aspect-[4/3]" />
+              </div>
+              <div>
+                <EditableText as="h2" value={val("histoire_title")} onChange={set("histoire_title")} className="font-serif text-3xl text-[var(--foreground)]" />
+                <EditableText value={val("histoire_text")} onChange={set("histoire_text")} className="mt-5 text-[var(--foreground)]/70" />
               </div>
             </Container>
           </section>
@@ -383,11 +397,11 @@ export function PageEditor({
             <ManagedBadge label="Gérer les avis" href="/admin/avis" />
             <Container>
               <p className="text-center text-xs uppercase tracking-[0.2em] text-[var(--foreground)]/40">Ils nous ont fait confiance</p>
-              <div className="mx-auto mt-8 flex max-w-4xl flex-wrap justify-center gap-5">
+              <div className="mx-auto mt-8 grid max-w-4xl gap-5 sm:grid-cols-3">
                 {(reviews.length > 0 ? reviews : [{ id: "x", author: "Exemple", rating: 5, text: "Aucun avis publié pour le moment." }])
                   .slice(0, 6)
                   .map((r) => (
-                    <div key={r.id} className="w-full rounded-xl border border-black/5 bg-[var(--background-muted)]/60 p-5 sm:w-[calc(33.333%-14px)]">
+                    <div key={r.id} className="h-full rounded-xl border border-black/5 bg-[var(--background-muted)]/60 p-5">
                       <p className="text-xs text-[var(--accent-warm)]">{"★".repeat(r.rating)}</p>
                       <p className="mt-2 line-clamp-4 text-sm text-[var(--foreground)]/60">{r.text}</p>
                       <p className="mt-3 text-xs font-medium text-[var(--foreground)]/70">{r.author}</p>
@@ -411,16 +425,6 @@ export function PageEditor({
                   </div>
                 ))}
               </div>
-            </Container>
-          </section>
-
-          <section className="py-20 text-center">
-            <Container className="max-w-xl">
-              <EditableText as="h2" value={val("cta_title")} onChange={set("cta_title")} className="font-serif text-3xl text-[var(--foreground)]" />
-              <EditableText value={val("cta_text")} onChange={set("cta_text")} className="mt-4 text-[var(--foreground)]/70" />
-              <span className="mt-6 inline-flex rounded-full bg-[var(--accent)] px-8 py-3.5 text-sm text-white">
-                <EditableText value={val("cta_button")} onChange={set("cta_button")} className="text-white" />
-              </span>
             </Container>
           </section>
         </>

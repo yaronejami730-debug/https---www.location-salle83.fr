@@ -7,7 +7,7 @@ import { Reveal } from "@/components/reveal";
 import { HeroFadeImage } from "@/components/hero-fade-image";
 import { getPageContent, getFaqs, getReviews, getMedia } from "@/lib/content";
 import { mediaUrl } from "@/lib/supabase-public";
-import { staticGalleryPhotos, staticHebergementPhotos } from "@/lib/static-gallery";
+import { staticHebergementPhotos } from "@/lib/static-gallery";
 import { getSchema, fieldValue } from "@/lib/page-schemas";
 
 const schema = getSchema("home")!;
@@ -40,17 +40,20 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function HomePage() {
-  const [pageContent, faqs, reviews, galleryPhotos, lieuPhotos] = await Promise.all([
+  const [pageContent, faqs, reviews, lieuPhotos, domainePhotos, histoirePhotos] = await Promise.all([
     getPageContent("home"),
     getFaqs("home"),
     getReviews(),
-    getMedia("galerie"),
     getMedia("home-lieu"),
+    getMedia("home-domaine"),
+    getMedia("home-histoire"),
   ]);
 
   const c = pageContent?.content ?? {};
   const f = (key: string) => fieldValue(c, schema.fields.find((x) => x.key === key)!);
   const lieuPhoto = lieuPhotos[0] ? mediaUrl(lieuPhotos[0].storage_path) : "/images/domaine-pool.jpg";
+  const domainePhoto = domainePhotos[0] ? mediaUrl(domainePhotos[0].storage_path) : "/images/domaine-featured.jpg";
+  const histoirePhoto = histoirePhotos[0] ? mediaUrl(histoirePhotos[0].storage_path) : "/images/mariage-hero.jpg";
 
   const displayFaqs = faqs.length > 0 ? faqs.map((fq) => ({ id: fq.id, question: fq.question, answer: fq.answer })) : fallbackFaqs;
 
@@ -93,6 +96,24 @@ export default async function HomePage() {
         </Reveal>
       </section>
 
+      <Link
+        href="/domaine"
+        className="group relative flex h-[60vh] min-h-[380px] items-center justify-center overflow-hidden text-center"
+      >
+        <Image
+          src={domainePhoto}
+          alt="Le domaine"
+          fill
+          className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"
+          sizes="100vw"
+        />
+        <div className="absolute inset-0 bg-black/35 transition-colors duration-500 group-hover:bg-black/50" />
+        <span className="relative z-10 inline-flex items-center gap-3 rounded-full border border-white/60 px-8 py-3.5 text-sm tracking-wide text-white transition-colors group-hover:bg-white group-hover:text-[var(--foreground)]">
+          {f("domaine_cta_label")}
+          <span className="transition-transform duration-300 group-hover:translate-x-1">→</span>
+        </span>
+      </Link>
+
       <section className="py-20 bg-[var(--background-muted)]">
         <Reveal>
           <Container className="grid gap-8 sm:grid-cols-2">
@@ -134,24 +155,13 @@ export default async function HomePage() {
 
       <section className="py-20 bg-[var(--background-muted)]">
         <Reveal>
-          <Container>
-            <h2 className="font-serif text-3xl text-[var(--foreground)]">{f("galerie_title")}</h2>
-            <div className="mt-10 grid grid-cols-2 gap-4 sm:grid-cols-3">
-              {(galleryPhotos.length > 0
-                ? galleryPhotos.slice(0, 6).map((p) => ({ key: p.id, src: mediaUrl(p.storage_path), alt: p.alt ?? "" }))
-                : staticGalleryPhotos.slice(0, 6).map((p) => ({ key: p.src, src: p.src, alt: p.alt }))
-              ).map((p, i) => (
-                <Reveal key={p.key} delayMs={i * 80}>
-                  <div className="relative aspect-[4/3] overflow-hidden rounded-xl">
-                    <Image src={p.src} alt={p.alt} fill className="object-cover" sizes="400px" />
-                  </div>
-                </Reveal>
-              ))}
+          <Container className="grid items-center gap-10 sm:grid-cols-2">
+            <div className="relative aspect-[4/3] overflow-hidden rounded-2xl sm:order-2">
+              <Image src={histoirePhoto} alt="Notre histoire" fill className="object-cover" sizes="(min-width: 640px) 500px, 100vw" />
             </div>
-            <div className="mt-8 text-center">
-              <Link href="/galerie" className="text-sm text-[var(--accent)] hover:underline">
-                Voir la galerie complète →
-              </Link>
+            <div>
+              <h2 className="font-serif text-3xl text-[var(--foreground)]">{f("histoire_title")}</h2>
+              <p className="mt-5 whitespace-pre-line text-[var(--foreground)]/70">{f("histoire_text")}</p>
             </div>
           </Container>
         </Reveal>
@@ -179,10 +189,10 @@ export default async function HomePage() {
           <Reveal>
             <Container>
               <p className="text-center text-xs uppercase tracking-[0.2em] text-[var(--foreground)]/40">Ils nous ont fait confiance</p>
-              <div className="mx-auto mt-8 flex max-w-4xl flex-wrap justify-center gap-5">
+              <div className="mx-auto mt-8 grid max-w-4xl gap-5 sm:grid-cols-3">
                 {reviews.slice(0, 6).map((r, i) => (
                   <Reveal key={r.id} delayMs={i * 100}>
-                    <div className="w-full rounded-xl border border-black/5 bg-[var(--background-muted)]/60 p-5 sm:w-[calc(33.333%-14px)]">
+                    <div className="h-full rounded-xl border border-black/5 bg-[var(--background-muted)]/60 p-5">
                       <p className="text-xs text-[var(--accent-warm)]">{"★".repeat(r.rating)}</p>
                       <p className="mt-2 line-clamp-4 text-sm text-[var(--foreground)]/60">{r.text}</p>
                       <p className="mt-3 text-xs font-medium text-[var(--foreground)]/70">{r.author}</p>
@@ -209,18 +219,6 @@ export default async function HomePage() {
                 </details>
               ))}
             </div>
-          </Container>
-        </Reveal>
-      </section>
-
-      <section className="py-24 text-center">
-        <Reveal>
-          <Container className="max-w-xl">
-            <h2 className="font-serif text-3xl text-[var(--foreground)]">{f("cta_title")}</h2>
-            <p className="mt-4 text-[var(--foreground)]/70">{f("cta_text")}</p>
-            <Link href="/contact" className="mt-8 inline-flex rounded-full bg-[var(--accent)] px-8 py-3.5 text-sm text-white hover:opacity-90">
-              {f("cta_button")}
-            </Link>
           </Container>
         </Reveal>
       </section>
