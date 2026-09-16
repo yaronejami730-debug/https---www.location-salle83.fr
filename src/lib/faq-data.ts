@@ -32,6 +32,23 @@ export const chatbotFaq: FaqEntry[] = [
       "La grille tarifaire couvre les groupes jusqu'à 110 personnes, par paliers de 40, 50, 65, 80, 95 et 110 participants. Au-delà, cela est possible en combinant salle, terrasse et chapiteaux, soit devis sur demande.",
   },
   {
+    keywords: ["vaisselle", "assiette", "verre", "couvert"],
+    question: "La vaisselle est-elle fournie ?",
+    answer:
+      "En option, de 110 à 150 € selon le nombre de convives : assiettes, verres et couverts. Un inventaire est signé à la prise en charge, et le matériel cassé ou détérioré est remboursé à la restitution des lieux.",
+  },
+  {
+    keywords: ["danse", "dansante", "sono", "sonorisation", "soiree dansante"],
+    question: "Peut-on organiser une soirée dansante ?",
+    answer: "Oui. La piste de danse dans la salle est prévue pour brancher une sonorisation adaptée au volume des lieux.",
+  },
+  {
+    keywords: ["pluie", "mauvais temps", "chapiteau", "couvert", "intemperies"],
+    question: "Que se passe-t-il s'il pleut ?",
+    answer:
+      "La salle de 90 m² et sa terrasse couverte prennent le relais. Deux chapiteaux de 8 × 4 m (32 personnes chacun) et trois de 4 × 4 m (16 personnes) sont disponibles à 200 € l'unité pour couvrir une partie de la terrasse extérieure, soit 48 personnes.",
+  },
+  {
     keywords: ["traiteur", "impose", "cuisine", "restauration", "cuisinier", "repas"],
     question: "Faut-il prendre un traiteur imposé ?",
     answer:
