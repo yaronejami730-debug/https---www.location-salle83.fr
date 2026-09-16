@@ -26,7 +26,7 @@ export async function uploadPhoto(formData: FormData) {
     .limit(1);
   const nextOrder = (existing?.[0]?.sort_order ?? -1) + 1;
 
-  await supabase.from("media").insert({ storage_path: path, page, alt: file.name, sort_order: nextOrder });
+  await supabase.from("media").insert({ storage_path: path, page, alt: file.name, sort_order: nextOrder, watermarked: true });
   revalidatePath("/", "layout");
 }
 
@@ -76,7 +76,7 @@ export async function replacePhoto(id: string, oldStoragePath: string, page: str
   const { error } = await supabase.storage.from("media").upload(newPath, watermarked, { contentType: "image/jpeg" });
   if (error) throw error;
 
-  await supabase.from("media").update({ storage_path: newPath, alt: file.name }).eq("id", id);
+  await supabase.from("media").update({ storage_path: newPath, alt: file.name, watermarked: true }).eq("id", id);
   await supabase.storage.from("media").remove([oldStoragePath]);
 
   revalidatePath("/", "layout");
