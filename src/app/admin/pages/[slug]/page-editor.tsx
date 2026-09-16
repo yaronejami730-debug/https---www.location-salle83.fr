@@ -11,6 +11,7 @@ import { pricingBrackets } from "@/lib/pricing";
 import { mediaUrl } from "@/lib/supabase-public";
 import { AmenityIcon } from "@/components/amenity-icon";
 import { LocationMap } from "@/components/location-map";
+import { LogoMarquee } from "@/components/logo-marquee";
 
 const amenityIcons = ["wifi", "parking", "pool", "paw", "child", "restaurant", "kitchen", "fitness"] as const;
 
@@ -320,10 +321,13 @@ export function PageEditor({
             </div>
           </section>
 
-          <section className="pt-24 pb-16 sm:pt-28">
-            <Container className="max-w-2xl text-center">
-              <EditableText as="h2" value={val("lieu_title")} onChange={set("lieu_title")} className="font-serif text-3xl text-[var(--foreground)]" />
-              <EditableText value={val("lieu_text")} onChange={set("lieu_text")} className="mt-5 text-[var(--foreground)]/70" />
+          <section className="pt-24 pb-14 sm:pt-28">
+            <Container className="grid items-center gap-10 sm:grid-cols-2">
+              <EditablePhotoGrid photos={zigzagMedia["home-lieu"] ?? []} page="home-lieu" aspect="aspect-[4/3]" />
+              <div>
+                <EditableText as="h2" value={val("lieu_title")} onChange={set("lieu_title")} className="font-serif text-3xl text-[var(--foreground)]" />
+                <EditableText value={val("lieu_text")} onChange={set("lieu_text")} className="mt-5 text-[var(--foreground)]/70" />
+              </div>
             </Container>
           </section>
 
@@ -392,6 +396,8 @@ export function PageEditor({
               </div>
             </Container>
           </section>
+
+          <LogoMarquee />
 
           <section className="relative py-16 bg-[var(--background-muted)]">
             <ManagedBadge label="Gérer la FAQ" href="/admin/faq" />

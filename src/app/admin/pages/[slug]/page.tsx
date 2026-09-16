@@ -17,7 +17,9 @@ export default async function AdminPageEditorRoute({ params }: { params: Promise
     ? [1, 2, 3].map((n) => `${slug}-zigzag-${n}`)
     : slug === "domaine"
       ? ["domaine-pool", "domaine-featured"]
-      : [];
+      : slug === "home"
+        ? ["home-lieu"]
+        : [];
 
   const [{ data: row }, { data: faqs }, { data: reviews }, { data: media }, { data: hebergementMedia }, zigzagRows] = await Promise.all([
     supabase.from("pages").select("*").eq("slug", slug).maybeSingle(),

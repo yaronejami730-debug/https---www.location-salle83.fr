@@ -38,6 +38,15 @@ body {
   font-family: var(--font-script), cursive;
 }
 
+@keyframes marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
 .editable-field {
   cursor: text;
   transition: background-color 0.15s, box-shadow 0.15s;

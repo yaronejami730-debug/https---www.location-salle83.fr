@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { Container } from "@/components/container";
+import { LogoMarquee } from "@/components/logo-marquee";
 import { getPageContent, getFaqs, getReviews, getMedia } from "@/lib/content";
 import { mediaUrl } from "@/lib/supabase-public";
 import { staticGalleryPhotos, staticHebergementPhotos } from "@/lib/static-gallery";
@@ -37,15 +38,17 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function HomePage() {
-  const [pageContent, faqs, reviews, galleryPhotos] = await Promise.all([
+  const [pageContent, faqs, reviews, galleryPhotos, lieuPhotos] = await Promise.all([
     getPageContent("home"),
     getFaqs("home"),
     getReviews(),
     getMedia("galerie"),
+    getMedia("home-lieu"),
   ]);
 
   const c = pageContent?.content ?? {};
   const f = (key: string) => fieldValue(c, schema.fields.find((x) => x.key === key)!);
+  const lieuPhoto = lieuPhotos[0] ? mediaUrl(lieuPhotos[0].storage_path) : "/images/domaine-pool.jpg";
 
   const displayFaqs = faqs.length > 0 ? faqs.map((fq) => ({ id: fq.id, question: fq.question, answer: fq.answer })) : fallbackFaqs;
 
@@ -83,10 +86,15 @@ export default async function HomePage() {
         </Link>
       </section>
 
-      <section className="pt-24 pb-20 sm:pt-28">
-        <Container className="max-w-2xl text-center">
-          <h2 className="font-serif text-3xl text-[var(--foreground)]">{f("lieu_title")}</h2>
-          <p className="mt-5 text-[var(--foreground)]/70">{f("lieu_text")}</p>
+      <section className="pt-24 pb-14 sm:pt-28">
+        <Container className="grid items-center gap-10 sm:grid-cols-2">
+          <div className="relative aspect-[4/3] overflow-hidden rounded-2xl">
+            <Image src={lieuPhoto} alt="Le domaine" fill className="object-cover" sizes="(min-width: 640px) 500px, 100vw" />
+          </div>
+          <div>
+            <h2 className="font-serif text-3xl text-[var(--foreground)]">{f("lieu_title")}</h2>
+            <p className="mt-5 text-[var(--foreground)]/70">{f("lieu_text")}</p>
+          </div>
         </Container>
       </section>
 
@@ -181,6 +189,8 @@ export default async function HomePage() {
           </Container>
         </section>
       )}
+
+      <LogoMarquee />
 
       <section className="py-20 bg-[var(--background-muted)]">
         <Container>
