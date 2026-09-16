@@ -47,7 +47,8 @@ export default async function MariagePage() {
         eyebrow="Mariage"
         title={f("hero_title")}
         description={f("hero_description")}
-        image={{ src: "/images/mariage-hero.jpg", alt: "Bouquet de fleurs blanches pour décoration de mariage" }}
+        image={{ src: "/images/mariage-hero.jpg", alt: "Domaine de la Bégude au coucher du soleil" }}
+        scrollFade
       />
 
       <IntroSection title={f("intro_title")} text={f("intro_text")} />
