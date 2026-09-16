@@ -292,9 +292,11 @@ export function PageEditor({
 
       {schema.slug === "home" && (
         <>
-          <section className="relative flex min-h-[90vh] items-center justify-center overflow-hidden text-center">
-            <Image src="/images/home-hero.jpg" alt="" fill className="object-cover" sizes="100vw" />
-            <div className="absolute inset-0 bg-black/45" />
+          <section className="relative flex min-h-[90vh] items-center justify-center text-center">
+            <div className="absolute inset-0 overflow-hidden">
+              <Image src="/images/home-hero.jpg" alt="" fill className="object-cover" sizes="100vw" />
+              <div className="absolute inset-0 bg-black/45" />
+            </div>
             <Container className="relative z-10 flex flex-col items-center px-4">
               <EditableText
                 as="h1"

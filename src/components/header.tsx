@@ -13,9 +13,9 @@ export function Header() {
 
   return (
     <header className="sticky top-0 z-50 border-b border-black/5 bg-[var(--background)]/90 backdrop-blur">
-      <Container className="flex h-24 items-center justify-between">
+      <Container className="flex h-28 items-center justify-between">
         <Link href="/" className="flex items-center gap-2">
-          <Image src="/images/logo.png" alt={siteConfig.name} width={82} height={84} className="h-20 w-auto" priority />
+          <Image src="/images/logo.png" alt={siteConfig.name} width={104} height={106} className="h-24 w-auto" priority />
         </Link>
 
         <nav className="hidden lg:flex items-center gap-7">

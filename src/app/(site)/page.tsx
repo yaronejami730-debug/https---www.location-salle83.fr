@@ -58,16 +58,18 @@ export default async function HomePage() {
 
   return (
     <>
-      <section className="relative flex min-h-screen items-center justify-center overflow-hidden text-center">
-        <Image
-          src="/images/home-hero.jpg"
-          alt="Étang et jardins du Domaine de la Bégude"
-          fill
-          priority
-          sizes="100vw"
-          className="object-cover"
-        />
-        <div className="absolute inset-0 bg-black/45" />
+      <section className="relative flex min-h-screen items-center justify-center text-center">
+        <div className="absolute inset-0 overflow-hidden">
+          <Image
+            src="/images/home-hero.jpg"
+            alt="Étang et jardins du Domaine de la Bégude"
+            fill
+            priority
+            sizes="100vw"
+            className="object-cover"
+          />
+          <div className="absolute inset-0 bg-black/45" />
+        </div>
         <Container className="relative z-10 flex flex-col items-center px-4">
           <h1 className="max-w-4xl font-serif text-5xl leading-[1.1] text-white sm:text-7xl">{f("hero_title")}</h1>
           <p className="mt-2 font-script text-5xl leading-none text-white sm:text-6xl">{f("hero_accent")}</p>
