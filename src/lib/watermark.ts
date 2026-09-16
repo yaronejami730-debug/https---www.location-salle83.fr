@@ -12,7 +12,7 @@ let logoBuffer: Buffer | null = null;
 
 async function getLogo() {
   if (!logoBuffer) {
-    logoBuffer = await readFile(join(process.cwd(), "public", "images", "logo.png"));
+    logoBuffer = await readFile(join(process.cwd(), "public", "images", "watermark-logo.png"));
   }
   return logoBuffer;
 }
