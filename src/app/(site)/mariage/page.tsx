@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import { PageHero } from "@/components/page-hero";
-import { CtaSection } from "@/components/cta-section";
 import { Container } from "@/components/container";
 import { ZigzagSection } from "@/components/zigzag-section";
 import { IntroSection } from "@/components/intro-section";
@@ -66,9 +65,15 @@ export default async function MariagePage() {
 
       <ZigzagSection title={f("zigzag1_title")} text={f("zigzag1_text")} images={toImages(zigzag1, 0)} intervalMs={Number(f("zigzag1_interval")) * 1000} startDelayMs={0} reverse />
       <ZigzagSection title={f("zigzag2_title")} text={f("zigzag2_text")} images={toImages(zigzag2, 1)} intervalMs={Number(f("zigzag2_interval")) * 1000} startDelayMs={2200} />
-      <ZigzagSection title={f("zigzag3_title")} text={f("zigzag3_text")} images={toImages(zigzag3, 2)} intervalMs={Number(f("zigzag3_interval")) * 1000} startDelayMs={4400} reverse />
-
-      <CtaSection />
+      <ZigzagSection
+        title={f("zigzag3_title")}
+        text={f("zigzag3_text")}
+        images={toImages(zigzag3, 2)}
+        intervalMs={Number(f("zigzag3_interval")) * 1000}
+        startDelayMs={4400}
+        reverse
+        cta={{ label: "Réserver un hébergement ↗", href: "https://www.domainedelabegude.com/fr" }}
+      />
     </>
   );
 }

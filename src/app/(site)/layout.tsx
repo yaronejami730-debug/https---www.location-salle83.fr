@@ -14,11 +14,18 @@ export default async function SiteLayout({ children }: { children: React.ReactNo
     description: settings.tagline,
     address: {
       "@type": "PostalAddress",
+      streetAddress: "4876 RD 562, La Bégude",
+      postalCode: "83440",
       addressLocality: "Fayence",
       addressRegion: "Var",
       addressCountry: "FR",
     },
     telephone: settings.phone,
+    additionalProperty: {
+      "@type": "PropertyValue",
+      name: "Téléphone fixe",
+      value: siteConfig.phoneLandline,
+    },
     email: settings.email,
     url: siteConfig.domain,
   };

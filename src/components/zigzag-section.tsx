@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { Container } from "./container";
 import { FadeCarousel } from "./fade-carousel";
 
@@ -8,6 +9,7 @@ export function ZigzagSection({
   intervalMs = 6000,
   startDelayMs = 0,
   reverse = false,
+  cta,
 }: {
   title: string;
   text: string;
@@ -15,6 +17,7 @@ export function ZigzagSection({
   intervalMs?: number;
   startDelayMs?: number;
   reverse?: boolean;
+  cta?: { label: string; href: string };
 }) {
   return (
     <section className="py-14">
@@ -25,6 +28,16 @@ export function ZigzagSection({
         <div>
           <h2 className="font-display text-3xl italic text-[var(--accent-warm)]">{title}</h2>
           <p className="mt-4 whitespace-pre-line text-[var(--foreground)]/70">{text}</p>
+          {cta && (
+            <Link
+              href={cta.href}
+              target={cta.href.startsWith("http") ? "_blank" : undefined}
+              rel={cta.href.startsWith("http") ? "noopener noreferrer" : undefined}
+              className="mt-6 inline-flex rounded-full bg-[var(--accent)] px-6 py-3 text-sm text-white hover:opacity-90"
+            >
+              {cta.label}
+            </Link>
+          )}
         </div>
       </Container>
     </section>

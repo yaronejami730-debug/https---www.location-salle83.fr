@@ -1,9 +1,11 @@
 export const siteConfig = {
   name: "Domaine de la Bégude",
   tagline: "Un lieu d'exception pour vos moments inoubliables",
+  address: "4876 RD 562, La Bégude, 83440 Fayence",
   locality: "Fayence, Var",
   domain: "https://www.domainedelabegude.fr",
   phone: "+33 6 08 06 72 34",
+  phoneLandline: "+33 4 94 39 09 60",
   email: "domainedelabegude@orange.fr",
   lat: 43.58489007966609,
   lng: 6.652272484118086,

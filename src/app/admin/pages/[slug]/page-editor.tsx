@@ -464,6 +464,11 @@ export function PageEditor({
                     <div>
                       <EditableText as="h2" value={val(`zigzag${n}_title`)} onChange={set(`zigzag${n}_title`)} className="font-display text-3xl italic text-[var(--accent-warm)]" />
                       <EditableText value={val(`zigzag${n}_text`)} onChange={set(`zigzag${n}_text`)} className="mt-4 whitespace-pre-line text-[var(--foreground)]/70" />
+                      {n === 3 && (
+                        <span className="mt-6 inline-flex rounded-full bg-[var(--accent)] px-6 py-3 text-sm text-white opacity-90">
+                          Réserver un hébergement ↗
+                        </span>
+                      )}
                     </div>
                   </div>
                 </Container>
