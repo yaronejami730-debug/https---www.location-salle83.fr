@@ -85,6 +85,29 @@ export const chatbotFaq: FaqEntry[] = [
       "Non, il est à la charge du locataire. S'il est laissé au domaine, il est facturé 35 € de l'heure selon l'état de la salle, et déduit de la caution.",
   },
   {
+    keywords: ["ceremonie", "parc", "laique", "vin d'honneur", "vin honneur", "cocktail", "defile"],
+    question: "Peut-on organiser la cérémonie dans le parc paysager ?",
+    answer:
+      "Oui. Le parc paysager et la terrasse se prêtent à une cérémonie laïque, à un vin d'honneur, à un spectacle, à un apéritif dinatoire ou à un défilé. La terrasse de 90 m² est comprise dans le forfait salle.",
+  },
+  {
+    keywords: ["decorer", "veille", "decoration", "installer"],
+    question: "Peut-on venir décorer la veille ?",
+    answer:
+      "Oui. La salle est à votre disposition la veille ou l'avant-veille de l'événement, de 9 h à 19 h, pour approvisionner les réfrigérateurs et installer votre décoration.",
+  },
+  {
+    keywords: ["enfant", "jeux", "occuper", "boules", "volley", "football", "piscine"],
+    question: "Les enfants ont-ils de quoi s'occuper ?",
+    answer:
+      "Le domaine dispose d'une aire de jeux pour enfants, d'un terrain de boules, de volley et de football. La piscine est accessible en option le lendemain uniquement, de 9 h à 20 h ; elle n'est pas surveillée et les moins de quinze ans doivent être accompagnés d'un adulte — un règlement est affiché sur place.",
+  },
+  {
+    keywords: ["climatise", "climatisation", "clim", "chaud", "chaleur"],
+    question: "Les gîtes sont-ils climatisés ?",
+    answer: "Oui. La salle peut également l'être, à condition que les portes et fenêtres restent bien fermées.",
+  },
+  {
     keywords: ["seminaire", "entreprise", "reunion", "team building"],
     question: "Organisez-vous des séminaires d'entreprise ?",
     answer: "Oui, le domaine accueille séminaires, réunions et journées de team building avec salles équipées et hébergement sur place.",

@@ -24,6 +24,10 @@ Les mazets sont équipés du wifi, du téléphone et de la télévision. Pour la
 couverture de la salle de réunion et les équipements de projection, contacter
 l'équipe.
 
+**Les gîtes sont-ils climatisés ?**
+Oui. La salle peut également l'être, à condition que les portes et fenêtres
+restent bien fermées.
+
 ## Capacité & location de la salle
 
 **Quelle est la capacité pour un événement ?**
@@ -64,6 +68,19 @@ Oui, piste de danse dans la salle, sonorisation adaptée au volume des lieux.
 La salle (90 m²) et sa terrasse couverte prennent le relais. Deux chapiteaux
 de 8×4 m (32 pers. chacun) et trois de 4×4 m (16 pers. chacun) disponibles à
 200 € l'unité, soit jusqu'à 48 personnes en plus sous chapiteau.
+
+**Peut-on organiser la cérémonie dans le parc paysager ?**
+Oui : cérémonie laïque, vin d'honneur, spectacle, apéritif dinatoire ou
+défilé. La terrasse de 90 m² est comprise dans le forfait salle.
+
+**Peut-on venir décorer la veille ?**
+Oui, la salle est disponible la veille ou l'avant-veille de 9h à 19h pour
+approvisionner les réfrigérateurs et installer la décoration.
+
+**Les enfants ont-ils de quoi s'occuper ?**
+Aire de jeux, terrain de boules, volley et football. Piscine accessible en
+option le lendemain uniquement (9h-20h), non surveillée, moins de 15 ans
+accompagnés obligatoire, règlement affiché sur place.
 
 ## Horaires
 
