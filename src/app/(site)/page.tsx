@@ -3,6 +3,8 @@ import Image from "next/image";
 import Link from "next/link";
 import { Container } from "@/components/container";
 import { LogoMarquee } from "@/components/logo-marquee";
+import { Reveal } from "@/components/reveal";
+import { HeroFadeImage } from "@/components/hero-fade-image";
 import { getPageContent, getFaqs, getReviews, getMedia } from "@/lib/content";
 import { mediaUrl } from "@/lib/supabase-public";
 import { staticGalleryPhotos, staticHebergementPhotos } from "@/lib/static-gallery";
@@ -62,17 +64,8 @@ export default async function HomePage() {
   return (
     <>
       <section className="relative flex min-h-screen items-center justify-center text-center">
-        <div className="absolute inset-0 overflow-hidden">
-          <Image
-            src="/images/home-hero.jpg"
-            alt="Étang et jardins du Domaine de la Bégude"
-            fill
-            priority
-            sizes="100vw"
-            className="object-cover"
-          />
-          <div className="absolute inset-0 bg-black/45" />
-        </div>
+        <HeroFadeImage src="/images/home-hero.jpg" alt="Étang et jardins du Domaine de la Bégude" />
+        <div className="absolute inset-0 bg-black/45" />
         <Container className="relative z-10 flex flex-col items-center px-4">
           <h1 className="max-w-4xl font-serif text-5xl leading-[1.1] text-white sm:text-7xl">{f("hero_title")}</h1>
           <p className="mt-3 font-script text-6xl leading-[1.3] text-white sm:text-7xl">{f("hero_accent")}</p>
@@ -87,133 +80,149 @@ export default async function HomePage() {
       </section>
 
       <section className="pt-24 pb-14 sm:pt-28">
-        <Container className="grid items-center gap-10 sm:grid-cols-2">
-          <div className="relative aspect-[4/3] overflow-hidden rounded-2xl">
-            <Image src={lieuPhoto} alt="Le domaine" fill className="object-cover" sizes="(min-width: 640px) 500px, 100vw" />
-          </div>
-          <div>
-            <h2 className="font-serif text-3xl text-[var(--foreground)]">{f("lieu_title")}</h2>
-            <p className="mt-5 text-[var(--foreground)]/70">{f("lieu_text")}</p>
-          </div>
-        </Container>
+        <Reveal>
+          <Container className="grid items-center gap-10 sm:grid-cols-2">
+            <div className="relative aspect-[4/3] overflow-hidden rounded-2xl">
+              <Image src={lieuPhoto} alt="Le domaine" fill className="object-cover" sizes="(min-width: 640px) 500px, 100vw" />
+            </div>
+            <div>
+              <h2 className="font-serif text-3xl text-[var(--foreground)]">{f("lieu_title")}</h2>
+              <p className="mt-5 text-[var(--foreground)]/70">{f("lieu_text")}</p>
+            </div>
+          </Container>
+        </Reveal>
       </section>
 
       <section className="py-20 bg-[var(--background-muted)]">
-        <Container className="grid gap-8 sm:grid-cols-2">
-          <div className="rounded-2xl bg-[var(--background)] p-10">
-            <h3 className="font-serif text-2xl">{f("mariage_card_title")}</h3>
-            <p className="mt-3 text-sm text-[var(--foreground)]/70">{f("mariage_card_text")}</p>
-            <Link href="/mariage" className="mt-6 inline-block text-sm text-[var(--accent)] hover:underline">
-              Découvrir les mariages →
-            </Link>
-          </div>
-          <div className="rounded-2xl bg-[var(--background)] p-10">
-            <h3 className="font-serif text-2xl">{f("seminaire_card_title")}</h3>
-            <p className="mt-3 text-sm text-[var(--foreground)]/70">{f("seminaire_card_text")}</p>
-            <Link href="/seminaire" className="mt-6 inline-block text-sm text-[var(--accent)] hover:underline">
-              Découvrir les séminaires →
-            </Link>
-          </div>
-        </Container>
+        <Reveal>
+          <Container className="grid gap-8 sm:grid-cols-2">
+            <div className="rounded-2xl bg-[var(--background)] p-10">
+              <h3 className="font-serif text-2xl">{f("mariage_card_title")}</h3>
+              <p className="mt-3 text-sm text-[var(--foreground)]/70">{f("mariage_card_text")}</p>
+              <Link href="/mariage" className="mt-6 inline-block text-sm text-[var(--accent)] hover:underline">
+                Découvrir les mariages →
+              </Link>
+            </div>
+            <div className="rounded-2xl bg-[var(--background)] p-10">
+              <h3 className="font-serif text-2xl">{f("seminaire_card_title")}</h3>
+              <p className="mt-3 text-sm text-[var(--foreground)]/70">{f("seminaire_card_text")}</p>
+              <Link href="/seminaire" className="mt-6 inline-block text-sm text-[var(--accent)] hover:underline">
+                Découvrir les séminaires →
+              </Link>
+            </div>
+          </Container>
+        </Reveal>
       </section>
 
       <section className="py-20">
-        <Container>
-          <h2 className="text-center font-serif text-3xl text-[var(--foreground)]">{f("stats_title")}</h2>
-          <div className="mt-12 grid grid-cols-2 gap-8 sm:grid-cols-4">
-            {stats.map((s) => (
-              <div key={s.label} className="text-center">
-                <p className="font-serif text-3xl text-[var(--accent)]">{s.value}</p>
-                <p className="mt-1 text-sm text-[var(--foreground)]/60">{s.label}</p>
-              </div>
-            ))}
-          </div>
-        </Container>
+        <Reveal>
+          <Container>
+            <h2 className="text-center font-serif text-3xl text-[var(--foreground)]">{f("stats_title")}</h2>
+            <div className="mt-12 grid grid-cols-2 gap-8 sm:grid-cols-4">
+              {stats.map((s, i) => (
+                <Reveal key={s.label} delayMs={i * 100}>
+                  <div className="text-center">
+                    <p className="font-serif text-3xl text-[var(--accent)]">{s.value}</p>
+                    <p className="mt-1 text-sm text-[var(--foreground)]/60">{s.label}</p>
+                  </div>
+                </Reveal>
+              ))}
+            </div>
+          </Container>
+        </Reveal>
       </section>
 
       <section className="py-20 bg-[var(--background-muted)]">
-        <Container>
-          <h2 className="font-serif text-3xl text-[var(--foreground)]">{f("galerie_title")}</h2>
-          <div className="mt-10 grid grid-cols-2 gap-4 sm:grid-cols-3">
-            {galleryPhotos.length > 0
-              ? galleryPhotos.slice(0, 6).map((p) => (
-                  <div key={p.id} className="relative aspect-[4/3] overflow-hidden rounded-xl">
-                    <Image src={mediaUrl(p.storage_path)} alt={p.alt ?? ""} fill className="object-cover" sizes="400px" />
-                  </div>
-                ))
-              : staticGalleryPhotos.slice(0, 6).map((p) => (
-                  <div key={p.src} className="relative aspect-[4/3] overflow-hidden rounded-xl">
+        <Reveal>
+          <Container>
+            <h2 className="font-serif text-3xl text-[var(--foreground)]">{f("galerie_title")}</h2>
+            <div className="mt-10 grid grid-cols-2 gap-4 sm:grid-cols-3">
+              {(galleryPhotos.length > 0
+                ? galleryPhotos.slice(0, 6).map((p) => ({ key: p.id, src: mediaUrl(p.storage_path), alt: p.alt ?? "" }))
+                : staticGalleryPhotos.slice(0, 6).map((p) => ({ key: p.src, src: p.src, alt: p.alt }))
+              ).map((p, i) => (
+                <Reveal key={p.key} delayMs={i * 80}>
+                  <div className="relative aspect-[4/3] overflow-hidden rounded-xl">
                     <Image src={p.src} alt={p.alt} fill className="object-cover" sizes="400px" />
                   </div>
-                ))}
-          </div>
-          <div className="mt-8 text-center">
-            <Link href="/galerie" className="text-sm text-[var(--accent)] hover:underline">
-              Voir la galerie complète →
-            </Link>
-          </div>
-        </Container>
+                </Reveal>
+              ))}
+            </div>
+            <div className="mt-8 text-center">
+              <Link href="/galerie" className="text-sm text-[var(--accent)] hover:underline">
+                Voir la galerie complète →
+              </Link>
+            </div>
+          </Container>
+        </Reveal>
       </section>
 
       <section className="py-20">
-        <Container className="grid items-center gap-10 sm:grid-cols-2">
-          <div className="relative aspect-[4/3] overflow-hidden rounded-xl">
-            <Image src={staticHebergementPhotos[0].src} alt={staticHebergementPhotos[0].alt} fill className="object-cover" sizes="500px" />
-          </div>
-          <div>
-            <h2 className="font-serif text-3xl text-[var(--foreground)]">{f("hebergement_title")}</h2>
-            <p className="mt-4 text-[var(--foreground)]/70">{f("hebergement_text")}</p>
-            <Link href="/hebergement" className="mt-6 inline-block text-sm text-[var(--accent)] hover:underline">
-              Découvrir l&apos;hébergement →
-            </Link>
-          </div>
-        </Container>
+        <Reveal>
+          <Container className="grid items-center gap-10 sm:grid-cols-2">
+            <div className="relative aspect-[4/3] overflow-hidden rounded-xl">
+              <Image src={staticHebergementPhotos[0].src} alt={staticHebergementPhotos[0].alt} fill className="object-cover" sizes="500px" />
+            </div>
+            <div>
+              <h2 className="font-serif text-3xl text-[var(--foreground)]">{f("hebergement_title")}</h2>
+              <p className="mt-4 text-[var(--foreground)]/70">{f("hebergement_text")}</p>
+              <Link href="/hebergement" className="mt-6 inline-block text-sm text-[var(--accent)] hover:underline">
+                Découvrir l&apos;hébergement →
+              </Link>
+            </div>
+          </Container>
+        </Reveal>
       </section>
 
       {reviews.length > 0 && (
         <section className="py-16">
-          <Container>
-            <p className="text-center text-xs uppercase tracking-[0.2em] text-[var(--foreground)]/40">Ils nous ont fait confiance</p>
-            <div className="mx-auto mt-8 flex max-w-4xl flex-wrap justify-center gap-5">
-              {reviews.slice(0, 6).map((r) => (
-                <div
-                  key={r.id}
-                  className="w-full rounded-xl border border-black/5 bg-[var(--background-muted)]/60 p-5 sm:w-[calc(33.333%-14px)]"
-                >
-                  <p className="text-xs text-[var(--accent-warm)]">{"★".repeat(r.rating)}</p>
-                  <p className="mt-2 line-clamp-4 text-sm text-[var(--foreground)]/60">{r.text}</p>
-                  <p className="mt-3 text-xs font-medium text-[var(--foreground)]/70">{r.author}</p>
-                </div>
-              ))}
-            </div>
-          </Container>
+          <Reveal>
+            <Container>
+              <p className="text-center text-xs uppercase tracking-[0.2em] text-[var(--foreground)]/40">Ils nous ont fait confiance</p>
+              <div className="mx-auto mt-8 flex max-w-4xl flex-wrap justify-center gap-5">
+                {reviews.slice(0, 6).map((r, i) => (
+                  <Reveal key={r.id} delayMs={i * 100}>
+                    <div className="w-full rounded-xl border border-black/5 bg-[var(--background-muted)]/60 p-5 sm:w-[calc(33.333%-14px)]">
+                      <p className="text-xs text-[var(--accent-warm)]">{"★".repeat(r.rating)}</p>
+                      <p className="mt-2 line-clamp-4 text-sm text-[var(--foreground)]/60">{r.text}</p>
+                      <p className="mt-3 text-xs font-medium text-[var(--foreground)]/70">{r.author}</p>
+                    </div>
+                  </Reveal>
+                ))}
+              </div>
+            </Container>
+          </Reveal>
         </section>
       )}
 
       <LogoMarquee />
 
       <section className="py-20 bg-[var(--background-muted)]">
-        <Container>
-          <h2 className="text-center font-serif text-3xl text-[var(--foreground)]">{f("faq_title")}</h2>
-          <div className="mx-auto mt-10 max-w-2xl divide-y divide-black/5">
-            {displayFaqs.map((fq) => (
-              <details key={fq.id} className="group py-5">
-                <summary className="cursor-pointer list-none font-medium text-[var(--foreground)]">{fq.question}</summary>
-                <p className="mt-3 text-sm text-[var(--foreground)]/70">{fq.answer}</p>
-              </details>
-            ))}
-          </div>
-        </Container>
+        <Reveal>
+          <Container>
+            <h2 className="text-center font-serif text-3xl text-[var(--foreground)]">{f("faq_title")}</h2>
+            <div className="mx-auto mt-10 max-w-2xl divide-y divide-black/5">
+              {displayFaqs.map((fq) => (
+                <details key={fq.id} className="group py-5">
+                  <summary className="cursor-pointer list-none font-medium text-[var(--foreground)]">{fq.question}</summary>
+                  <p className="mt-3 text-sm text-[var(--foreground)]/70">{fq.answer}</p>
+                </details>
+              ))}
+            </div>
+          </Container>
+        </Reveal>
       </section>
 
       <section className="py-24 text-center">
-        <Container className="max-w-xl">
-          <h2 className="font-serif text-3xl text-[var(--foreground)]">{f("cta_title")}</h2>
-          <p className="mt-4 text-[var(--foreground)]/70">{f("cta_text")}</p>
-          <Link href="/contact" className="mt-8 inline-flex rounded-full bg-[var(--accent)] px-8 py-3.5 text-sm text-white hover:opacity-90">
-            {f("cta_button")}
-          </Link>
-        </Container>
+        <Reveal>
+          <Container className="max-w-xl">
+            <h2 className="font-serif text-3xl text-[var(--foreground)]">{f("cta_title")}</h2>
+            <p className="mt-4 text-[var(--foreground)]/70">{f("cta_text")}</p>
+            <Link href="/contact" className="mt-8 inline-flex rounded-full bg-[var(--accent)] px-8 py-3.5 text-sm text-white hover:opacity-90">
+              {f("cta_button")}
+            </Link>
+          </Container>
+        </Reveal>
       </section>
     </>
   );
