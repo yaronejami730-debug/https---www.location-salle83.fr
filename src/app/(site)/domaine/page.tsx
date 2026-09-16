@@ -24,9 +24,17 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function DomainePage() {
-  const [pageContent, photos] = await Promise.all([getPageContent("domaine"), getMedia("domaine")]);
+  const [pageContent, photos, poolPhotos, featuredPhotos] = await Promise.all([
+    getPageContent("domaine"),
+    getMedia("domaine"),
+    getMedia("domaine-pool"),
+    getMedia("domaine-featured"),
+  ]);
   const c = pageContent?.content ?? {};
   const f = (key: string) => fieldValue(c, schema.fields.find((x) => x.key === key)!);
+
+  const poolPhoto = poolPhotos[0] ? mediaUrl(poolPhotos[0].storage_path) : "/images/domaine-pool.jpg";
+  const featuredPhoto = featuredPhotos[0] ? mediaUrl(featuredPhotos[0].storage_path) : "/images/domaine-featured.jpg";
 
   return (
     <>
@@ -35,7 +43,7 @@ export default async function DomainePage() {
       <section className="py-16">
         <Container>
           <div className="relative aspect-[16/9] w-full overflow-hidden rounded-3xl">
-            <Image src="/images/domaine-pool.jpg" alt="Piscine extérieure du domaine entourée de transats et d'arbres" fill className="object-cover" sizes="1200px" />
+            <Image src={poolPhoto} alt="Piscine extérieure du domaine entourée de transats et d'arbres" fill className="object-cover" sizes="1200px" />
           </div>
         </Container>
       </section>
@@ -44,7 +52,7 @@ export default async function DomainePage() {
         <Container className="max-w-xl">
           <div className="relative aspect-[3/4] w-full overflow-hidden rounded-3xl">
             <Image
-              src="/images/domaine-featured.jpg"
+              src={featuredPhoto}
               alt="Voiture de mariage fleurie devant le domaine, mariée et invités dans le jardin"
               fill
               className="object-cover"

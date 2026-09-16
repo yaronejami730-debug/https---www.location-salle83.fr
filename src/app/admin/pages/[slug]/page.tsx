@@ -13,7 +13,11 @@ export default async function AdminPageEditorRoute({ params }: { params: Promise
   if (!schema) notFound();
 
   const supabase = supabaseAdmin();
-  const zigzagCategories = ZIGZAG_SLUGS.includes(slug) ? [1, 2, 3].map((n) => `${slug}-zigzag-${n}`) : [];
+  const zigzagCategories = ZIGZAG_SLUGS.includes(slug)
+    ? [1, 2, 3].map((n) => `${slug}-zigzag-${n}`)
+    : slug === "domaine"
+      ? ["domaine-pool", "domaine-featured"]
+      : [];
 
   const [{ data: row }, { data: faqs }, { data: reviews }, { data: media }, { data: hebergementMedia }, zigzagRows] = await Promise.all([
     supabase.from("pages").select("*").eq("slug", slug).maybeSingle(),

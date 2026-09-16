@@ -293,7 +293,7 @@ export function PageEditor({
       {schema.slug === "home" && (
         <>
           <section className="relative flex min-h-[70vh] items-center justify-center overflow-hidden text-center">
-            <Image src="/images/mariage-hero.jpg" alt="" fill className="object-cover" sizes="100vw" />
+            <Image src="/images/home-hero.jpg" alt="" fill className="object-cover" sizes="100vw" />
             <div className="absolute inset-0 bg-black/50" />
             <Container className="relative z-10 flex flex-col items-center py-20">
               <EditableText
@@ -594,9 +594,8 @@ export function PageEditor({
           {schema.slug === "domaine" && (
             <section className="py-16">
               <Container>
-                <div className="relative aspect-[16/9] w-full overflow-hidden rounded-3xl">
-                  <Image src="/images/domaine-pool.jpg" alt="" fill className="object-cover" sizes="1200px" />
-                </div>
+                <p className="mb-2 text-xs font-medium text-[var(--accent)]">Photo piscine (bannière)</p>
+                <EditablePhotoGrid photos={zigzagMedia["domaine-pool"] ?? []} page="domaine-pool" aspect="aspect-[16/9]" />
               </Container>
             </section>
           )}
@@ -604,9 +603,8 @@ export function PageEditor({
           {schema.slug === "domaine" && (
             <section className="py-16">
               <Container className="max-w-xl">
-                <div className="relative aspect-[3/4] w-full overflow-hidden rounded-3xl">
-                  <Image src="/images/domaine-featured.jpg" alt="" fill className="object-cover" sizes="600px" />
-                </div>
+                <p className="mb-2 text-xs font-medium text-[var(--accent)]">Photo mise en avant</p>
+                <EditablePhotoGrid photos={zigzagMedia["domaine-featured"] ?? []} page="domaine-featured" aspect="aspect-[3/4]" />
                 <EditableText
                   value={val("featured_caption")}
                   onChange={set("featured_caption")}

@@ -60,8 +60,8 @@ export default async function HomePage() {
     <>
       <section className="relative flex min-h-[85vh] items-center justify-center overflow-hidden text-center">
         <Image
-          src="/images/mariage-hero.jpg"
-          alt="Décoration florale du Domaine de la Bégude"
+          src="/images/home-hero.jpg"
+          alt="Étang et jardins du Domaine de la Bégude"
           fill
           priority
           sizes="100vw"
