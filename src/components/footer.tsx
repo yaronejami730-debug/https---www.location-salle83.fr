@@ -50,6 +50,9 @@ export async function Footer() {
           <Link href="/confidentialite" className="text-xs text-[var(--foreground)]/50 hover:text-[var(--accent)]">
             Charte de confidentialité
           </Link>
+          <Link href="/conditions-generales" className="text-xs text-[var(--foreground)]/50 hover:text-[var(--accent)]">
+            Conditions générales
+          </Link>
         </div>
       </Container>
     </footer>

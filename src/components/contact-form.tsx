@@ -1,6 +1,7 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
+import Link from "next/link";
 import { Controller, useForm } from "react-hook-form";
 import { useState } from "react";
 import { z } from "zod";
@@ -18,10 +19,12 @@ const schema = z
     vaisselle: z.boolean(),
     cuisine: z.boolean(),
     chapiteauCount: z.string(),
-    fullName: z.string().min(2, "Nom requis"),
+    firstName: z.string().min(2, "Prénom requis"),
+    lastName: z.string().min(2, "Nom requis"),
     phone: z.string().min(6, "Téléphone requis"),
     email: z.string().email("Email invalide"),
     message: z.string().optional(),
+    termsAccepted: z.boolean().refine((v) => v, { message: "Merci d'accepter les conditions générales" }),
   })
   .refine((data) => data.eventType !== "autre" || (data.message ?? "").trim().length > 0, {
     message: "Merci de préciser votre demande",
@@ -77,6 +80,7 @@ export function ContactForm() {
       vaisselle: false,
       cuisine: false,
       chapiteauCount: "0",
+      termsAccepted: false,
     },
   });
 
@@ -94,7 +98,7 @@ export function ContactForm() {
   async function onSubmit(values: FormValues) {
     setStatus("loading");
     try {
-      const quote = await submitLead(values);
+      const quote = await submitLead({ ...values, fullName: `${values.firstName} ${values.lastName}`.trim() });
       setLastQuote(quote);
       setStatus("success");
       reset();
@@ -120,8 +124,12 @@ export function ContactForm() {
               <span>Arrhes (50%)</span>
               <span>{lastQuote.arrhes} €</span>
             </p>
+            <p className="mt-1 flex justify-between text-[var(--foreground)]/70">
+              <span>Caution (à l&apos;arrivée)</span>
+              <span>500 €</span>
+            </p>
             <p className="mt-3 text-xs text-[var(--foreground)]/50">
-              Estimation indicative, confirmée par notre équipe. Caution de 500 € demandée à l&apos;arrivée.
+              Estimation indicative, confirmée par notre équipe. Ménage à la charge du locataire, ou facturé 30 €/heure selon l&apos;état des lieux.
             </p>
           </div>
         )}
@@ -240,8 +248,15 @@ export function ContactForm() {
               <span className="font-serif text-2xl text-[var(--accent)]">{quote.total} €</span>
             </div>
             <p className="mt-1 text-xs text-[var(--foreground)]/50">
-              Dont {quote.arrhes} € d&apos;arrhes à la réservation (50%). Forfait salle minimum 1700 €, hors ménage et caution (500 €).
+              Dont {quote.arrhes} € d&apos;arrhes à la réservation (50%).
             </p>
+            <div className="mt-3 space-y-1 border-t border-black/10 pt-3 text-xs text-[var(--foreground)]/60">
+              <p className="flex justify-between">
+                <span>Caution (à l&apos;arrivée, en espèces)</span>
+                <span>500 €</span>
+              </p>
+              <p>Ménage à la charge du locataire, ou facturé 30 €/heure selon l&apos;état des lieux.</p>
+            </div>
           </>
         ) : (
           <p className="text-sm text-[var(--foreground)]/60">
@@ -252,9 +267,22 @@ export function ContactForm() {
 
       <div className="grid gap-6 sm:grid-cols-2">
         <div>
+          <label className="mb-2 block text-sm text-[var(--foreground)]/80">Prénom</label>
+          <input {...register("firstName")} className="w-full rounded-lg border border-black/10 px-4 py-3 text-sm" />
+          {errors.firstName && <p className="mt-1 text-xs text-red-600">{errors.firstName.message}</p>}
+        </div>
+        <div>
           <label className="mb-2 block text-sm text-[var(--foreground)]/80">Nom</label>
-          <input {...register("fullName")} className="w-full rounded-lg border border-black/10 px-4 py-3 text-sm" />
-          {errors.fullName && <p className="mt-1 text-xs text-red-600">{errors.fullName.message}</p>}
+          <input {...register("lastName")} className="w-full rounded-lg border border-black/10 px-4 py-3 text-sm" />
+          {errors.lastName && <p className="mt-1 text-xs text-red-600">{errors.lastName.message}</p>}
+        </div>
+      </div>
+
+      <div className="grid gap-6 sm:grid-cols-2">
+        <div>
+          <label className="mb-2 block text-sm text-[var(--foreground)]/80">Email</label>
+          <input type="email" {...register("email")} className="w-full rounded-lg border border-black/10 px-4 py-3 text-sm" />
+          {errors.email && <p className="mt-1 text-xs text-red-600">{errors.email.message}</p>}
         </div>
         <div>
           <label className="mb-2 block text-sm text-[var(--foreground)]/80">Téléphone</label>
@@ -263,18 +291,26 @@ export function ContactForm() {
         </div>
       </div>
 
-      <div>
-        <label className="mb-2 block text-sm text-[var(--foreground)]/80">Email</label>
-        <input type="email" {...register("email")} className="w-full rounded-lg border border-black/10 px-4 py-3 text-sm" />
-        {errors.email && <p className="mt-1 text-xs text-red-600">{errors.email.message}</p>}
-      </div>
+      {watched.eventType === "autre" && (
+        <div>
+          <label className="mb-2 block text-sm text-[var(--foreground)]/80">Précisez votre demande</label>
+          <textarea {...register("message")} rows={4} className="w-full rounded-lg border border-black/10 px-4 py-3 text-sm" />
+          {errors.message && <p className="mt-1 text-xs text-red-600">{errors.message.message}</p>}
+        </div>
+      )}
 
       <div>
-        <label className="mb-2 block text-sm text-[var(--foreground)]/80">
-          {watched.eventType === "autre" ? "Précisez votre demande" : "Votre message (optionnel)"}
+        <label className="flex cursor-pointer items-start gap-3 text-sm text-[var(--foreground)]/80">
+          <input type="checkbox" {...register("termsAccepted")} className="mt-0.5 h-4 w-4 shrink-0" />
+          <span>
+            J&apos;ai pris connaissance des{" "}
+            <Link href="/conditions-generales" target="_blank" className="text-[var(--accent)] hover:underline">
+              conditions générales
+            </Link>{" "}
+            (caution, ménage, réglement intérieur).
+          </span>
         </label>
-        <textarea {...register("message")} rows={4} className="w-full rounded-lg border border-black/10 px-4 py-3 text-sm" />
-        {errors.message && <p className="mt-1 text-xs text-red-600">{errors.message.message}</p>}
+        {errors.termsAccepted && <p className="mt-1 text-xs text-red-600">{errors.termsAccepted.message}</p>}
       </div>
 
       <button
