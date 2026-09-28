@@ -1,6 +1,6 @@
 import { Header } from "@/components/header";
 import { Footer } from "@/components/footer";
-import { ChatbotWidget } from "@/components/chatbot-widget";
+import { FaqWidget } from "@/components/faq-widget";
 import { siteConfig } from "@/lib/site";
 import { getSiteSettings } from "@/lib/content";
 
@@ -36,7 +36,7 @@ export default async function SiteLayout({ children }: { children: React.ReactNo
       <Header />
       <main className="flex-1">{children}</main>
       <Footer />
-      <ChatbotWidget />
+      <FaqWidget />
     </>
   );
 }
