@@ -85,9 +85,9 @@ export default async function HomePage() {
               {f("stats_title")}
             </p>
             <div className="flex flex-col overflow-hidden rounded-2xl border border-black/10 bg-[var(--background)] shadow-xl sm:flex-row">
-              <div className="flex flex-nowrap items-center justify-between gap-6 overflow-x-auto px-6 py-7 sm:flex-1 sm:gap-4">
+              <div className="grid grid-cols-2 gap-y-5 px-6 py-7 sm:flex sm:flex-1 sm:flex-nowrap sm:items-center sm:justify-between sm:gap-4 sm:py-7">
                 {mainStats.map((s) => (
-                  <div key={s.label} className="shrink-0 text-center">
+                  <div key={s.label} className="text-center sm:shrink-0">
                     <p className="font-serif text-2xl text-[var(--accent)] sm:text-3xl">{s.value}</p>
                     <p className="text-[10px] uppercase tracking-[0.12em] text-[var(--foreground)]/50 sm:text-xs">{s.label}</p>
                   </div>
