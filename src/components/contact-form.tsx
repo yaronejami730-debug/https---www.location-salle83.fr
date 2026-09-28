@@ -108,6 +108,7 @@ export function ContactForm() {
         ...values,
         civility: civilityLabel,
         fullName: `${values.firstName} ${values.lastName}`.trim(),
+        lastName: values.lastName,
       });
       setLastQuote(quote);
       setLastReference(leadReference(leadId));

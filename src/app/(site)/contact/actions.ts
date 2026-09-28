@@ -17,6 +17,7 @@ const schema = z.object({
   chapiteauCount: z.string(),
   civility: z.string().optional(),
   fullName: z.string().min(2),
+  lastName: z.string().optional(),
   address: z.string().optional(),
   phone: z.string().optional(),
   email: z.string().email(),
@@ -76,9 +77,9 @@ export async function submitLead(input: SubmitLeadInput) {
   );
 
   const welcome = welcomeEmail({
+    civility: values.civility,
+    lastName: values.lastName,
     fullName: values.fullName,
-    eventType: values.eventType,
-    guestCount: Number(values.guestCount) || undefined,
     quote,
   });
   void sendEmail(values.email, welcome.subject, welcome.html, values.fullName);

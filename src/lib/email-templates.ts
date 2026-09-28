@@ -1,6 +1,118 @@
 import "server-only";
 import { siteConfig } from "@/lib/site";
 
+// Logo hébergé sur le déploiement Vercel accessible tant que le domaine principal n'est pas branché.
+const LOGO_URL = "https://https-www-location-salle83-fr.vercel.app/images/logo.png";
+
+const CONTACT_NAME = "Gonzague Tassou";
+const CONTACT_PHONE_HREF = `tel:${siteConfig.phone.replace(/\s/g, "")}`;
+
+/**
+ * Shell email — fond blanc, logo centré, titre centré, CTA bouton pill, footer minimaliste.
+ * Pas de carte/bordure : structure inspirée de dealandcompany.fr.
+ */
+function baseEmail({
+  title,
+  heading,
+  body,
+  ctaLabel,
+  ctaUrl,
+  postCta,
+}: {
+  title: string;
+  heading: string;
+  body: string;
+  ctaLabel?: string;
+  ctaUrl?: string;
+  postCta?: string;
+}): string {
+  return `<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>${title}</title>
+  <style>
+    body,table,td,a{-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%;}
+    body{margin:0;padding:0;background:#ffffff;font-family:Arial,Helvetica,sans-serif;}
+    img{border:0;height:auto;line-height:100%;outline:none;text-decoration:none;}
+    @media(max-width:620px){
+      .wrap{width:100%!important;}
+      .pad{padding:0 24px 28px!important;}
+      .h1{font-size:26px!important;}
+      .logo{width:110px!important;}
+    }
+  </style>
+</head>
+<body bgcolor="#ffffff">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" bgcolor="#ffffff">
+<tr><td align="center" style="padding:48px 16px;">
+<table class="wrap" role="presentation" width="560" cellpadding="0" cellspacing="0" style="max-width:560px;width:100%;">
+
+  <tr><td align="center" style="padding-bottom:36px;">
+    <img class="logo" src="${LOGO_URL}" alt="${siteConfig.name}" width="130" style="display:block;height:auto;"/>
+  </td></tr>
+
+  <tr><td align="center" style="padding-bottom:24px;">
+    <h1 class="h1" style="font-family:Georgia,'Times New Roman',serif;font-size:30px;font-weight:normal;
+      color:#2b2a26;letter-spacing:0;margin:0;line-height:1.25;text-align:center;">
+      ${heading}
+    </h1>
+  </td></tr>
+
+  <tr><td class="pad" style="padding:0 8px 32px;">
+    <div style="font-size:15px;color:#3d3c37;line-height:1.75;text-align:center;">
+      ${body}
+    </div>
+  </td></tr>
+
+  ${
+    ctaLabel && ctaUrl
+      ? `
+  <tr><td align="center" style="padding-bottom:${postCta ? "16px" : "48px"};">
+    <a href="${ctaUrl}"
+      style="display:inline-block;background:#5c6b4a;color:#ffffff;font-size:15px;
+      font-weight:bold;text-decoration:none;padding:16px 40px;border-radius:9999px;
+      letter-spacing:0.01em;">
+      ${ctaLabel}
+    </a>
+  </td></tr>`
+      : ""
+  }
+
+  ${
+    postCta
+      ? `
+  <tr><td style="padding:0 8px 48px;">
+    <p style="font-size:13px;color:#8a887f;line-height:1.75;margin:0;text-align:center;">
+      ${postCta}
+    </p>
+  </td></tr>`
+      : ""
+  }
+
+  <tr><td style="padding-bottom:32px;">
+    <div style="height:1px;background:#eceef0;"></div>
+  </td></tr>
+
+  <tr><td align="center" style="padding-bottom:16px;">
+    <img class="logo" src="${LOGO_URL}" alt="${siteConfig.name}" width="90" style="display:block;height:auto;margin:0 auto;opacity:0.55;"/>
+  </td></tr>
+
+  <tr><td align="center" style="padding-bottom:8px;">
+    <p style="font-size:12px;color:#9ea4a9;line-height:1.7;margin:0;text-align:center;">
+      ${siteConfig.name} — ${siteConfig.address}<br/>
+      ${siteConfig.phone} — <a href="mailto:${siteConfig.email}" style="color:#9ea4a9;">${siteConfig.email}</a>
+    </p>
+  </td></tr>
+
+</table>
+</td></tr>
+</table>
+</body>
+</html>`;
+}
+
 const bins = [
   { name: "Poubelle jaune", color: "#c99a1f", description: "Tous les emballages" },
   { name: "Poubelle marron", color: "#8a5a3c", description: "Déchets ménagers" },
@@ -9,105 +121,76 @@ const bins = [
   { name: "Poubelle carton", color: "#a68a5c", description: "Carton à plat" },
 ];
 
-function emailShell(title: string, bodyHtml: string): string {
-  return `
-  <div style="background:#f7f5f0;padding:32px 16px;font-family:Georgia,'Times New Roman',serif;color:#2b2a26;">
-    <div style="max-width:560px;margin:0 auto;background:#ffffff;border-radius:16px;overflow:hidden;border:1px solid #e8e5dc;">
-      <div style="background:#5c6b4a;padding:28px 32px;text-align:center;">
-        <p style="margin:0;color:#ffffff;font-size:20px;letter-spacing:0.02em;">${siteConfig.name}</p>
-      </div>
-      <div style="padding:32px;">
-        <h1 style="margin:0 0 16px;font-size:22px;color:#2b2a26;">${title}</h1>
-        ${bodyHtml}
-      </div>
-      <div style="padding:20px 32px;background:#f7f5f0;text-align:center;font-family:Arial,sans-serif;font-size:12px;color:#8a887f;">
-        ${siteConfig.name} — ${siteConfig.address}<br/>
-        ${siteConfig.phone} — ${siteConfig.email}
-      </div>
-    </div>
-  </div>`;
-}
-
 export function welcomeEmail(params: {
+  civility?: string;
+  lastName?: string;
   fullName: string;
-  eventType: string;
-  guestCount?: number;
   quote?: { total: number; arrhes: number } | null;
 }): { subject: string; html: string } {
-  const { fullName, quote } = params;
+  const { civility, lastName, fullName, quote } = params;
+  const greetingName = civility && lastName ? `${civility} ${lastName}` : fullName;
 
   const quoteBlock = quote
     ? `
-      <table style="width:100%;border-collapse:collapse;margin-top:8px;font-family:Arial,sans-serif;font-size:14px;color:#3d3c37;">
-        <tr>
-          <td style="padding:6px 0;">Estimation</td>
-          <td style="padding:6px 0;text-align:right;font-weight:bold;color:#5c6b4a;">${quote.total} €</td>
-        </tr>
-        <tr>
-          <td style="padding:6px 0;">Arrhes à la réservation (50%)</td>
-          <td style="padding:6px 0;text-align:right;">${quote.arrhes} €</td>
-        </tr>
-        <tr>
-          <td style="padding:6px 0;">Caution (à l'arrivée)</td>
-          <td style="padding:6px 0;text-align:right;">1 000 €</td>
-        </tr>
-      </table>
-      <p style="margin-top:14px;font-family:Arial,sans-serif;font-size:12px;color:#8a887f;">
-        Estimation indicative, confirmée par notre équipe.
+      <p style="margin:28px 0 4px;font-size:13px;color:#8a887f;text-transform:uppercase;letter-spacing:0.1em;">Votre estimation</p>
+      <p style="margin:0;font-family:Georgia,'Times New Roman',serif;font-size:32px;color:#5c6b4a;">${quote.total} €</p>
+      <p style="margin:6px 0 0;font-size:13px;color:#8a887f;">
+        Arrhes à la réservation (50 %) : ${quote.arrhes} € · Caution à l'arrivée : 1 000 €
       </p>`
     : "";
 
   const body = `
-    <p style="font-family:Arial,sans-serif;font-size:15px;line-height:1.6;color:#3d3c37;">
-      Bonjour ${fullName},
+    <p>Bonjour ${greetingName},</p>
+    <p>Merci pour l'intérêt que vous portez au Domaine de la Bégude.</p>
+    <p>
+      Trois hectares de nature préservée à Fayence, dans le Var, autour d'un mas provençal créé en 1995 :
+      un cadre vrai et chaleureux pour les plus beaux moments, mariages, séminaires et réceptions.
     </p>
-    <p style="font-family:Arial,sans-serif;font-size:15px;line-height:1.6;color:#3d3c37;">
-      Merci pour votre demande. Le Domaine de la Bégude, c'est trois hectares de nature préservée à Fayence, dans le Var,
-      autour d'un mas provençal créé en 1995 : un lieu vrai et chaleureux pour mariages, séminaires et réceptions.
-    </p>
-    <p style="font-family:Arial,sans-serif;font-size:15px;line-height:1.6;color:#3d3c37;">
-      4876 RD 562, La Bégude, 83440 Fayence.
-    </p>
-    ${quote ? `<h2 style="margin:24px 0 4px;font-size:17px;color:#2b2a26;">Votre estimation</h2>${quoteBlock}` : ""}
-    <p style="margin-top:24px;font-family:Arial,sans-serif;font-size:15px;line-height:1.6;color:#3d3c37;">
-      Veuillez contacter directement Monsieur Gonzague pour finaliser votre projet.
-    </p>`;
+    ${quote ? `<p>Suite à l'estimation que vous avez faite en ligne, voici l'estimation que nous vous proposons :</p>${quoteBlock}` : ""}
+  `;
 
-  return { subject: "Bienvenue au Domaine de la Bégude", html: emailShell("Bienvenue au Domaine de la Bégude", body) };
+  return {
+    subject: "Bienvenue au Domaine de la Bégude",
+    html: baseEmail({
+      title: "Bienvenue au Domaine de la Bégude",
+      heading: "Bienvenue au Domaine de la Bégude",
+      body,
+      ctaLabel: `Contacter Monsieur ${CONTACT_NAME}`,
+      ctaUrl: CONTACT_PHONE_HREF,
+      postCta: `Ou par email : <a href="mailto:${siteConfig.email}" style="color:#8a887f;">${siteConfig.email}</a>`,
+    }),
+  };
 }
 
 export function wasteSortingEmail(params: { fullName: string }): { subject: string; html: string } {
   const binsHtml = bins
     .map(
-      (b) => `
-      <tr>
-        <td style="padding:10px 0;font-family:Arial,sans-serif;font-size:14px;">
-          <span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:${b.color};margin-right:10px;"></span>
+      (b) =>
+        `<span style="display:inline-block;margin:4px 10px;font-size:14px;">
+          <span style="display:inline-block;width:9px;height:9px;border-radius:50%;background:${b.color};margin-right:6px;"></span>
           <strong>${b.name}</strong> = ${b.description}
-        </td>
-      </tr>`,
+        </span>`,
     )
     .join("");
 
   const body = `
-    <p style="font-family:Arial,sans-serif;font-size:15px;line-height:1.6;color:#3d3c37;">
-      Bonjour ${params.fullName},
+    <p>Bonjour ${params.fullName},</p>
+    <p>Votre séjour au Domaine de la Bégude se termine bientôt. Avant votre départ, un rappel sur le tri sélectif —
+    la communauté de communes nous demande d'être vigilants sur ce point.</p>
+    <p style="margin-top:20px;">${binsHtml}</p>
+    <p style="margin-top:28px;font-size:13px;color:#a33;">
+      <strong>Sujet très important&nbsp;:</strong> si le tri n'est pas respecté durant votre séjour, la caution sera
+      retenue en intégralité, et les autorités compétentes seront informées.
     </p>
-    <p style="font-family:Arial,sans-serif;font-size:15px;line-height:1.6;color:#3d3c37;">
-      Votre séjour au Domaine de la Bégude se termine bientôt. Avant votre départ, voici un rappel sur le tri sélectif —
-      un sujet important, la communauté de communes nous demande d'être vigilants.
-    </p>
-    <table style="width:100%;border-collapse:collapse;margin-top:12px;">${binsHtml}</table>
-    <div style="margin-top:24px;padding:16px;border-radius:8px;background:#fdecec;border:1px solid #e8b4b4;">
-      <p style="margin:0;font-family:Arial,sans-serif;font-size:13px;color:#a33;font-weight:bold;">Sujet très important</p>
-      <p style="margin:6px 0 0;font-family:Arial,sans-serif;font-size:13px;color:#5a2222;line-height:1.5;">
-        Si le tri n'est pas respecté durant votre séjour, la caution sera retenue en intégralité, et les autorités
-        compétentes seront informées.
-      </p>
-    </div>
-    <p style="margin-top:24px;font-family:Arial,sans-serif;font-size:15px;line-height:1.6;color:#3d3c37;">
-      Merci et à bientôt !
-    </p>`;
+    <p style="margin-top:20px;">Merci, et à bientôt !</p>
+  `;
 
-  return { subject: "Avant votre départ — le tri sélectif au domaine", html: emailShell("Avant votre départ", body) };
+  return {
+    subject: "Avant votre départ — le tri sélectif au domaine",
+    html: baseEmail({
+      title: "Avant votre départ",
+      heading: "Avant votre départ",
+      body,
+    }),
+  };
 }

@@ -16,7 +16,7 @@ type EntryGateProps = {
 // panels' own overflow-hidden clipping, and it travels with its door as it slides open.
 function GateContent({ offset, heroTitle, heroAccent, heroDescription }: { offset: string } & EntryGateProps) {
   return (
-    <div className="fixed inset-y-0 top-0 h-full w-screen bg-black" style={{ left: offset }}>
+    <div className="fixed inset-y-0 top-0 h-dvh w-screen bg-black" style={{ left: offset }}>
       <Image src="/images/entry-gate.jpg" alt="" fill priority className="object-cover" sizes="100vw" />
       <div className="absolute inset-0 bg-black/45" />
       <div className="absolute inset-0 flex flex-col items-center justify-center px-4 text-center text-white">
@@ -52,16 +52,16 @@ export function EntryGate({ heroTitle, heroAccent, heroDescription }: EntryGateP
   const contentProps = { heroTitle, heroAccent, heroDescription };
 
   return (
-    <div className="fixed inset-0 z-50">
+    <div className="fixed inset-0 z-50 h-dvh bg-black">
       <div
-        className={`absolute inset-y-0 left-0 w-1/2 overflow-hidden transition-transform duration-[1800ms] ease-[cubic-bezier(0.83,0,0.17,1)] ${
+        className={`absolute inset-y-0 left-0 h-dvh w-1/2 overflow-hidden transition-transform duration-[1800ms] ease-[cubic-bezier(0.83,0,0.17,1)] ${
           opening ? "-translate-x-full" : "translate-x-0"
         }`}
       >
         <GateContent offset="0" {...contentProps} />
       </div>
       <div
-        className={`absolute inset-y-0 right-0 w-1/2 overflow-hidden transition-transform duration-[1800ms] ease-[cubic-bezier(0.83,0,0.17,1)] ${
+        className={`absolute inset-y-0 right-0 h-dvh w-1/2 overflow-hidden transition-transform duration-[1800ms] ease-[cubic-bezier(0.83,0,0.17,1)] ${
           opening ? "translate-x-full" : "translate-x-0"
         }`}
       >
