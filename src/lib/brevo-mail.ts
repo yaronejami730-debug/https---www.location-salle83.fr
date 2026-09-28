@@ -1,6 +1,20 @@
 import "server-only";
 import { siteConfig } from "@/lib/site";
 
+/** Version texte brut dérivée du HTML — les filtres anti-spam font davantage confiance à un mail multipart. */
+function htmlToText(html: string): string {
+  return html
+    .replace(/<style[\s\S]*?<\/style>/gi, "")
+    .replace(/<br\s*\/?>/gi, "\n")
+    .replace(/<\/(p|div|tr|h1|h2|h3)>/gi, "\n\n")
+    .replace(/<[^>]+>/g, "")
+    .replace(/&nbsp;/g, " ")
+    .replace(/&amp;/g, "&")
+    .replace(/[ \t]+/g, " ")
+    .replace(/\n{3,}/g, "\n\n")
+    .trim();
+}
+
 /** Envoie un email transactionnel via l'API Brevo à un destinataire donné. Ne jette jamais. */
 export async function sendEmail(to: string, subject: string, htmlContent: string, toName?: string): Promise<void> {
   const apiKey = process.env.BREVO_API_KEY;
@@ -22,6 +36,7 @@ export async function sendEmail(to: string, subject: string, htmlContent: string
         to: [{ email: to, name: toName }],
         subject,
         htmlContent,
+        textContent: htmlToText(htmlContent),
       }),
     });
     if (!res.ok) {
