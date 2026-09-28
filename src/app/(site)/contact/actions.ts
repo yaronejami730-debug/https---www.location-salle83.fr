@@ -3,6 +3,7 @@
 import { z } from "zod";
 import { supabaseAdmin } from "@/lib/supabase-admin";
 import { computeQuote } from "@/lib/pricing";
+import { sendAlertEmail } from "@/lib/brevo-mail";
 
 const schema = z.object({
   eventType: z.enum(["mariage", "seminaire", "reception", "hebergement", "autre"]),
@@ -60,6 +61,18 @@ export async function submitLead(input: SubmitLeadInput) {
     .single();
 
   if (error) throw new Error("insert_failed");
+
+  void sendAlertEmail(
+    "Nouvelle demande de devis",
+    `<p>Nouvelle demande reçue (${values.eventType}, ${values.guestCount || "?"} personnes) :</p>
+     <ul>
+       <li>${values.fullName} — ${values.phone} — ${values.email}</li>
+       ${values.eventDate ? `<li>Date souhaitée : ${values.eventDate}</li>` : ""}
+       ${quote ? `<li>Estimation : ${quote.total} € (arrhes ${quote.arrhes} €)</li>` : ""}
+       ${values.message ? `<li>Message : ${values.message.replace(/</g, "&lt;")}</li>` : ""}
+     </ul>
+     <p>Voir la fiche complète dans le back-office.</p>`,
+  );
 
   return { quote, leadId: data.id as string };
 }

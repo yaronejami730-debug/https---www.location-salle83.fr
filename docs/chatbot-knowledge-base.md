@@ -58,7 +58,7 @@ couverts). Inventaire signé à la prise en charge ; matériel cassé/détérior
 remboursé à la restitution.
 
 **Le ménage de la salle et de la cuisine est-il compris ?**
-Non, à la charge du locataire. Si laissé au domaine : 35 € de l'heure selon
+Non, à la charge du locataire. Si laissé au domaine : 30 € de l'heure selon
 l'état de la salle, déduit de la caution.
 
 **Peut-on organiser une soirée dansante ?**
@@ -93,15 +93,9 @@ réglementation sur le bruit.
 
 **Comment réserve-t-on, et que faut-il prévoir ?**
 Signature du contrat + versement de 50 % du montant total (non remboursable
-en cas d'annulation). Solde et caution réglés à l'arrivée. Attestation de
-responsabilité civile requise (généralement gratuite via l'assureur).
-
-> ⚠️ Montant de la caution non stabilisé au moment de la rédaction : le
-> contrat de référence indique 500 €, une réponse du chatbot indique 1000 €.
-> À confirmer avec le domaine puis harmoniser partout (site, formulaire de
-> devis, PDF de contrat, page conditions générales).
-> ⚠️ Tarif du ménage : le contrat de référence indique 30 €/heure, une
-> réponse du chatbot indique 35 €/heure. Même remarque.
+en cas d'annulation). Solde et caution de 500 € réglés à l'arrivée.
+Attestation de responsabilité civile requise (généralement gratuite via
+l'assureur).
 
 ## Localisation
 
@@ -109,6 +103,21 @@ responsabilité civile requise (généralement gratuite via l'assureur).
 4876 route départementale 562, lieu-dit La Bégude, 83440 Fayence (Var).
 À 35 km de Grasse, 23 km de Fréjus Saint-Raphaël, 30 km de Cannes, par
 l'autoroute A8, sorties Les Adrets ou Le Muy.
+
+## Tri des déchets
+
+**Que deviennent vos poubelles ?**
+Poubelle jaune = tous les emballages. Poubelle marron = déchets ménagers.
+Poubelle verte = le verre. Poubelle compost = déchets de légumes. Poubelle
+carton = carton à plat. Sujet important : si le tri n'est pas respecté durant
+le séjour, la caution peut être retenue en intégralité et les autorités
+compétentes peuvent être informées.
+
+## Animaux
+
+**Les animaux sont-ils acceptés lors de l'événement ?**
+Malheureusement, les animaux (y compris les chiens) ne sont plus acceptés
+lors des événements.
 
 ## Séminaires
 

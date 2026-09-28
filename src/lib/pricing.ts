@@ -34,6 +34,13 @@ export function findBracket(guestCount: number): PricingBracket | null {
   return pricingBrackets.find((b) => guestCount <= b.maxGuests) ?? null;
 }
 
+/** Phrase prête à injecter dans le contexte du chatbot : tarif de base de la salle pour ce nombre d'invités. */
+export function describeBaseRate(guestCount: number): string | null {
+  const bracket = findBracket(guestCount);
+  if (!bracket) return null;
+  return `Pour un événement jusqu'à ${bracket.maxGuests} personnes, le tarif de base de la location de la salle est de ${bracket.salle} €. En supplément selon les besoins : le lendemain (${bracket.lendemain} €), l'accès piscine le lendemain (${bracket.piscine} €), la vaisselle (${bracket.vaisselle} €), la cuisine professionnelle (${bracket.cuisine} €), et les chapiteaux (${CHAPITEAU_UNIT_PRICE} € l'unité). Un acompte de 50 % du montant total est demandé à la réservation.`;
+}
+
 export function computeQuote(options: QuoteOptions) {
   const bracket = findBracket(options.guestCount);
   if (!bracket) return null;
