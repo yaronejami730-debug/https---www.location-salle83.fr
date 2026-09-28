@@ -81,7 +81,7 @@ export default async function HomePage() {
       <div className="relative z-10 -mt-14 px-4 sm:-mt-16">
         <Reveal>
           <Container>
-            <p className="mb-4 text-center text-xs font-medium uppercase tracking-[0.2em] text-[var(--foreground)]/50">
+            <p className="mb-4 text-center text-sm font-bold normal-case tracking-[0.05em] text-[var(--foreground)]/70">
               {f("stats_title")}
             </p>
             <div className="flex flex-col overflow-hidden rounded-2xl border border-black/10 bg-[var(--background)] shadow-xl sm:flex-row">
