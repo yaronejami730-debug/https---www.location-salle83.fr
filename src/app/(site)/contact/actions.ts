@@ -3,7 +3,8 @@
 import { z } from "zod";
 import { supabaseAdmin } from "@/lib/supabase-admin";
 import { computeQuote } from "@/lib/pricing";
-import { sendAlertEmail } from "@/lib/brevo-mail";
+import { sendAlertEmail, sendEmail } from "@/lib/brevo-mail";
+import { welcomeEmail } from "@/lib/email-templates";
 
 const schema = z.object({
   eventType: z.enum(["mariage", "seminaire", "reception", "hebergement", "autre"]),
@@ -73,6 +74,14 @@ export async function submitLead(input: SubmitLeadInput) {
      </ul>
      <p>Voir la fiche complète dans le back-office.</p>`,
   );
+
+  const welcome = welcomeEmail({
+    fullName: values.fullName,
+    eventType: values.eventType,
+    guestCount: Number(values.guestCount) || undefined,
+    quote,
+  });
+  void sendEmail(values.email, welcome.subject, welcome.html, values.fullName);
 
   return { quote, leadId: data.id as string };
 }

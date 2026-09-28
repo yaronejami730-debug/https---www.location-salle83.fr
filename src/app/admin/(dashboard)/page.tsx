@@ -2,6 +2,7 @@ import { supabaseAdmin } from "@/lib/supabase-admin";
 import { leadReference } from "@/lib/lead-reference";
 import { LeadStatusSelect } from "./lead-status-select";
 import { GenerateContractButton } from "./generate-contract-button";
+import { LeadEndDate } from "./lead-end-date";
 
 export default async function AdminDashboard({
   searchParams,
@@ -51,6 +52,7 @@ export default async function AdminDashboard({
               <th className="px-4 py-3 font-medium">Nom</th>
               <th className="px-4 py-3 font-medium">Contact</th>
               <th className="px-4 py-3 font-medium">Événement</th>
+              <th className="px-4 py-3 font-medium">Date de fin</th>
               <th className="px-4 py-3 font-medium">Invités</th>
               <th className="px-4 py-3 font-medium">Options</th>
               <th className="px-4 py-3 font-medium">Estimation</th>
@@ -72,6 +74,9 @@ export default async function AdminDashboard({
                   <div>{lead.phone}</div>
                 </td>
                 <td className="px-4 py-3 text-[var(--foreground)]/70">{lead.event_date ?? "—"}</td>
+                <td className="px-4 py-3">
+                  <LeadEndDate id={lead.id} endDate={lead.event_end_date} departureEmailSentAt={lead.departure_email_sent_at} />
+                </td>
                 <td className="px-4 py-3 text-[var(--foreground)]/70">{lead.guest_count ?? "—"}</td>
                 <td className="px-4 py-3 text-xs text-[var(--foreground)]/70">
                   {[
@@ -97,7 +102,7 @@ export default async function AdminDashboard({
             ))}
             {leads.length === 0 && (
               <tr>
-                <td colSpan={11} className="px-4 py-10 text-center text-[var(--foreground)]/50">
+                <td colSpan={12} className="px-4 py-10 text-center text-[var(--foreground)]/50">
                   Aucune demande pour le moment.
                 </td>
               </tr>

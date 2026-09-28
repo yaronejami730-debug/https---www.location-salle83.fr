@@ -10,10 +10,32 @@ import { pricingBrackets, CHAPITEAU_UNIT_PRICE } from "@/lib/pricing";
 import { leadReference } from "@/lib/lead-reference";
 import { siteConfig } from "@/lib/site";
 import { ContractPdfDocument } from "@/lib/contract-pdf";
+import { sendEmail } from "@/lib/brevo-mail";
+import { wasteSortingEmail } from "@/lib/email-templates";
 
 export async function updateLeadStatus(id: string, status: string) {
   const supabase = supabaseAdmin();
   await supabase.from("leads").update({ status }).eq("id", id);
+  revalidatePath("/admin");
+}
+
+export async function updateLeadEndDate(id: string, endDate: string) {
+  const supabase = supabaseAdmin();
+  await supabase
+    .from("leads")
+    .update({ event_end_date: endDate || null, departure_email_sent_at: null })
+    .eq("id", id);
+  revalidatePath("/admin");
+}
+
+export async function sendDepartureEmailNow(id: string) {
+  const supabase = supabaseAdmin();
+  const { data: lead, error } = await supabase.from("leads").select("full_name, email").eq("id", id).single();
+  if (error || !lead) throw new Error("lead_not_found");
+
+  const { subject, html } = wasteSortingEmail({ fullName: lead.full_name });
+  await sendEmail(lead.email, subject, html, lead.full_name);
+  await supabase.from("leads").update({ departure_email_sent_at: new Date().toISOString() }).eq("id", id);
   revalidatePath("/admin");
 }
 
