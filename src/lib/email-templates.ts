@@ -1,9 +1,6 @@
 import "server-only";
 import { siteConfig } from "@/lib/site";
 
-// Logo hébergé sur le déploiement Vercel accessible tant que le domaine principal n'est pas branché.
-const LOGO_URL = "https://https-www-location-salle83-fr.vercel.app/images/logo.png";
-
 const CONTACT_NAME = "Gonzague Tassou";
 const CONTACT_PHONE_HREF = `tel:${siteConfig.phone.replace(/\s/g, "")}`;
 
@@ -49,8 +46,10 @@ function baseEmail({
 <tr><td align="center" style="padding:48px 16px;">
 <table class="wrap" role="presentation" width="560" cellpadding="0" cellspacing="0" style="max-width:560px;width:100%;">
 
-  <tr><td align="center" style="padding-bottom:36px;">
-    <img class="logo" src="${LOGO_URL}" alt="${siteConfig.name}" width="130" style="display:block;height:auto;"/>
+  <tr><td align="center" style="padding-bottom:28px;">
+    <p style="margin:0;font-family:Georgia,'Times New Roman',serif;font-size:15px;letter-spacing:0.08em;text-transform:uppercase;color:#5c6b4a;">
+      ${siteConfig.name}
+    </p>
   </td></tr>
 
   <tr><td align="center" style="padding-bottom:24px;">
@@ -93,10 +92,6 @@ function baseEmail({
 
   <tr><td style="padding-bottom:32px;">
     <div style="height:1px;background:#eceef0;"></div>
-  </td></tr>
-
-  <tr><td align="center" style="padding-bottom:16px;">
-    <img class="logo" src="${LOGO_URL}" alt="${siteConfig.name}" width="90" style="display:block;height:auto;margin:0 auto;opacity:0.55;"/>
   </td></tr>
 
   <tr><td align="center" style="padding-bottom:8px;">
