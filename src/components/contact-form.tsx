@@ -123,7 +123,7 @@ export function ContactForm() {
       <div className="rounded-2xl border border-black/5 bg-[var(--background-muted)] p-8 text-center">
         <p className="font-serif text-xl text-[var(--foreground)]">Merci pour votre demande</p>
         <p className="mt-2 text-sm text-[var(--foreground)]/70">
-          Nous revenons vers vous très rapidement pour construire votre projet ensemble.
+          Veuillez contacter directement Monsieur Gonzague pour finaliser votre projet.
         </p>
         {lastReference && (
           <p className="mt-3 text-sm text-[var(--foreground)]/70">

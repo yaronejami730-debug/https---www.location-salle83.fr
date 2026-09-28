@@ -16,7 +16,7 @@ type EntryGateProps = {
 // panels' own overflow-hidden clipping, and it travels with its door as it slides open.
 function GateContent({ offset, heroTitle, heroAccent, heroDescription }: { offset: string } & EntryGateProps) {
   return (
-    <div className="fixed inset-y-0 top-0 h-full w-screen" style={{ left: offset }}>
+    <div className="fixed inset-y-0 top-0 h-full w-screen bg-black" style={{ left: offset }}>
       <Image src="/images/entry-gate.jpg" alt="" fill priority className="object-cover" sizes="100vw" />
       <div className="absolute inset-0 bg-black/45" />
       <div className="absolute inset-0 flex flex-col items-center justify-center px-4 text-center text-white">

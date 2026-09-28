@@ -36,7 +36,7 @@ export const pageSchemas: PageSchema[] = [
       { key: "faq_title", label: "Section FAQ — titre", type: "text", default: "Questions fréquentes" },
       { key: "cta_title", label: "CTA final — titre", type: "text", default: "Parlons de votre projet" },
       { key: "cta_text", label: "CTA final — texte", type: "text", default: "Recevez une proposition personnalisée sous 48h." },
-      { key: "cta_button", label: "CTA final — bouton", type: "text", default: "Demander un devis" },
+      { key: "cta_button", label: "CTA final — bouton", type: "text", default: "Parlons de votre projet" },
     ],
   },
   {

@@ -13,9 +13,9 @@ export function Header() {
 
   return (
     <header className="sticky top-0 z-50 border-b border-black/5 bg-[var(--background)]/90 backdrop-blur">
-      <Container className="flex h-32 items-center justify-between">
+      <Container className="flex h-40 items-center justify-between">
         <Link href="/" className="flex items-center gap-2">
-          <Image src="/images/logo.png" alt={siteConfig.name} width={104} height={106} className="h-28 w-auto" priority />
+          <Image src="/images/logo.png" alt={siteConfig.name} width={104} height={106} className="h-36 w-auto" priority />
         </Link>
 
         <nav className="hidden lg:flex items-center gap-7">
@@ -36,7 +36,7 @@ export function Header() {
           href="/contact"
           className="hidden lg:inline-flex items-center rounded-full bg-[var(--accent)] px-5 py-2.5 text-sm text-white transition-opacity hover:opacity-90"
         >
-          Demander un devis
+          Parlons de votre projet
         </Link>
 
         <button
