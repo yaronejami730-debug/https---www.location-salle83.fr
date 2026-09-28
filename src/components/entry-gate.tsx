@@ -52,7 +52,7 @@ export function EntryGate({ heroTitle, heroAccent, heroDescription }: EntryGateP
   const contentProps = { heroTitle, heroAccent, heroDescription };
 
   return (
-    <div className="fixed inset-0 z-50 h-dvh bg-black">
+    <div className="fixed inset-0 z-50 h-dvh">
       <div
         className={`absolute inset-y-0 left-0 h-dvh w-1/2 overflow-hidden transition-transform duration-[1800ms] ease-[cubic-bezier(0.83,0,0.17,1)] ${
           opening ? "-translate-x-full" : "translate-x-0"

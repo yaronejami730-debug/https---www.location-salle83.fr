@@ -10,7 +10,7 @@ import { pricingBrackets, CHAPITEAU_UNIT_PRICE } from "@/lib/pricing";
 import { leadReference } from "@/lib/lead-reference";
 import { siteConfig } from "@/lib/site";
 import { ContractPdfDocument } from "@/lib/contract-pdf";
-import { sendEmail } from "@/lib/brevo-mail";
+import { sendEmail } from "@/lib/mail";
 import { wasteSortingEmail } from "@/lib/email-templates";
 
 export async function updateLeadStatus(id: string, status: string) {

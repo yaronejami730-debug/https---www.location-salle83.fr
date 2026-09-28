@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { supabaseAdmin } from "@/lib/supabase-admin";
-import { sendEmail } from "@/lib/brevo-mail";
+import { sendEmail } from "@/lib/mail";
 import { wasteSortingEmail } from "@/lib/email-templates";
 
 export async function GET(request: Request) {

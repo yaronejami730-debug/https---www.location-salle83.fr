@@ -66,45 +66,43 @@ export default async function HomePage() {
 
       <section className="py-20 bg-[var(--background-muted)]">
         <Reveal>
-          <Container className="grid items-center gap-10 sm:grid-cols-2">
-            <div className="relative aspect-[4/3] overflow-hidden rounded-2xl sm:order-2">
-              <Image src={histoirePhoto} alt="Notre histoire" fill className="object-cover" sizes="(min-width: 640px) 500px, 100vw" />
+          <Container>
+            <div className="grid items-center gap-10 sm:grid-cols-2">
+              <div className="relative aspect-[4/3] overflow-hidden rounded-2xl sm:order-2">
+                <Image src={histoirePhoto} alt="Notre histoire" fill className="object-cover" sizes="(min-width: 640px) 500px, 100vw" />
+              </div>
+              <div>
+                <h2 className="font-script text-5xl text-[var(--foreground)] sm:text-6xl">{f("histoire_title")}</h2>
+                <p className="mt-5 whitespace-pre-line text-[var(--foreground)]/70">{f("histoire_text")}</p>
+              </div>
             </div>
-            <div>
-              <h2 className="font-serif text-3xl text-[var(--foreground)]">{f("histoire_title")}</h2>
-              <p className="mt-5 whitespace-pre-line text-[var(--foreground)]/70">{f("histoire_text")}</p>
+
+            <div className="mt-14">
+              <p className="mb-4 text-center text-sm font-bold normal-case tracking-[0.05em] text-[var(--foreground)]/70">
+                {f("stats_title")}
+              </p>
+              <div className="flex flex-col overflow-hidden rounded-2xl border border-black/10 bg-[var(--background)] shadow-xl sm:flex-row">
+                <div className="grid grid-cols-2 gap-y-6 px-6 py-8 sm:flex sm:flex-1 sm:flex-nowrap sm:items-center sm:justify-between sm:gap-4 sm:px-10 sm:py-9">
+                  {mainStats.map((s) => (
+                    <div key={s.label} className="text-center sm:shrink-0">
+                      <p className="font-serif text-3xl text-[var(--accent)] sm:text-4xl">{s.value}</p>
+                      <p className="text-[10px] uppercase tracking-[0.12em] text-[var(--foreground)]/50 sm:text-xs">{s.label}</p>
+                    </div>
+                  ))}
+                </div>
+                <div className="flex shrink-0 items-center justify-center border-t border-black/10 bg-[var(--accent)]/8 px-8 py-6 text-center sm:border-t-0 sm:border-l sm:w-72 sm:py-9">
+                  <p className="font-serif text-lg text-[var(--foreground)] sm:text-xl">{sideStat}</p>
+                </div>
+              </div>
             </div>
           </Container>
         </Reveal>
       </section>
 
-      <div className="relative z-10 -mt-14 px-4 sm:-mt-16">
-        <Reveal>
-          <Container>
-            <p className="mb-4 text-center text-sm font-bold normal-case tracking-[0.05em] text-[var(--foreground)]/70">
-              {f("stats_title")}
-            </p>
-            <div className="flex flex-col overflow-hidden rounded-2xl border border-black/10 bg-[var(--background)] shadow-xl sm:flex-row">
-              <div className="grid grid-cols-2 gap-y-5 px-6 py-7 sm:flex sm:flex-1 sm:flex-nowrap sm:items-center sm:justify-between sm:gap-4 sm:py-7">
-                {mainStats.map((s) => (
-                  <div key={s.label} className="text-center sm:shrink-0">
-                    <p className="font-serif text-2xl text-[var(--accent)] sm:text-3xl">{s.value}</p>
-                    <p className="text-[10px] uppercase tracking-[0.12em] text-[var(--foreground)]/50 sm:text-xs">{s.label}</p>
-                  </div>
-                ))}
-              </div>
-              <div className="flex shrink-0 items-center justify-center border-t border-black/10 bg-[var(--accent)]/8 px-8 py-5 text-center sm:border-t-0 sm:border-l sm:w-64 sm:py-7">
-                <p className="font-serif text-base text-[var(--foreground)] sm:text-lg">{sideStat}</p>
-              </div>
-            </div>
-          </Container>
-        </Reveal>
-      </div>
-
       <section className="pt-24 pb-20">
         <Reveal>
           <Container>
-            <h2 className="text-center font-script text-4xl text-[var(--foreground)] sm:text-5xl">{f("choices_title")}</h2>
+            <h2 className="text-center font-script text-5xl text-[var(--foreground)] sm:text-6xl">{f("choices_title")}</h2>
             <div className="mt-10 grid gap-5 sm:grid-cols-3">
               {choices.map((choice, i) => (
                 <Reveal key={choice.href} delayMs={i * 100}>

@@ -19,7 +19,7 @@ function htmlToText(html: string): string {
 export async function sendEmail(to: string, subject: string, htmlContent: string, toName?: string): Promise<void> {
   const apiKey = process.env.BREVO_API_KEY;
   if (!apiKey) {
-    console.warn("[brevo-mail] BREVO_API_KEY absente, email non envoyé:", subject);
+    console.warn("[mail] BREVO_API_KEY absente, email non envoyé:", subject);
     return;
   }
 
@@ -40,10 +40,10 @@ export async function sendEmail(to: string, subject: string, htmlContent: string
       }),
     });
     if (!res.ok) {
-      console.error("[brevo-mail] échec envoi:", res.status, await res.text());
+      console.error("[mail] échec envoi:", res.status, await res.text());
     }
   } catch (err) {
-    console.error("[brevo-mail] erreur envoi:", err);
+    console.error("[mail] erreur envoi:", err);
   }
 }
 

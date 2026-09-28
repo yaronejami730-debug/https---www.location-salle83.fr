@@ -3,7 +3,7 @@
 import { z } from "zod";
 import { supabaseAdmin } from "@/lib/supabase-admin";
 import { computeQuote } from "@/lib/pricing";
-import { sendAlertEmail, sendEmail } from "@/lib/brevo-mail";
+import { sendAlertEmail, sendEmail } from "@/lib/mail";
 import { welcomeEmail } from "@/lib/email-templates";
 
 const schema = z.object({
