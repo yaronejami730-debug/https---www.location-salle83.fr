@@ -18,7 +18,7 @@ export async function sendEmail(to: string, subject: string, htmlContent: string
         Accept: "application/json",
       },
       body: JSON.stringify({
-        sender: { name: siteConfig.name, email: siteConfig.email },
+        sender: { name: siteConfig.name, email: process.env.BREVO_SENDER_EMAIL || siteConfig.email },
         to: [{ email: to, name: toName }],
         subject,
         htmlContent,
