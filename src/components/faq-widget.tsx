@@ -1,52 +1,11 @@
 "use client";
 
-import { useMemo, useState } from "react";
-import { chatbotFaq } from "@/lib/faq-data";
-
-const CATEGORY_LABELS: Record<string, string> = {
-  hebergement: "Hébergement",
-  accessibilite: "Accessibilité",
-  equipements: "Équipements",
-  location: "Location",
-  animation: "Animation",
-  logistique: "Logistique",
-  restauration: "Restauration",
-  reservation: "Réservation",
-  localisation: "Localisation",
-  evenement: "Événements",
-};
-
-function normalize(text: string) {
-  return text
-    .toLowerCase()
-    .normalize("NFD")
-    .replace(/[̀-ͯ]/g, "");
-}
-
-const CATEGORIES = Array.from(new Set(chatbotFaq.map((f) => f.category)));
+import { useState } from "react";
+import Link from "next/link";
+import { FaqList } from "./faq-list";
 
 export function FaqWidget() {
   const [open, setOpen] = useState(false);
-  const [query, setQuery] = useState("");
-  const [category, setCategory] = useState<string | null>(null);
-  const [openId, setOpenId] = useState<string | null>(null);
-
-  const grouped = useMemo(() => {
-    const q = normalize(query.trim());
-    const filtered = chatbotFaq.filter((f) => {
-      if (category && f.category !== category) return false;
-      if (!q) return true;
-      return normalize(f.question).includes(q) || normalize(f.answer).includes(q) || f.keywords.some((k) => normalize(k).includes(q));
-    });
-
-    const byCategory = new Map<string, typeof chatbotFaq>();
-    for (const entry of filtered) {
-      const list = byCategory.get(entry.category) ?? [];
-      list.push(entry);
-      byCategory.set(entry.category, list);
-    }
-    return byCategory;
-  }, [query, category]);
 
   return (
     <div className="fixed bottom-6 right-6 z-50">
@@ -59,77 +18,17 @@ export function FaqWidget() {
             </button>
           </div>
 
-          <div className="space-y-2.5 border-b border-black/5 p-3">
-            <input
-              value={query}
-              onChange={(e) => setQuery(e.target.value)}
-              placeholder="Rechercher une question..."
-              className="w-full rounded-lg border border-black/10 px-3 py-2 text-sm"
-            />
-            <div className="flex flex-wrap gap-1.5">
-              <button
-                onClick={() => setCategory(null)}
-                className={`rounded-full border px-2.5 py-1 text-xs ${
-                  category === null
-                    ? "border-[var(--accent)] bg-[var(--accent)] text-white"
-                    : "border-black/10 text-[var(--foreground)]/70 hover:bg-black/5"
-                }`}
-              >
-                Toutes
-              </button>
-              {CATEGORIES.map((cat) => (
-                <button
-                  key={cat}
-                  onClick={() => setCategory(cat === category ? null : cat)}
-                  className={`rounded-full border px-2.5 py-1 text-xs ${
-                    category === cat
-                      ? "border-[var(--accent)] bg-[var(--accent)] text-white"
-                      : "border-black/10 text-[var(--foreground)]/70 hover:bg-black/5"
-                  }`}
-                >
-                  {CATEGORY_LABELS[cat] ?? cat}
-                </button>
-              ))}
-            </div>
+          <div className="flex-1 overflow-y-auto p-3">
+            <FaqList compact />
           </div>
 
-          <div className="flex-1 overflow-y-auto px-4 py-3">
-            {grouped.size === 0 && <p className="text-sm text-[var(--foreground)]/50">Aucune question ne correspond à votre recherche.</p>}
-
-            {[...grouped.entries()].map(([category, entries]) => (
-              <div key={category} className="mb-4">
-                <p className="mb-2 text-xs font-medium tracking-wide text-[var(--accent)] uppercase">
-                  {CATEGORY_LABELS[category] ?? category}
-                </p>
-                <div className="space-y-2">
-                  {entries.map((f) => {
-                    const isOpen = openId === f.id;
-                    return (
-                      <div key={f.id} className="rounded-xl border border-black/5">
-                        <button
-                          onClick={() => setOpenId(isOpen ? null : f.id)}
-                          className="flex w-full items-center justify-between gap-2 px-3 py-2.5 text-left text-sm text-[var(--foreground)]"
-                        >
-                          <span>{f.question}</span>
-                          <span className="shrink-0 text-[var(--foreground)]/40">{isOpen ? "−" : "+"}</span>
-                        </button>
-                        {isOpen && (
-                          <p className="border-t border-black/5 px-3 py-2.5 text-sm leading-relaxed whitespace-pre-wrap text-[var(--foreground)]/80">
-                            {f.answer}
-                          </p>
-                        )}
-                      </div>
-                    );
-                  })}
-                </div>
-              </div>
-            ))}
-          </div>
-
-          <div className="flex items-center justify-center border-t border-black/5 px-3 py-2.5 text-xs">
-            <a href="/contact" className="font-medium text-[var(--accent)] hover:underline">
+          <div className="flex items-center justify-between border-t border-black/5 px-3 py-2.5 text-xs">
+            <Link href="/faq" className="text-[var(--foreground)]/60 hover:text-[var(--foreground)] hover:underline">
+              Voir la FAQ complète
+            </Link>
+            <Link href="/contact" className="font-medium text-[var(--accent)] hover:underline">
               Faire une demande de devis
-            </a>
+            </Link>
           </div>
         </div>
       )}

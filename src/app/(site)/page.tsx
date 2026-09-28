@@ -101,28 +101,7 @@ export default async function HomePage() {
         </Reveal>
       </div>
 
-      {reviews.length > 0 && (
-        <section className="pt-24 pb-16">
-          <Reveal>
-            <Container>
-              <p className="text-center text-xs uppercase tracking-[0.2em] text-[var(--foreground)]/40">Ils nous ont fait confiance</p>
-              <div className="mx-auto mt-8 grid max-w-4xl gap-5 sm:grid-cols-3">
-                {reviews.slice(0, 6).map((r, i) => (
-                  <Reveal key={r.id} delayMs={i * 100}>
-                    <div className="h-full rounded-xl border border-black/5 bg-[var(--background-muted)]/60 p-5">
-                      <p className="text-xs text-[var(--accent-warm)]">{"★".repeat(r.rating)}</p>
-                      <p className="mt-2 line-clamp-4 text-sm text-[var(--foreground)]/60">{r.text}</p>
-                      <p className="mt-3 text-xs font-medium text-[var(--foreground)]/70">{r.author}</p>
-                    </div>
-                  </Reveal>
-                ))}
-              </div>
-            </Container>
-          </Reveal>
-        </section>
-      )}
-
-      <section className="py-20 bg-[var(--background-muted)]">
+      <section className="pt-24 pb-20">
         <Reveal>
           <Container>
             <h2 className="text-center font-script text-4xl text-[var(--foreground)] sm:text-5xl">{f("choices_title")}</h2>
@@ -152,6 +131,27 @@ export default async function HomePage() {
           </Container>
         </Reveal>
       </section>
+
+      {reviews.length > 0 && (
+        <section className="py-16 bg-[var(--background-muted)]">
+          <Reveal>
+            <Container>
+              <p className="text-center text-xs uppercase tracking-[0.2em] text-[var(--foreground)]/40">Ils nous ont fait confiance</p>
+              <div className="mx-auto mt-8 grid max-w-4xl gap-5 sm:grid-cols-3">
+                {reviews.slice(0, 6).map((r, i) => (
+                  <Reveal key={r.id} delayMs={i * 100}>
+                    <div className="h-full rounded-xl border border-black/5 bg-[var(--background)]/60 p-5">
+                      <p className="text-xs text-[var(--accent-warm)]">{"★".repeat(r.rating)}</p>
+                      <p className="mt-2 line-clamp-4 text-sm text-[var(--foreground)]/60">{r.text}</p>
+                      <p className="mt-3 text-xs font-medium text-[var(--foreground)]/70">{r.author}</p>
+                    </div>
+                  </Reveal>
+                ))}
+              </div>
+            </Container>
+          </Reveal>
+        </section>
+      )}
 
       <LogoMarquee />
     </>

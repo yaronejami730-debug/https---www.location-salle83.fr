@@ -25,7 +25,7 @@ const schema = z
     firstName: z.string().min(2, "Prénom requis"),
     lastName: z.string().min(2, "Nom requis"),
     address: z.string().min(5, "Adresse requise"),
-    phone: z.string().min(6, "Téléphone requis"),
+    phone: z.string().optional(),
     email: z.string().email("Email invalide"),
     message: z.string().optional(),
     termsAccepted: z.boolean().refine((v) => v, { message: "Merci d'accepter les conditions générales" }),
@@ -331,7 +331,7 @@ export function ContactForm() {
           {errors.email && <p className="mt-1 text-xs text-red-600">{errors.email.message}</p>}
         </div>
         <div>
-          <label className="mb-2 block text-sm text-[var(--foreground)]/80">Téléphone</label>
+          <label className="mb-2 block text-sm text-[var(--foreground)]/80">Téléphone (facultatif)</label>
           <input {...register("phone")} className="w-full rounded-lg border border-black/10 px-4 py-3 text-sm" />
           {errors.phone && <p className="mt-1 text-xs text-red-600">{errors.phone.message}</p>}
         </div>

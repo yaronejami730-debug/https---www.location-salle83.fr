@@ -17,7 +17,7 @@ const schema = z.object({
   civility: z.string().optional(),
   fullName: z.string().min(2),
   address: z.string().optional(),
-  phone: z.string().min(6),
+  phone: z.string().optional(),
   email: z.string().email(),
   message: z.string().optional(),
 });
@@ -46,7 +46,7 @@ export async function submitLead(input: SubmitLeadInput) {
       civility: values.civility || null,
       full_name: values.fullName,
       address: values.address || null,
-      phone: values.phone,
+      phone: values.phone || null,
       email: values.email,
       message: values.message || null,
       pricing_bracket: quote?.bracket.key ?? null,
@@ -66,7 +66,7 @@ export async function submitLead(input: SubmitLeadInput) {
     "Nouvelle demande de devis",
     `<p>Nouvelle demande reçue (${values.eventType}, ${values.guestCount || "?"} personnes) :</p>
      <ul>
-       <li>${values.fullName} — ${values.phone} — ${values.email}</li>
+       <li>${values.fullName}${values.phone ? ` — ${values.phone}` : ""} — ${values.email}</li>
        ${values.eventDate ? `<li>Date souhaitée : ${values.eventDate}</li>` : ""}
        ${quote ? `<li>Estimation : ${quote.total} € (arrhes ${quote.arrhes} €)</li>` : ""}
        ${values.message ? `<li>Message : ${values.message.replace(/</g, "&lt;")}</li>` : ""}
