@@ -57,6 +57,7 @@ export default async function HomePage() {
     { value: f("stat2_value"), label: f("stat2_label") },
     { value: f("stat3_value"), label: f("stat3_label") },
     { value: f("stat4_value"), label: f("stat4_label") },
+    { value: f("stat5_value"), label: f("stat5_label") },
   ];
 
   return (

@@ -25,6 +25,8 @@ export const pageSchemas: PageSchema[] = [
       { key: "stat3_label", label: "Chiffre 3 — légende", type: "text", default: "invités max" },
       { key: "stat4_value", label: "Chiffre 4 — valeur", type: "text", default: "Fayence" },
       { key: "stat4_label", label: "Chiffre 4 — légende", type: "text", default: "Var" },
+      { key: "stat5_value", label: "Chiffre 5 — valeur", type: "text", default: "900 m²" },
+      { key: "stat5_label", label: "Chiffre 5 — légende", type: "text", default: "bâti : salle et cuisine professionnelle" },
       { key: "galerie_title", label: "Section Galerie — titre", type: "text", default: "Galerie" },
       { key: "hebergement_title", label: "Section Hébergement — titre", type: "text", default: "Hébergement" },
       { key: "hebergement_text", label: "Section Hébergement — texte", type: "textarea", default: "15 mazets de 2 à 6 personnes, literie 4 étoiles, wifi et télévision, pour prolonger la fête et accueillir vos proches directement sur place." },
