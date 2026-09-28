@@ -93,7 +93,7 @@ réglementation sur le bruit.
 
 **Comment réserve-t-on, et que faut-il prévoir ?**
 Signature du contrat + versement de 50 % du montant total (non remboursable
-en cas d'annulation). Solde et caution de 500 € réglés à l'arrivée.
+en cas d'annulation). Solde et caution de 1 000 € réglés à l'arrivée.
 Attestation de responsabilité civile requise (généralement gratuite via
 l'assureur).
 

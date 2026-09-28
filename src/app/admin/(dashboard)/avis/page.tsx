@@ -9,7 +9,9 @@ export default async function AdminAvisPage() {
   return (
     <div>
       <h1 className="font-serif text-2xl text-[var(--foreground)]">Avis</h1>
-      <p className="mt-1 text-sm text-[var(--foreground)]/60">Affichés sur la page d&apos;accueil.</p>
+      <p className="mt-1 text-sm text-[var(--foreground)]/60">
+        Un avis ajouté n&apos;est pas visible sur le site tant qu&apos;il n&apos;est pas publié ci-dessous.
+      </p>
 
       <form action={addReview} className="mt-8 max-w-xl space-y-4 rounded-2xl border border-black/5 bg-[var(--background)] p-6">
         <div>

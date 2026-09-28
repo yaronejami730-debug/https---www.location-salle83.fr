@@ -9,6 +9,7 @@ export async function addReview(formData: FormData) {
     author: String(formData.get("author") ?? "").trim(),
     rating: Number(formData.get("rating") ?? 5),
     text: String(formData.get("text") ?? "").trim(),
+    published: false,
   });
   revalidatePath("/admin/avis");
   revalidatePath("/");

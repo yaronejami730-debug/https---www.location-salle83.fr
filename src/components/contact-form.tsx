@@ -21,7 +21,7 @@ const schema = z
     vaisselle: z.boolean(),
     cuisine: z.boolean(),
     chapiteauCount: z.string(),
-    civility: z.enum(["madame", "monsieur"]),
+    civility: z.array(z.enum(["madame", "monsieur"])).min(1, "Sélectionnez au moins une civilité"),
     firstName: z.string().min(2, "Prénom requis"),
     lastName: z.string().min(2, "Nom requis"),
     address: z.string().min(5, "Adresse requise"),
@@ -54,13 +54,12 @@ const HEBERGEMENT_BOOKING_URL = "https://www.domainedelabegude.com/fr";
 const optionFields: {
   name: "lendemain" | "piscine" | "vaisselle" | "cuisine";
   label: string;
-  icon: string;
   priceKey: "lendemain" | "piscine" | "vaisselle" | "cuisine";
 }[] = [
-  { name: "lendemain", label: "Accès le lendemain", icon: "🌅", priceKey: "lendemain" },
-  { name: "piscine", label: "Accès piscine", icon: "🏊", priceKey: "piscine" },
-  { name: "vaisselle", label: "Vaisselle complète", icon: "🍽️", priceKey: "vaisselle" },
-  { name: "cuisine", label: "Cuisine professionnelle", icon: "👩‍🍳", priceKey: "cuisine" },
+  { name: "lendemain", label: "Accès le lendemain", priceKey: "lendemain" },
+  { name: "piscine", label: "Accès piscine", priceKey: "piscine" },
+  { name: "vaisselle", label: "Vaisselle complète", priceKey: "vaisselle" },
+  { name: "cuisine", label: "Cuisine professionnelle", priceKey: "cuisine" },
 ];
 
 export function ContactForm() {
@@ -85,7 +84,7 @@ export function ContactForm() {
       vaisselle: false,
       cuisine: false,
       chapiteauCount: "0",
-      civility: "madame",
+      civility: ["madame"],
       termsAccepted: false,
     },
   });
@@ -104,7 +103,12 @@ export function ContactForm() {
   async function onSubmit(values: FormValues) {
     setStatus("loading");
     try {
-      const { quote, leadId } = await submitLead({ ...values, fullName: `${values.firstName} ${values.lastName}`.trim() });
+      const civilityLabel = values.civility.map((v) => v.charAt(0).toUpperCase() + v.slice(1)).join(" et ");
+      const { quote, leadId } = await submitLead({
+        ...values,
+        civility: civilityLabel,
+        fullName: `${values.firstName} ${values.lastName}`.trim(),
+      });
       setLastQuote(quote);
       setLastReference(leadReference(leadId));
       setStatus("success");
@@ -138,7 +142,7 @@ export function ContactForm() {
             </p>
             <p className="mt-1 flex justify-between text-[var(--foreground)]/70">
               <span>Caution (à l&apos;arrivée)</span>
-              <span>500 €</span>
+              <span>1 000 €</span>
             </p>
             <p className="mt-3 text-xs text-[var(--foreground)]/50">
               Estimation indicative, confirmée par notre équipe. Ménage à la charge du locataire, ou facturé 30 €/heure selon l&apos;état des lieux.
@@ -211,7 +215,6 @@ export function ContactForm() {
               <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-md border border-black/20 text-[10px] text-transparent peer-checked:border-[var(--accent)] peer-checked:bg-[var(--accent)] peer-checked:text-white">
                 ✓
               </span>
-              <span className="text-lg leading-none">{opt.icon}</span>
               <span className="flex-1 text-[var(--foreground)]">{opt.label}</span>
               <span className="text-xs text-[var(--foreground)]/50">+{previewBracket[opt.priceKey]} €</span>
             </label>
@@ -220,7 +223,6 @@ export function ContactForm() {
 
         <div className="mt-3 flex items-center justify-between rounded-xl border border-black/10 px-4 py-3.5">
           <span className="flex items-center gap-3 text-sm text-[var(--foreground)]">
-            <span className="text-lg leading-none">⛺</span>
             Chapiteaux <span className="text-xs text-[var(--foreground)]/50">(200 €/pièce)</span>
           </span>
           <Controller
@@ -265,7 +267,7 @@ export function ContactForm() {
             <div className="mt-3 space-y-1 border-t border-black/10 pt-3 text-xs text-[var(--foreground)]/60">
               <p className="flex justify-between">
                 <span>Caution (à l&apos;arrivée, en espèces)</span>
-                <span>500 €</span>
+                <span>1 000 €</span>
               </p>
               <p>Ménage à la charge du locataire, ou facturé 30 €/heure selon l&apos;état des lieux.</p>
             </div>
@@ -278,18 +280,19 @@ export function ContactForm() {
       </div>
 
       <div>
-        <span className="mb-2 block text-sm text-[var(--foreground)]/80">Civilité</span>
+        <span className="mb-2 block text-sm text-[var(--foreground)]/80">Civilité (plusieurs choix possibles)</span>
         <div className="flex gap-3">
           {(["madame", "monsieur"] as const).map((value) => (
             <label
               key={value}
               className="flex flex-1 cursor-pointer items-center justify-center rounded-lg border border-black/10 px-3 py-3 text-center text-sm capitalize has-[:checked]:border-[var(--accent)] has-[:checked]:bg-[var(--accent)]/10"
             >
-              <input type="radio" value={value} {...register("civility")} className="sr-only" />
+              <input type="checkbox" value={value} {...register("civility")} className="sr-only" />
               {value}
             </label>
           ))}
         </div>
+        {errors.civility && <p className="mt-1 text-xs text-red-600">{errors.civility.message}</p>}
       </div>
 
       <div className="grid gap-6 sm:grid-cols-2">

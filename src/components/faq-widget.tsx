@@ -23,21 +23,21 @@ function normalize(text: string) {
     .replace(/[̀-ͯ]/g, "");
 }
 
+const CATEGORIES = Array.from(new Set(chatbotFaq.map((f) => f.category)));
+
 export function FaqWidget() {
   const [open, setOpen] = useState(false);
   const [query, setQuery] = useState("");
+  const [category, setCategory] = useState<string | null>(null);
   const [openId, setOpenId] = useState<string | null>(null);
 
   const grouped = useMemo(() => {
     const q = normalize(query.trim());
-    const filtered = q
-      ? chatbotFaq.filter(
-          (f) =>
-            normalize(f.question).includes(q) ||
-            normalize(f.answer).includes(q) ||
-            f.keywords.some((k) => normalize(k).includes(q)),
-        )
-      : chatbotFaq;
+    const filtered = chatbotFaq.filter((f) => {
+      if (category && f.category !== category) return false;
+      if (!q) return true;
+      return normalize(f.question).includes(q) || normalize(f.answer).includes(q) || f.keywords.some((k) => normalize(k).includes(q));
+    });
 
     const byCategory = new Map<string, typeof chatbotFaq>();
     for (const entry of filtered) {
@@ -46,7 +46,7 @@ export function FaqWidget() {
       byCategory.set(entry.category, list);
     }
     return byCategory;
-  }, [query]);
+  }, [query, category]);
 
   return (
     <div className="fixed bottom-6 right-6 z-50">
@@ -59,13 +59,38 @@ export function FaqWidget() {
             </button>
           </div>
 
-          <div className="border-b border-black/5 p-3">
+          <div className="space-y-2.5 border-b border-black/5 p-3">
             <input
               value={query}
               onChange={(e) => setQuery(e.target.value)}
               placeholder="Rechercher une question..."
               className="w-full rounded-lg border border-black/10 px-3 py-2 text-sm"
             />
+            <div className="flex flex-wrap gap-1.5">
+              <button
+                onClick={() => setCategory(null)}
+                className={`rounded-full border px-2.5 py-1 text-xs ${
+                  category === null
+                    ? "border-[var(--accent)] bg-[var(--accent)] text-white"
+                    : "border-black/10 text-[var(--foreground)]/70 hover:bg-black/5"
+                }`}
+              >
+                Toutes
+              </button>
+              {CATEGORIES.map((cat) => (
+                <button
+                  key={cat}
+                  onClick={() => setCategory(cat === category ? null : cat)}
+                  className={`rounded-full border px-2.5 py-1 text-xs ${
+                    category === cat
+                      ? "border-[var(--accent)] bg-[var(--accent)] text-white"
+                      : "border-black/10 text-[var(--foreground)]/70 hover:bg-black/5"
+                  }`}
+                >
+                  {CATEGORY_LABELS[cat] ?? cat}
+                </button>
+              ))}
+            </div>
           </div>
 
           <div className="flex-1 overflow-y-auto px-4 py-3">
@@ -103,7 +128,7 @@ export function FaqWidget() {
 
           <div className="flex items-center justify-center border-t border-black/5 px-3 py-2.5 text-xs">
             <a href="/contact" className="font-medium text-[var(--accent)] hover:underline">
-              📋 Faire une demande de devis
+              Faire une demande de devis
             </a>
           </div>
         </div>

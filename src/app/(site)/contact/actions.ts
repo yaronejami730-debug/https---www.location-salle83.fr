@@ -14,7 +14,7 @@ const schema = z.object({
   vaisselle: z.boolean(),
   cuisine: z.boolean(),
   chapiteauCount: z.string(),
-  civility: z.enum(["madame", "monsieur"]).optional(),
+  civility: z.string().optional(),
   fullName: z.string().min(2),
   address: z.string().optional(),
   phone: z.string().min(6),

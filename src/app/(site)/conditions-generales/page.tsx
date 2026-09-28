@@ -14,7 +14,7 @@ export default function ConditionsGeneralesPage() {
 
       <h2 className="font-serif text-xl text-[var(--foreground)]">Montant de la caution</h2>
       <p>
-        Une caution de <strong>500 €</strong> en espèces est demandée à la prise en charge de la salle. Elle est
+        Une caution de <strong>1 000 €</strong> en espèces est demandée à la prise en charge de la salle. Elle est
         restituée au départ, déduction faite le cas échéant des détériorations occasionnées, des objets manquants
         et du nettoyage selon l&apos;état des lieux.
       </p>

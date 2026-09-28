@@ -42,7 +42,7 @@ export default async function HomePage() {
     },
     {
       label: f("choice_evenements_label"),
-      href: "/evenements",
+      href: "/seminaire",
       photo: choiceEvenementsPhotos[0] ? mediaUrl(choiceEvenementsPhotos[0].storage_path) : "/images/domaine-featured.jpg",
     },
     {
@@ -52,13 +52,13 @@ export default async function HomePage() {
     },
   ];
 
-  const stats = [
+  const mainStats = [
     { value: f("stat1_value"), label: f("stat1_label") },
     { value: f("stat2_value"), label: f("stat2_label") },
     { value: f("stat3_value"), label: f("stat3_label") },
     { value: f("stat4_value"), label: f("stat4_label") },
-    { value: f("stat5_value"), label: f("stat5_label") },
   ];
+  const sideStat = f("stat5_label");
 
   return (
     <>
@@ -66,8 +66,66 @@ export default async function HomePage() {
 
       <section className="py-20 bg-[var(--background-muted)]">
         <Reveal>
+          <Container className="grid items-center gap-10 sm:grid-cols-2">
+            <div className="relative aspect-[4/3] overflow-hidden rounded-2xl sm:order-2">
+              <Image src={histoirePhoto} alt="Notre histoire" fill className="object-cover" sizes="(min-width: 640px) 500px, 100vw" />
+            </div>
+            <div>
+              <h2 className="font-serif text-3xl text-[var(--foreground)]">{f("histoire_title")}</h2>
+              <p className="mt-5 whitespace-pre-line text-[var(--foreground)]/70">{f("histoire_text")}</p>
+            </div>
+          </Container>
+        </Reveal>
+      </section>
+
+      <div className="relative z-10 -mt-14 px-4 sm:-mt-16">
+        <Reveal>
           <Container>
-            <h2 className="text-center font-serif text-3xl text-[var(--foreground)]">{f("choices_title")}</h2>
+            <p className="mb-4 text-center text-xs font-medium uppercase tracking-[0.2em] text-[var(--foreground)]/50">
+              {f("stats_title")}
+            </p>
+            <div className="flex flex-col overflow-hidden rounded-2xl border border-black/10 bg-[var(--background)] shadow-xl sm:flex-row">
+              <div className="flex flex-nowrap items-center justify-between gap-6 overflow-x-auto px-6 py-7 sm:flex-1 sm:gap-4">
+                {mainStats.map((s) => (
+                  <div key={s.label} className="shrink-0 text-center">
+                    <p className="font-serif text-2xl text-[var(--accent)] sm:text-3xl">{s.value}</p>
+                    <p className="text-[10px] uppercase tracking-[0.12em] text-[var(--foreground)]/50 sm:text-xs">{s.label}</p>
+                  </div>
+                ))}
+              </div>
+              <div className="flex shrink-0 items-center justify-center border-t border-black/10 bg-[var(--accent)]/8 px-8 py-5 text-center sm:border-t-0 sm:border-l sm:w-64 sm:py-7">
+                <p className="font-serif text-base text-[var(--foreground)] sm:text-lg">{sideStat}</p>
+              </div>
+            </div>
+          </Container>
+        </Reveal>
+      </div>
+
+      {reviews.length > 0 && (
+        <section className="pt-24 pb-16">
+          <Reveal>
+            <Container>
+              <p className="text-center text-xs uppercase tracking-[0.2em] text-[var(--foreground)]/40">Ils nous ont fait confiance</p>
+              <div className="mx-auto mt-8 grid max-w-4xl gap-5 sm:grid-cols-3">
+                {reviews.slice(0, 6).map((r, i) => (
+                  <Reveal key={r.id} delayMs={i * 100}>
+                    <div className="h-full rounded-xl border border-black/5 bg-[var(--background-muted)]/60 p-5">
+                      <p className="text-xs text-[var(--accent-warm)]">{"★".repeat(r.rating)}</p>
+                      <p className="mt-2 line-clamp-4 text-sm text-[var(--foreground)]/60">{r.text}</p>
+                      <p className="mt-3 text-xs font-medium text-[var(--foreground)]/70">{r.author}</p>
+                    </div>
+                  </Reveal>
+                ))}
+              </div>
+            </Container>
+          </Reveal>
+        </section>
+      )}
+
+      <section className="py-20 bg-[var(--background-muted)]">
+        <Reveal>
+          <Container>
+            <h2 className="text-center font-script text-4xl text-[var(--foreground)] sm:text-5xl">{f("choices_title")}</h2>
             <div className="mt-10 grid gap-5 sm:grid-cols-3">
               {choices.map((choice, i) => (
                 <Reveal key={choice.href} delayMs={i * 100}>
@@ -94,59 +152,6 @@ export default async function HomePage() {
           </Container>
         </Reveal>
       </section>
-
-      <section className="py-20">
-        <Reveal>
-          <Container>
-            <h2 className="text-center font-serif text-3xl text-[var(--foreground)]">{f("stats_title")}</h2>
-            <div className="mt-12 grid grid-cols-2 divide-x divide-y divide-black/10 overflow-hidden rounded-2xl border border-black/10 sm:grid-cols-4 sm:divide-y-0">
-              {stats.map((s, i) => (
-                <Reveal key={s.label} delayMs={i * 100}>
-                  <div className="flex flex-col items-center justify-center gap-1.5 px-4 py-10 text-center">
-                    <p className="font-serif text-4xl text-[var(--accent)]">{s.value}</p>
-                    <p className="text-xs uppercase tracking-[0.15em] text-[var(--foreground)]/50">{s.label}</p>
-                  </div>
-                </Reveal>
-              ))}
-            </div>
-          </Container>
-        </Reveal>
-      </section>
-
-      <section className="py-20 bg-[var(--background-muted)]">
-        <Reveal>
-          <Container className="grid items-center gap-10 sm:grid-cols-2">
-            <div className="relative aspect-[4/3] overflow-hidden rounded-2xl sm:order-2">
-              <Image src={histoirePhoto} alt="Notre histoire" fill className="object-cover" sizes="(min-width: 640px) 500px, 100vw" />
-            </div>
-            <div>
-              <h2 className="font-serif text-3xl text-[var(--foreground)]">{f("histoire_title")}</h2>
-              <p className="mt-5 whitespace-pre-line text-[var(--foreground)]/70">{f("histoire_text")}</p>
-            </div>
-          </Container>
-        </Reveal>
-      </section>
-
-      {reviews.length > 0 && (
-        <section className="py-16">
-          <Reveal>
-            <Container>
-              <p className="text-center text-xs uppercase tracking-[0.2em] text-[var(--foreground)]/40">Ils nous ont fait confiance</p>
-              <div className="mx-auto mt-8 grid max-w-4xl gap-5 sm:grid-cols-3">
-                {reviews.slice(0, 6).map((r, i) => (
-                  <Reveal key={r.id} delayMs={i * 100}>
-                    <div className="h-full rounded-xl border border-black/5 bg-[var(--background-muted)]/60 p-5">
-                      <p className="text-xs text-[var(--accent-warm)]">{"★".repeat(r.rating)}</p>
-                      <p className="mt-2 line-clamp-4 text-sm text-[var(--foreground)]/60">{r.text}</p>
-                      <p className="mt-3 text-xs font-medium text-[var(--foreground)]/70">{r.author}</p>
-                    </div>
-                  </Reveal>
-                ))}
-              </div>
-            </Container>
-          </Reveal>
-        </section>
-      )}
 
       <LogoMarquee />
     </>

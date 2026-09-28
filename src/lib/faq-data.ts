@@ -276,7 +276,7 @@ export const chatbotFaq: FaqEntry[] = [
     keywords: ["reserver", "reservation", "contrat", "acompte", "arrhes", "caution", "solde"],
     question: "Comment réserve-t-on, et que faut-il prévoir ?",
     answer:
-      "La réservation est actée par la signature du contrat et le versement de 50 % du montant total, non remboursables en cas d'annulation. Le solde et une caution de 500 € sont réglés à l'arrivée. Il faut également fournir une attestation de responsabilité civile — votre assureur la délivre gratuitement dans la plupart des cas.",
+      "La réservation est actée par la signature du contrat et le versement de 50 % du montant total, non remboursables en cas d'annulation. Le solde et une caution de 1 000 € sont réglés à l'arrivée. Il faut également fournir une attestation de responsabilité civile — votre assureur la délivre gratuitement dans la plupart des cas.",
     variants: [
       "comment réserver",
       "comment faire pour bloquer une date",

@@ -221,7 +221,7 @@ export function ContractPdfDocument({
 
         <Heading number="3" title="MONTANT CAUTION :">
           <Text style={styles.paragraph}>
-            500 EUROS en espèces payable d&apos;avance à la prise en charge de la salle et restituée au départ,
+            1 000 EUROS en espèces payable d&apos;avance à la prise en charge de la salle et restituée au départ,
             déduction faite éventuellement des détériorations occasionnées, des objets manquants et du nettoyage
             selon l&apos;état des lieux.
           </Text>
