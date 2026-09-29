@@ -23,7 +23,7 @@ export function Header() {
             <Link
               key={item.href}
               href={item.href}
-              className={`text-sm tracking-wide transition-colors hover:text-[var(--accent)] ${
+              className={`font-script text-2xl tracking-wide transition-colors hover:text-[var(--accent)] ${
                 pathname === item.href ? "text-[var(--accent)]" : "text-[var(--foreground)]/80"
               }`}
             >
@@ -34,7 +34,7 @@ export function Header() {
 
         <Link
           href="/contact"
-          className="hidden lg:inline-flex items-center rounded-full bg-[var(--accent)] px-5 py-2.5 text-sm text-white transition-opacity hover:opacity-90"
+          className="hidden lg:inline-flex items-center rounded-full bg-[var(--accent)] px-6 py-2.5 font-script text-2xl text-white transition-opacity hover:opacity-90"
         >
           Parlons de votre projet
         </Link>
@@ -58,7 +58,7 @@ export function Header() {
                 key={item.href}
                 href={item.href}
                 onClick={() => setOpen(false)}
-                className={`rounded-md px-3 py-3 text-sm ${
+                className={`rounded-md px-3 py-3 font-script text-2xl ${
                   pathname === item.href ? "bg-black/5 text-[var(--accent)]" : "text-[var(--foreground)]/80"
                 }`}
               >
