@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Cormorant_Garamond, Inter, Playfair_Display, Beau_Rivage } from "next/font/google";
 import { siteConfig } from "@/lib/site";
 import "./globals.css";
@@ -26,6 +26,12 @@ const beauRivage = Beau_Rivage({
   subsets: ["latin"],
   weight: "400",
 });
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  viewportFit: "cover",
+};
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteConfig.domain),
