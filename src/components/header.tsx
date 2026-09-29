@@ -13,9 +13,9 @@ export function Header() {
 
   return (
     <header className="sticky top-0 z-50 border-b border-black/5 bg-[var(--background)]/90 backdrop-blur">
-      <Container className="flex h-40 items-center justify-between">
+      <Container className="flex h-48 items-center justify-between">
         <Link href="/" className="flex items-center gap-2">
-          <Image src="/images/logo.png" alt={siteConfig.name} width={104} height={106} className="h-36 w-auto" priority />
+          <Image src="/images/logo.png" alt={siteConfig.name} width={104} height={106} className="h-44 w-auto" priority />
         </Link>
 
         <nav className="hidden lg:flex items-center gap-7">
@@ -23,9 +23,9 @@ export function Header() {
             <Link
               key={item.href}
               href={item.href}
-              className={`font-script text-2xl tracking-wide transition-colors hover:text-[var(--accent)] ${
-                item.label === "FAQ" ? "font-bold" : ""
-              } ${pathname === item.href ? "text-[var(--accent)]" : "text-[var(--foreground)]/80"}`}
+              className={`font-script text-2xl font-bold tracking-wide transition-colors hover:text-[var(--accent)] ${
+                pathname === item.href ? "text-[var(--accent)]" : "text-[var(--foreground)]/80"
+              }`}
             >
               {item.label}
             </Link>
@@ -58,7 +58,7 @@ export function Header() {
                 key={item.href}
                 href={item.href}
                 onClick={() => setOpen(false)}
-                className={`rounded-md px-3 py-3 font-script text-2xl ${item.label === "FAQ" ? "font-bold" : ""} ${
+                className={`rounded-md px-3 py-3 font-script text-2xl font-bold ${
                   pathname === item.href ? "bg-black/5 text-[var(--accent)]" : "text-[var(--foreground)]/80"
                 }`}
               >
