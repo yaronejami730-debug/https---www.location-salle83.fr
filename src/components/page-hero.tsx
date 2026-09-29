@@ -8,13 +8,20 @@ export function PageHero({
   description,
   image,
   scrollFade = false,
+  scriptTitle = true,
+  scriptEyebrow = false,
 }: {
   eyebrow: string;
   title: string;
   description?: string;
   image?: { src: string; alt: string };
   scrollFade?: boolean;
+  scriptTitle?: boolean;
+  scriptEyebrow?: boolean;
 }) {
+  const titleFont = scriptTitle ? "font-script text-5xl sm:text-6xl" : "font-serif text-3xl sm:text-4xl";
+  const eyebrowFont = scriptEyebrow ? "font-script text-3xl sm:text-4xl normal-case tracking-normal" : "text-sm tracking-[0.2em] uppercase";
+
   if (image) {
     return (
       <section className="relative flex h-[55vh] min-h-[420px] items-center justify-center overflow-hidden text-center">
@@ -25,8 +32,8 @@ export function PageHero({
         )}
         <div className="absolute inset-0 bg-black/45" />
         <Container className="relative z-10 max-w-2xl">
-          <p className="text-sm tracking-[0.2em] text-white/80 uppercase">{eyebrow}</p>
-          <h1 className="mt-4 font-script text-5xl text-white sm:text-6xl">{title}</h1>
+          <p className={`text-white/80 ${eyebrowFont}`}>{eyebrow}</p>
+          <h1 className={`mt-4 text-white ${titleFont}`}>{title}</h1>
           {description && <p className="mt-5 text-white/85">{description}</p>}
         </Container>
       </section>
@@ -36,8 +43,8 @@ export function PageHero({
   return (
     <section className="bg-[var(--background-muted)] py-20 text-center">
       <Container className="max-w-2xl">
-        <p className="text-sm tracking-[0.2em] text-[var(--accent)] uppercase">{eyebrow}</p>
-        <h1 className="mt-4 font-script text-5xl text-[var(--foreground)] sm:text-6xl">{title}</h1>
+        <p className={`text-[var(--accent)] ${eyebrowFont}`}>{eyebrow}</p>
+        <h1 className={`mt-4 text-[var(--foreground)] ${titleFont}`}>{title}</h1>
         {description && <p className="mt-5 text-[var(--foreground)]/70">{description}</p>}
       </Container>
     </section>
