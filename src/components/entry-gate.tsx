@@ -69,7 +69,7 @@ export function EntryGate({ heroTitle, heroAccent, heroDescription }: EntryGateP
   return (
     <div id="entry-gate" data-phase={phase} className="fixed inset-0 z-[100] h-screen overflow-hidden">
       <div
-        className={`absolute inset-y-0 left-0 h-screen w-1/2 overflow-hidden bg-black transition-transform ease-[cubic-bezier(0.83,0,0.17,1)] ${
+        className={`absolute inset-y-0 left-0 h-screen w-[calc(50%+2px)] overflow-hidden bg-black transition-transform ease-[cubic-bezier(0.83,0,0.17,1)] ${
           opening ? "-translate-x-full" : "translate-x-0"
         }`}
         style={{ willChange: "transform", transitionDuration: `${DOOR_DURATION_MS}ms` }}
@@ -77,7 +77,7 @@ export function EntryGate({ heroTitle, heroAccent, heroDescription }: EntryGateP
         <HalfPhoto side="left" />
       </div>
       <div
-        className={`absolute inset-y-0 right-0 h-screen w-1/2 overflow-hidden bg-black transition-transform ease-[cubic-bezier(0.83,0,0.17,1)] ${
+        className={`absolute inset-y-0 right-0 h-screen w-[calc(50%+2px)] overflow-hidden bg-black transition-transform ease-[cubic-bezier(0.83,0,0.17,1)] ${
           opening ? "translate-x-full" : "translate-x-0"
         }`}
         style={{ willChange: "transform", transitionDuration: `${DOOR_DURATION_MS}ms` }}
