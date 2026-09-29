@@ -68,7 +68,7 @@ body {
 
 .animate-write-in {
   clip-path: inset(0 100% 0 0);
-  animation: writeIn 1.3s cubic-bezier(0.65, 0, 0.35, 1) forwards;
+  animation: writeIn 2.4s cubic-bezier(0.65, 0, 0.35, 1) forwards;
 }
 
 @keyframes marquee {
