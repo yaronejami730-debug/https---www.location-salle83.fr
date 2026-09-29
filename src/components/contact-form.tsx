@@ -124,7 +124,8 @@ export function ContactForm() {
       <div className="rounded-2xl border border-black/5 bg-[var(--background-muted)] p-8 text-center">
         <p className="font-serif text-xl text-[var(--foreground)]">Merci pour votre demande</p>
         <p className="mt-2 text-sm text-[var(--foreground)]/70">
-          Veuillez contacter directement Monsieur Gonzague pour finaliser votre projet.
+          Vous allez recevoir d&apos;ici quelques secondes un mail récapitulatif reprenant votre numéro de demande
+          ainsi que l&apos;estimation ci-dessous.
         </p>
         {lastReference && (
           <p className="mt-3 text-sm text-[var(--foreground)]/70">
@@ -150,6 +151,13 @@ export function ContactForm() {
             </p>
           </div>
         )}
+        <p className="mx-auto mt-6 max-w-sm text-xs text-[var(--foreground)]/60">
+          En attendant, prenez le temps d&apos;explorer le site et notre{" "}
+          <Link href="/faq" className="text-[var(--accent)] hover:underline">
+            FAQ
+          </Link>
+          , qui répond à la plupart des questions sur le domaine.
+        </p>
       </div>
     );
   }

@@ -142,6 +142,7 @@ export function welcomeEmail(params: {
       un cadre vrai et chaleureux pour les plus beaux moments, mariages, séminaires et réceptions.
     </p>
     ${quote ? `<p>Suite à l'estimation que vous avez faite en ligne, voici l'estimation que nous vous proposons :</p>${quoteBlock}` : ""}
+    <p style="margin-top:28px;">Pour visiter le domaine, n'hésitez pas à contacter Monsieur ${CONTACT_NAME}.</p>
   `;
 
   return {

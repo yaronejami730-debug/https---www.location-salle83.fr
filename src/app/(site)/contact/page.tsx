@@ -24,7 +24,7 @@ export default async function ContactPage() {
 
   return (
     <>
-      <PageHero eyebrow="Contact" title={f("hero_title")} description={f("hero_description")} />
+      <PageHero eyebrow="Contact" title={f("hero_title")} />
 
       <section className="py-20">
         <Container className="max-w-2xl">
