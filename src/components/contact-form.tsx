@@ -359,7 +359,7 @@ export function ContactForm() {
           <input type="checkbox" {...register("termsAccepted")} className="mt-0.5 h-4 w-4 shrink-0" />
           <span>
             J&apos;ai pris connaissance des{" "}
-            <Link href="/conditions-generales" target="_blank" className="text-[var(--accent)] hover:underline">
+            <Link href="/conditions-generales" target="_blank" className="font-medium text-[var(--accent)] underline underline-offset-2 hover:opacity-80">
               conditions générales
             </Link>{" "}
             (caution, ménage, réglement intérieur).
