@@ -64,7 +64,7 @@ export async function submitLead(input: SubmitLeadInput) {
 
   if (error) throw new Error("insert_failed");
 
-  void sendAlertEmail(
+  await sendAlertEmail(
     "Nouvelle demande de devis",
     `<p>Nouvelle demande reçue (${values.eventType}, ${values.guestCount || "?"} personnes) :</p>
      <ul>
@@ -82,7 +82,7 @@ export async function submitLead(input: SubmitLeadInput) {
     fullName: values.fullName,
     quote,
   });
-  void sendEmail(values.email, welcome.subject, welcome.html, values.fullName);
+  await sendEmail(values.email, welcome.subject, welcome.html, values.fullName);
 
   return { quote, leadId: data.id as string };
 }
