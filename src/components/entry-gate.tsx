@@ -31,18 +31,28 @@ export function EntryGate({ heroTitle, heroAccent, heroDescription }: EntryGateP
 
   useEffect(() => {
     if (phase === "open") return;
-    const { overflow } = document.documentElement.style;
-    document.documentElement.style.overflow = "hidden";
 
-    // iOS Safari still rubber-bands on touch even with overflow:hidden, which briefly shifts
-    // `position: fixed` elements and exposes whatever is behind them — this is the actual
-    // "bars during scroll" bug. Blocking the touch gesture itself is the standard fix.
-    const preventTouchScroll = (e: TouchEvent) => e.preventDefault();
-    document.addEventListener("touchmove", preventTouchScroll, { passive: false });
+    // overflow:hidden on <html> alone doesn't stop iOS Safari: the real page underneath can
+    // still shift into view during a bounce/scroll gesture, briefly showing through the fixed
+    // gate (confirmed on video — the homepage's own text was visible at the bottom edge while
+    // the gate was still up). The reliable fix is taking <body> out of the scrollable flow
+    // entirely: pin it with position:fixed at its current scroll offset, so there is no
+    // document to scroll at all until the gate is gone.
+    const scrollY = window.scrollY;
+    const body = document.body;
+    const prev = { position: body.style.position, top: body.style.top, width: body.style.width, overflow: document.documentElement.style.overflow };
+
+    document.documentElement.style.overflow = "hidden";
+    body.style.position = "fixed";
+    body.style.top = `-${scrollY}px`;
+    body.style.width = "100%";
 
     return () => {
-      document.documentElement.style.overflow = overflow;
-      document.removeEventListener("touchmove", preventTouchScroll);
+      document.documentElement.style.overflow = prev.overflow;
+      body.style.position = prev.position;
+      body.style.top = prev.top;
+      body.style.width = prev.width;
+      window.scrollTo(0, scrollY);
     };
   }, [phase]);
 

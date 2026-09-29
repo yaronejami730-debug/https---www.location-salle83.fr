@@ -20,10 +20,15 @@
   --font-script: var(--font-script);
 }
 
+html {
+  overscroll-behavior: none;
+}
+
 body {
   background: var(--background);
   color: var(--foreground);
   font-family: var(--font-sans), Arial, Helvetica, sans-serif;
+  overscroll-behavior: none;
 }
 
 /* Guaranteed by the browser's style engine, not by paint/compositing timing:
