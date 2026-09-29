@@ -26,6 +26,13 @@ body {
   font-family: var(--font-sans), Arial, Helvetica, sans-serif;
 }
 
+/* Guaranteed by the browser's style engine, not by paint/compositing timing:
+   the header simply never renders while the entry gate exists in the DOM,
+   so there is no race it could lose. Reverts the instant the gate unmounts. */
+body:has(#entry-gate) header {
+  visibility: hidden;
+}
+
 .font-serif {
   font-family: var(--font-serif), Georgia, serif;
 }
