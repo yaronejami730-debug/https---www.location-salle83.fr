@@ -24,8 +24,8 @@ export function Header() {
               key={item.href}
               href={item.href}
               className={`font-script text-2xl tracking-wide transition-colors hover:text-[var(--accent)] ${
-                pathname === item.href ? "text-[var(--accent)]" : "text-[var(--foreground)]/80"
-              }`}
+                item.label === "FAQ" ? "font-bold" : ""
+              } ${pathname === item.href ? "text-[var(--accent)]" : "text-[var(--foreground)]/80"}`}
             >
               {item.label}
             </Link>
@@ -58,7 +58,7 @@ export function Header() {
                 key={item.href}
                 href={item.href}
                 onClick={() => setOpen(false)}
-                className={`rounded-md px-3 py-3 font-script text-2xl ${
+                className={`rounded-md px-3 py-3 font-script text-2xl ${item.label === "FAQ" ? "font-bold" : ""} ${
                   pathname === item.href ? "bg-black/5 text-[var(--accent)]" : "text-[var(--foreground)]/80"
                 }`}
               >
