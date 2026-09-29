@@ -1,8 +1,10 @@
 import "server-only";
 import { siteConfig } from "@/lib/site";
+import { chatbotFaq } from "@/lib/faq-data";
 
 const CONTACT_NAME = "Gonzague Tassou";
 const CONTACT_PHONE_HREF = `tel:${siteConfig.phone.replace(/\s/g, "")}`;
+const LOGO_URL = "https://https-www-location-salle83-fr.vercel.app/images/logo.png";
 
 /**
  * Shell email — fond blanc, logo centré, titre centré, CTA bouton pill, footer minimaliste.
@@ -47,9 +49,7 @@ function baseEmail({
 <table class="wrap" role="presentation" width="560" cellpadding="0" cellspacing="0" style="max-width:560px;width:100%;">
 
   <tr><td align="center" style="padding-bottom:28px;">
-    <p style="margin:0;font-family:Georgia,'Times New Roman',serif;font-size:15px;letter-spacing:0.08em;text-transform:uppercase;color:#5c6b4a;">
-      ${siteConfig.name}
-    </p>
+    <img class="logo" src="${LOGO_URL}" alt="${siteConfig.name}" width="130" style="display:block;height:auto;"/>
   </td></tr>
 
   <tr><td align="center" style="padding-bottom:24px;">
@@ -96,8 +96,7 @@ function baseEmail({
 
   <tr><td align="center" style="padding-bottom:8px;">
     <p style="font-size:12px;color:#9ea4a9;line-height:1.7;margin:0;text-align:center;">
-      ${siteConfig.name} — ${siteConfig.address}<br/>
-      ${siteConfig.phone} — <a href="mailto:${siteConfig.email}" style="color:#9ea4a9;">${siteConfig.email}</a>
+      ${siteConfig.name} — ${siteConfig.address}
     </p>
   </td></tr>
 
@@ -153,7 +152,6 @@ export function welcomeEmail(params: {
       body,
       ctaLabel: `Contacter Monsieur ${CONTACT_NAME}`,
       ctaUrl: CONTACT_PHONE_HREF,
-      postCta: `Ou par email : <a href="mailto:${siteConfig.email}" style="color:#8a887f;">${siteConfig.email}</a>`,
     }),
   };
 }
@@ -161,11 +159,14 @@ export function welcomeEmail(params: {
 export function wasteSortingEmail(params: { fullName: string }): { subject: string; html: string } {
   const binsHtml = bins
     .map(
-      (b) =>
-        `<span style="display:inline-block;margin:4px 10px;font-size:14px;">
-          <span style="display:inline-block;width:9px;height:9px;border-radius:50%;background:${b.color};margin-right:6px;"></span>
-          <strong>${b.name}</strong> = ${b.description}
-        </span>`,
+      (b) => `
+      <tr>
+        <td style="padding:10px 0;border-bottom:1px solid #eceef0;text-align:left;">
+          <span style="display:inline-block;width:11px;height:11px;border-radius:50%;background:${b.color};margin-right:10px;vertical-align:middle;"></span>
+          <strong style="color:#2b2a26;">${b.name}</strong>
+          <span style="color:#8a887f;"> — ${b.description}</span>
+        </td>
+      </tr>`,
     )
     .join("");
 
@@ -173,7 +174,9 @@ export function wasteSortingEmail(params: { fullName: string }): { subject: stri
     <p>Bonjour ${params.fullName},</p>
     <p>Votre séjour au Domaine de la Bégude se termine bientôt. Avant votre départ, un rappel sur le tri sélectif —
     la communauté de communes nous demande d'être vigilants sur ce point.</p>
-    <p style="margin-top:20px;">${binsHtml}</p>
+    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin-top:20px;text-align:left;font-size:14px;">
+      ${binsHtml}
+    </table>
     <p style="margin-top:28px;font-size:13px;color:#a33;">
       <strong>Sujet très important&nbsp;:</strong> si le tri n'est pas respecté durant votre séjour, la caution sera
       retenue en intégralité, et les autorités compétentes seront informées.
@@ -187,6 +190,40 @@ export function wasteSortingEmail(params: { fullName: string }): { subject: stri
       title: "Avant votre départ",
       heading: "Avant votre départ",
       body,
+    }),
+  };
+}
+
+export function faqDigestEmail(params: { fullName: string }): { subject: string; html: string } {
+  const rows = chatbotFaq
+    .map(
+      (f) => `
+      <tr>
+        <td style="padding:12px 0;border-bottom:1px solid #eceef0;text-align:left;">
+          <p style="margin:0;font-weight:bold;color:#2b2a26;">${f.question}</p>
+          <p style="margin:4px 0 0;color:#5c5b54;">${f.answer}</p>
+        </td>
+      </tr>`,
+    )
+    .join("");
+
+  const body = `
+    <p>Bonjour ${params.fullName},</p>
+    <p>Voici les réponses aux questions les plus fréquentes sur le Domaine de la Bégude.</p>
+    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin-top:20px;text-align:left;font-size:14px;">
+      ${rows}
+    </table>
+    <p style="margin-top:28px;">Une autre question ? Contactez directement Monsieur ${CONTACT_NAME}.</p>
+  `;
+
+  return {
+    subject: "Vos questions sur le Domaine de la Bégude",
+    html: baseEmail({
+      title: "FAQ",
+      heading: "Questions fréquentes",
+      body,
+      ctaLabel: `Contacter Monsieur ${CONTACT_NAME}`,
+      ctaUrl: CONTACT_PHONE_HREF,
     }),
   };
 }
