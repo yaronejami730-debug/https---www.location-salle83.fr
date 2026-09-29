@@ -38,6 +38,24 @@ body {
   font-family: var(--font-script), cursive;
 }
 
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+    filter: blur(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+    filter: blur(0);
+  }
+}
+
+.animate-fade-in-up {
+  opacity: 0;
+  animation: fadeInUp 1.1s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
 @keyframes marquee {
   from {
     transform: translateX(0);

@@ -20,9 +20,18 @@ function GateContent({ offset, heroTitle, heroAccent, heroDescription }: { offse
       <Image src="/images/entry-gate.jpg" alt="" fill priority className="object-cover" sizes="100vw" />
       <div className="absolute inset-0 bg-black/45" />
       <div className="absolute inset-0 flex flex-col items-center justify-center px-4 text-center text-white">
-        <h1 className="max-w-4xl font-script text-5xl leading-[1.3] sm:text-7xl">{heroTitle}</h1>
-        <p className="mt-2 font-script text-5xl leading-[1.3] sm:text-7xl">{heroAccent}</p>
-        <p className="mt-8 max-w-xl font-script text-2xl text-white/85 sm:text-3xl">{heroDescription}</p>
+        <h1 className="animate-fade-in-up max-w-4xl font-script text-5xl leading-[1.3] sm:text-7xl" style={{ animationDelay: "200ms" }}>
+          {heroTitle}
+        </h1>
+        <p className="animate-fade-in-up mt-2 font-script text-5xl leading-[1.3] sm:text-7xl" style={{ animationDelay: "500ms" }}>
+          {heroAccent}
+        </p>
+        <p
+          className="animate-fade-in-up mt-8 max-w-xl font-script text-2xl text-white/85 sm:text-3xl"
+          style={{ animationDelay: "850ms" }}
+        >
+          {heroDescription}
+        </p>
       </div>
     </div>
   );
@@ -71,9 +80,10 @@ export function EntryGate({ heroTitle, heroAccent, heroDescription }: EntryGateP
       <button
         type="button"
         onClick={() => setPhase("opening")}
-        className={`absolute bottom-[15%] left-1/2 z-10 -translate-x-1/2 rounded-full border border-white/60 px-8 py-3.5 text-sm tracking-wide text-white transition-opacity duration-300 hover:bg-white hover:text-[var(--foreground)] ${
-          opening ? "pointer-events-none opacity-0" : "opacity-100"
+        className={`absolute bottom-[15%] left-1/2 z-10 -translate-x-1/2 rounded-full border border-white/60 px-9 py-3.5 font-script text-2xl tracking-wide text-white transition-opacity duration-300 hover:bg-white hover:text-[var(--foreground)] ${
+          opening ? "pointer-events-none opacity-0" : "animate-fade-in-up"
         }`}
+        style={opening ? undefined : { animationDelay: "1200ms" }}
       >
         Accéder au site
       </button>
