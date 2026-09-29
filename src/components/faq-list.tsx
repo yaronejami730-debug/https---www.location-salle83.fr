@@ -58,7 +58,10 @@ export function FaqList({ compact = false }: { compact?: boolean }) {
         />
         <div className="flex flex-wrap gap-1.5">
           <button
-            onClick={() => setCategory(null)}
+            onClick={() => {
+              setCategory(null);
+              setQuery("");
+            }}
             className={`rounded-full border-2 px-3 py-1.5 text-xs font-bold ${
               category === null
                 ? "border-[var(--accent)] bg-[var(--accent)] text-white"
@@ -70,7 +73,10 @@ export function FaqList({ compact = false }: { compact?: boolean }) {
           {CATEGORIES.map((cat) => (
             <button
               key={cat}
-              onClick={() => setCategory(cat === category ? null : cat)}
+              onClick={() => {
+                setCategory(cat === category ? null : cat);
+                setQuery("");
+              }}
               className={`rounded-full border-2 px-3 py-1.5 text-xs font-bold ${
                 category === cat
                   ? "border-[var(--accent)] bg-[var(--accent)] text-white"
