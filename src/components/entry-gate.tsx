@@ -33,8 +33,16 @@ export function EntryGate({ heroTitle, heroAccent, heroDescription }: EntryGateP
     if (phase === "open") return;
     const { overflow } = document.documentElement.style;
     document.documentElement.style.overflow = "hidden";
+
+    // iOS Safari still rubber-bands on touch even with overflow:hidden, which briefly shifts
+    // `position: fixed` elements and exposes whatever is behind them — this is the actual
+    // "bars during scroll" bug. Blocking the touch gesture itself is the standard fix.
+    const preventTouchScroll = (e: TouchEvent) => e.preventDefault();
+    document.addEventListener("touchmove", preventTouchScroll, { passive: false });
+
     return () => {
       document.documentElement.style.overflow = overflow;
+      document.removeEventListener("touchmove", preventTouchScroll);
     };
   }, [phase]);
 
