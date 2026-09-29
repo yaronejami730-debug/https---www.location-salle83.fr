@@ -1,10 +1,10 @@
 import "server-only";
 import { siteConfig } from "@/lib/site";
-import { chatbotFaq } from "@/lib/faq-data";
 
 const CONTACT_NAME = "Gonzague Tassou";
 const CONTACT_PHONE_HREF = `tel:${siteConfig.phone.replace(/\s/g, "")}`;
 const LOGO_URL = "https://https-www-location-salle83-fr.vercel.app/images/logo.png";
+const SITE_URL = "https://https-www-location-salle83-fr.vercel.app";
 
 /**
  * Shell email — fond blanc, logo centré, titre centré, CTA bouton pill, footer minimaliste.
@@ -194,36 +194,23 @@ export function wasteSortingEmail(params: { fullName: string }): { subject: stri
   };
 }
 
-export function faqDigestEmail(params: { fullName: string }): { subject: string; html: string } {
-  const rows = chatbotFaq
-    .map(
-      (f) => `
-      <tr>
-        <td style="padding:12px 0;border-bottom:1px solid #eceef0;text-align:left;">
-          <p style="margin:0;font-weight:bold;color:#2b2a26;">${f.question}</p>
-          <p style="margin:4px 0 0;color:#5c5b54;">${f.answer}</p>
-        </td>
-      </tr>`,
-    )
-    .join("");
-
+export function faqFollowUpEmail(params: { fullName: string }): { subject: string; html: string } {
   const body = `
     <p>Bonjour ${params.fullName},</p>
-    <p>Voici les réponses aux questions les plus fréquentes sur le Domaine de la Bégude.</p>
-    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin-top:20px;text-align:left;font-size:14px;">
-      ${rows}
-    </table>
-    <p style="margin-top:28px;">Une autre question ? Contactez directement Monsieur ${CONTACT_NAME}.</p>
+    <p>
+      En attendant de finaliser votre projet, sachez que nous avons une FAQ sur notre site qui répond à la plupart
+      des questions sur le domaine : hébergement, capacité, tarifs, réservation, équipements, et bien plus.
+    </p>
   `;
 
   return {
-    subject: "Vos questions sur le Domaine de la Bégude",
+    subject: "Une question ? Notre FAQ répond probablement déjà",
     html: baseEmail({
       title: "FAQ",
-      heading: "Questions fréquentes",
+      heading: "Une question sur le domaine ?",
       body,
-      ctaLabel: `Contacter Monsieur ${CONTACT_NAME}`,
-      ctaUrl: CONTACT_PHONE_HREF,
+      ctaLabel: "Consulter la FAQ",
+      ctaUrl: `${SITE_URL}/faq`,
     }),
   };
 }

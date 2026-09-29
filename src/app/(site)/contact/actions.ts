@@ -1,10 +1,13 @@
 "use server";
 
 import { z } from "zod";
+import { after } from "next/server";
 import { supabaseAdmin } from "@/lib/supabase-admin";
 import { computeQuote } from "@/lib/pricing";
 import { sendAlertEmail, sendEmail } from "@/lib/mail";
-import { welcomeEmail } from "@/lib/email-templates";
+import { welcomeEmail, faqFollowUpEmail } from "@/lib/email-templates";
+
+const FAQ_FOLLOW_UP_DELAY_MS = 4 * 60 * 1000;
 
 const schema = z.object({
   eventType: z.enum(["mariage", "seminaire", "reception", "hebergement", "autre"]),
@@ -83,6 +86,12 @@ export async function submitLead(input: SubmitLeadInput) {
     quote,
   });
   await sendEmail(values.email, welcome.subject, welcome.html, values.fullName);
+
+  after(async () => {
+    await new Promise((resolve) => setTimeout(resolve, FAQ_FOLLOW_UP_DELAY_MS));
+    const followUp = faqFollowUpEmail({ fullName: values.fullName });
+    await sendEmail(values.email, followUp.subject, followUp.html, values.fullName);
+  });
 
   return { quote, leadId: data.id as string };
 }
