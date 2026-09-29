@@ -400,8 +400,8 @@ export function PageEditor({
 
           <section className="py-16 text-center">
             <Container className="max-w-2xl">
-              <span className="mx-auto block h-px w-12 bg-[var(--accent-warm)]/50" />
-              <EditableText as="h2" value={val("intro_title")} onChange={set("intro_title")} className="mt-5 font-display text-3xl italic text-[var(--accent-warm)]" />
+              <span className="mx-auto block h-px w-12 bg-[var(--accent)]/50" />
+              <EditableText as="h2" value={val("intro_title")} onChange={set("intro_title")} className="mt-5 font-script text-4xl text-[var(--accent)]" />
               <EditableText value={val("intro_text")} onChange={set("intro_text")} className="mt-5 whitespace-pre-line text-[var(--foreground)]/70" />
             </Container>
           </section>
@@ -439,7 +439,7 @@ export function PageEditor({
                       <EditablePhotoGrid photos={zigzagMedia[category] ?? []} page={category} aspect="aspect-[4/3]" />
                     </div>
                     <div>
-                      <EditableText as="h2" value={val(`zigzag${n}_title`)} onChange={set(`zigzag${n}_title`)} className="font-display text-3xl italic text-[var(--accent-warm)]" />
+                      <EditableText as="h2" value={val(`zigzag${n}_title`)} onChange={set(`zigzag${n}_title`)} className="font-script text-4xl text-[var(--accent)]" />
                       <EditableText value={val(`zigzag${n}_text`)} onChange={set(`zigzag${n}_text`)} className="mt-4 whitespace-pre-line text-[var(--foreground)]/70" />
                       {n === 3 && (
                         <span className="mt-6 inline-flex rounded-full bg-[var(--accent)] px-6 py-3 text-sm text-white opacity-90">
@@ -466,8 +466,8 @@ export function PageEditor({
 
           <section className="py-16 text-center">
             <Container className="max-w-2xl">
-              <span className="mx-auto block h-px w-12 bg-[var(--accent-warm)]/50" />
-              <EditableText as="h2" value={val("intro_title")} onChange={set("intro_title")} className="mt-5 font-display text-3xl italic text-[var(--accent-warm)]" />
+              <span className="mx-auto block h-px w-12 bg-[var(--accent)]/50" />
+              <EditableText as="h2" value={val("intro_title")} onChange={set("intro_title")} className="mt-5 font-script text-4xl text-[var(--accent)]" />
               <EditableText value={val("intro_text")} onChange={set("intro_text")} className="mt-5 whitespace-pre-line text-[var(--foreground)]/70" />
             </Container>
           </section>
@@ -494,7 +494,7 @@ export function PageEditor({
                       <EditablePhotoGrid photos={zigzagMedia[category] ?? []} page={category} aspect="aspect-[4/3]" />
                     </div>
                     <div>
-                      <EditableText as="h2" value={val(`feature${n}_title`)} onChange={set(`feature${n}_title`)} className="font-display text-3xl italic text-[var(--accent-warm)]" />
+                      <EditableText as="h2" value={val(`feature${n}_title`)} onChange={set(`feature${n}_title`)} className="font-script text-4xl text-[var(--accent)]" />
                       <EditableText value={val(`feature${n}_text`)} onChange={set(`feature${n}_text`)} className="mt-4 whitespace-pre-line text-[var(--foreground)]/70" />
                     </div>
                   </div>

@@ -53,7 +53,7 @@ export default async function SeminaireEvenementsPage() {
 
   return (
     <>
-      <PageHero eyebrow="Séminaire & Événements" title={fs("hero_title")} description={fs("hero_description")} scriptTitle={false} scriptEyebrow />
+      <PageHero eyebrow="Séminaire & Événements" title={fs("hero_title")} description={fs("hero_description")} />
 
       <IntroSection title={fs("intro_title")} text={fs("intro_text")} />
 

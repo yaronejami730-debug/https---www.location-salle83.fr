@@ -26,7 +26,7 @@ export function ZigzagSection({
           <FadeCarousel photos={images} intervalMs={intervalMs} startDelayMs={startDelayMs} />
         </div>
         <div>
-          <h2 className="font-display text-3xl italic text-[var(--accent-warm)]">{title}</h2>
+          <h2 className="font-script text-4xl text-[var(--accent)]">{title}</h2>
           <p className="mt-4 whitespace-pre-line text-[var(--foreground)]/70">{text}</p>
           {cta && (
             <Link

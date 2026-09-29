@@ -8,8 +8,8 @@ export function PageHero({
   description,
   image,
   scrollFade = false,
-  scriptTitle = true,
-  scriptEyebrow = false,
+  scriptTitle = false,
+  scriptEyebrow = true,
 }: {
   eyebrow: string;
   title: string;
@@ -19,7 +19,7 @@ export function PageHero({
   scriptTitle?: boolean;
   scriptEyebrow?: boolean;
 }) {
-  const titleFont = scriptTitle ? "font-script text-5xl sm:text-6xl" : "font-serif text-3xl sm:text-4xl";
+  const titleFont = scriptTitle ? "font-script text-5xl sm:text-6xl" : "font-sans font-bold text-3xl sm:text-4xl";
   const eyebrowFont = scriptEyebrow ? "font-script text-3xl sm:text-4xl normal-case tracking-normal" : "text-sm tracking-[0.2em] uppercase";
 
   if (image) {
@@ -30,9 +30,9 @@ export function PageHero({
         ) : (
           <Image src={image.src} alt={image.alt} fill priority sizes="100vw" className="object-cover" />
         )}
-        <div className="absolute inset-0 bg-black/45" />
+        <div className="absolute inset-0 bg-black/55" />
         <Container className="relative z-10 max-w-2xl">
-          <p className={`text-white/80 ${eyebrowFont}`}>{eyebrow}</p>
+          <p className={`text-white/90 ${eyebrowFont}`}>{eyebrow}</p>
           <h1 className={`mt-4 text-white ${titleFont}`}>{title}</h1>
           {description && <p className="mt-5 text-white/85">{description}</p>}
         </Container>
