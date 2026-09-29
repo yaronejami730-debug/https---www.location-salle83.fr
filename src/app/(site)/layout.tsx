@@ -1,5 +1,6 @@
 import { Header } from "@/components/header";
 import { Footer } from "@/components/footer";
+import { PageTransition } from "@/components/page-transition";
 import { siteConfig } from "@/lib/site";
 import { getSiteSettings } from "@/lib/content";
 
@@ -33,7 +34,9 @@ export default async function SiteLayout({ children }: { children: React.ReactNo
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <Header />
-      <main className="flex-1">{children}</main>
+      <main className="flex-1">
+        <PageTransition>{children}</PageTransition>
+      </main>
       <Footer />
     </>
   );

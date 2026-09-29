@@ -1,12 +1,28 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Image from "next/image";
 
 type EntryGateProps = {
   heroTitle: string;
   heroAccent: string;
   heroDescription: string;
 };
+
+/**
+ * Full-viewport-sized photo, shifted horizontally within its half-panel so the panel's own
+ * overflow-hidden shows only its half — object-cover keeps the aspect ratio correct (unlike a
+ * background-size stretch), and plain `absolute` positioning (no `fixed`-in-`transform`) avoids
+ * the compositing race that used to let the header paint a frame before this layer.
+ */
+function HalfPhoto({ side }: { side: "left" | "right" }) {
+  return (
+    <div className="absolute inset-y-0 h-dvh w-screen" style={{ left: side === "left" ? 0 : "-50vw" }}>
+      <Image src="/images/entry-gate.jpg" alt="" fill priority className="object-cover" sizes="100vw" />
+      <div className="absolute inset-0 bg-black/45" />
+    </div>
+  );
+}
 
 export function EntryGate({ heroTitle, heroAccent, heroDescription }: EntryGateProps) {
   const [phase, setPhase] = useState<"closed" | "opening" | "open">("closed");
@@ -36,20 +52,20 @@ export function EntryGate({ heroTitle, heroAccent, heroDescription }: EntryGateP
           avoiding a `fixed` element nested in a `transform`ed ancestor (that combo introduced
           a real compositing race where the header could paint a frame before this layer). */}
       <div
-        className={`absolute inset-y-0 left-0 h-dvh w-1/2 overflow-hidden bg-black bg-[url('/images/entry-gate.jpg')] bg-[length:200%_100%] bg-left transition-transform duration-[1800ms] ease-[cubic-bezier(0.83,0,0.17,1)] ${
+        className={`absolute inset-y-0 left-0 h-dvh w-1/2 overflow-hidden bg-black transition-transform duration-[1800ms] ease-[cubic-bezier(0.83,0,0.17,1)] ${
           opening ? "-translate-x-full" : "translate-x-0"
         }`}
         style={{ willChange: "transform" }}
       >
-        <div className="absolute inset-0 bg-black/45" />
+        <HalfPhoto side="left" />
       </div>
       <div
-        className={`absolute inset-y-0 right-0 h-dvh w-1/2 overflow-hidden bg-black bg-[url('/images/entry-gate.jpg')] bg-[length:200%_100%] bg-right transition-transform duration-[1800ms] ease-[cubic-bezier(0.83,0,0.17,1)] ${
+        className={`absolute inset-y-0 right-0 h-dvh w-1/2 overflow-hidden bg-black transition-transform duration-[1800ms] ease-[cubic-bezier(0.83,0,0.17,1)] ${
           opening ? "translate-x-full" : "translate-x-0"
         }`}
         style={{ willChange: "transform" }}
       >
-        <div className="absolute inset-0 bg-black/45" />
+        <HalfPhoto side="right" />
       </div>
 
       <div
