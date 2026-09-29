@@ -16,6 +16,8 @@ export async function generateMetadata(): Promise<Metadata> {
     title: content?.seo_title || "Galerie",
     description:
       content?.seo_description || "Photos du Domaine de la Bégude à Fayence : mariages, séminaires, réceptions et hébergements.",
+    openGraph: { images: [{ url: "/images/galerie/IMG_7448.jpg", width: 2000, height: 1500, alt: "Galerie du Domaine de la Bégude" }] },
+    twitter: { images: ["/images/galerie/IMG_7448.jpg"] },
   };
 }
 

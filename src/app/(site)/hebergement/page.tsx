@@ -18,6 +18,8 @@ export async function generateMetadata(): Promise<Metadata> {
     description:
       content?.seo_description ||
       "15 mazets et chambres au Domaine de la Bégude, à Fayence dans le Var, pour prolonger votre événement sur place.",
+    openGraph: { images: [{ url: "/images/hebergement/hebergement-3.jpg", width: 1600, height: 1200, alt: "Hébergement au Domaine de la Bégude" }] },
+    twitter: { images: ["/images/hebergement/hebergement-3.jpg"] },
   };
 }
 

@@ -20,6 +20,8 @@ export async function generateMetadata(): Promise<Metadata> {
     description:
       content?.seo_description ||
       "Séminaires d'entreprise, réceptions privées et événements au Domaine de la Bégude, à Fayence dans le Var : salles équipées, hébergement et privatisation.",
+    openGraph: { images: [{ url: "/images/galerie/IMG_7447.jpg", width: 2000, height: 1500, alt: "Séminaires et événements au Domaine de la Bégude" }] },
+    twitter: { images: ["/images/galerie/IMG_7447.jpg"] },
   };
 }
 

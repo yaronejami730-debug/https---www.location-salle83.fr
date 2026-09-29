@@ -14,6 +14,8 @@ export async function generateMetadata(): Promise<Metadata> {
     description:
       content?.seo_description ||
       "Demandez votre devis personnalisé pour votre mariage, séminaire ou réception au Domaine de la Bégude, à Fayence dans le Var.",
+    openGraph: { images: [{ url: "/images/home-hero.jpg", width: 1600, height: 1200, alt: "Domaine de la Bégude" }] },
+    twitter: { images: ["/images/home-hero.jpg"] },
   };
 }
 

@@ -20,6 +20,8 @@ export async function generateMetadata(): Promise<Metadata> {
     description:
       content?.seo_description ||
       "Découvrez le Domaine de la Bégude à Fayence, dans le Var : 3 hectares de nature préservée, bâtisses en pierre et espaces réceptifs.",
+    openGraph: { images: [{ url: "/images/domaine-pool.jpg", width: 1600, height: 1200, alt: "Le Domaine de la Bégude" }] },
+    twitter: { images: ["/images/domaine-pool.jpg"] },
   };
 }
 

@@ -7,6 +7,8 @@ import { FaqList } from "@/components/faq-list";
 export const metadata: Metadata = {
   title: "FAQ",
   description: "Toutes les réponses aux questions fréquentes sur le Domaine de la Bégude : hébergement, capacité, tarifs, réservation, équipements et plus.",
+  openGraph: { images: [{ url: "/images/galerie/IMG_7450.jpg", width: 2000, height: 1500, alt: "Domaine de la Bégude" }] },
+  twitter: { images: ["/images/galerie/IMG_7450.jpg"] },
 };
 
 export default function FaqPage() {

@@ -17,6 +17,8 @@ export async function generateMetadata(): Promise<Metadata> {
     description:
       content?.seo_description ||
       "Organisez votre mariage au Domaine de la Bégude, à Fayence dans le Var : cérémonie, réception et hébergement sur place.",
+    openGraph: { images: [{ url: "/images/mariage-hero.jpg", width: 1600, height: 1200, alt: "Mariage au Domaine de la Bégude" }] },
+    twitter: { images: ["/images/mariage-hero.jpg"] },
   };
 }
 
