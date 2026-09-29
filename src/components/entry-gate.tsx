@@ -19,7 +19,7 @@ const DOOR_DURATION_MS = 1400;
  */
 function HalfPhoto({ side }: { side: "left" | "right" }) {
   return (
-    <div className="absolute inset-y-0 h-dvh w-screen" style={{ left: side === "left" ? 0 : "-50vw" }}>
+    <div className="absolute inset-y-0 h-screen w-screen" style={{ left: side === "left" ? 0 : "-50vw" }}>
       <Image src="/images/entry-gate.jpg" alt="" fill priority className="object-cover" sizes="100vw" />
       <div className="absolute inset-0 bg-black/45" />
     </div>
@@ -49,9 +49,9 @@ export function EntryGate({ heroTitle, heroAccent, heroDescription }: EntryGateP
   const opening = phase === "opening";
 
   return (
-    <div id="entry-gate" data-phase={phase} className="fixed inset-0 z-[100] h-dvh overflow-hidden">
+    <div id="entry-gate" data-phase={phase} className="fixed inset-0 z-[100] h-screen overflow-hidden">
       <div
-        className={`absolute inset-y-0 left-0 h-dvh w-1/2 overflow-hidden bg-black transition-transform ease-[cubic-bezier(0.83,0,0.17,1)] ${
+        className={`absolute inset-y-0 left-0 h-screen w-1/2 overflow-hidden bg-black transition-transform ease-[cubic-bezier(0.83,0,0.17,1)] ${
           opening ? "-translate-x-full" : "translate-x-0"
         }`}
         style={{ willChange: "transform", transitionDuration: `${DOOR_DURATION_MS}ms` }}
@@ -59,7 +59,7 @@ export function EntryGate({ heroTitle, heroAccent, heroDescription }: EntryGateP
         <HalfPhoto side="left" />
       </div>
       <div
-        className={`absolute inset-y-0 right-0 h-dvh w-1/2 overflow-hidden bg-black transition-transform ease-[cubic-bezier(0.83,0,0.17,1)] ${
+        className={`absolute inset-y-0 right-0 h-screen w-1/2 overflow-hidden bg-black transition-transform ease-[cubic-bezier(0.83,0,0.17,1)] ${
           opening ? "translate-x-full" : "translate-x-0"
         }`}
         style={{ willChange: "transform", transitionDuration: `${DOOR_DURATION_MS}ms` }}
