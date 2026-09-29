@@ -31,7 +31,7 @@ export function EntryGate({ heroTitle, heroAccent, heroDescription }: EntryGateP
   const opening = phase === "opening";
 
   return (
-    <div id="entry-gate" className="fixed inset-0 z-[100] h-dvh">
+    <div id="entry-gate" data-phase={phase} className="fixed inset-0 z-[100] h-dvh">
       {/* Each half-width panel shows one side of the same photo via background-position,
           avoiding a `fixed` element nested in a `transform`ed ancestor (that combo introduced
           a real compositing race where the header could paint a frame before this layer). */}

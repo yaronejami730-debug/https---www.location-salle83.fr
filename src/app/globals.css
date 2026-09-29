@@ -29,7 +29,7 @@ body {
 /* Guaranteed by the browser's style engine, not by paint/compositing timing:
    the header simply never renders while the entry gate exists in the DOM,
    so there is no race it could lose. Reverts the instant the gate unmounts. */
-body:has(#entry-gate) header {
+body:has(#entry-gate[data-phase="closed"]) header {
   visibility: hidden;
 }
 
