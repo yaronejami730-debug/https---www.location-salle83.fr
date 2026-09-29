@@ -3,8 +3,8 @@ import { siteConfig } from "@/lib/site";
 
 const CONTACT_NAME = "Gonzague Tassou";
 const CONTACT_PHONE_HREF = `tel:${siteConfig.phone.replace(/\s/g, "")}`;
-const LOGO_URL = "https://https-www-location-salle83-fr.vercel.app/images/logo.png";
-const SITE_URL = "https://https-www-location-salle83-fr.vercel.app";
+const LOGO_URL = `${siteConfig.domain}/images/logo.png`;
+const SITE_URL = siteConfig.domain;
 
 /**
  * Shell email — fond blanc, logo centré, titre centré, CTA bouton pill, footer minimaliste.
