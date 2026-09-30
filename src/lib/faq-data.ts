@@ -462,8 +462,8 @@ export const chatbotFaq: FaqEntry[] = [
     id: "climatisation",
     category: "equipements",
     keywords: ["climatise", "climatisation", "clim"],
-    question: "Les gîtes sont-ils climatisés ?",
-    answer: "Oui. La salle peut également l'être, à condition que les portes et fenêtres restent bien fermées.",
+    question: "La salle et les gîtes sont-ils climatisés ?",
+    answer: "Oui, les deux. Pour la salle, à condition que les portes et fenêtres restent bien fermées.",
     variants: [
       "les gites ont-ils la climatisation",
       "les mazets sont-ils climatisés",
