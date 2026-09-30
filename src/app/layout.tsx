@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Cormorant_Garamond, Inter, Playfair_Display, Beau_Rivage } from "next/font/google";
 import { siteConfig } from "@/lib/site";
+import { getThemeColors } from "@/lib/content";
 import "./globals.css";
 
 const cormorant = Cormorant_Garamond({
@@ -52,9 +53,22 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({ children }: LayoutProps<"/">) {
+export default async function RootLayout({ children }: LayoutProps<"/">) {
+  const theme = await getThemeColors();
+  const themeVars = {
+    "--background": theme.background,
+    "--background-muted": theme.backgroundMuted,
+    "--foreground": theme.foreground,
+    "--accent": theme.accent,
+    "--accent-warm": theme.accentWarm,
+  } as React.CSSProperties;
+
   return (
-    <html lang="fr" className={`${cormorant.variable} ${playfair.variable} ${inter.variable} ${beauRivage.variable} h-full antialiased`}>
+    <html
+      lang="fr"
+      style={themeVars}
+      className={`${cormorant.variable} ${playfair.variable} ${inter.variable} ${beauRivage.variable} h-full antialiased`}
+    >
       <body className="min-h-full flex flex-col">{children}</body>
     </html>
   );

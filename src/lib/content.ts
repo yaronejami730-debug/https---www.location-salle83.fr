@@ -47,6 +47,27 @@ export async function getSiteSettings() {
   };
 }
 
+export const THEME_DEFAULTS = {
+  background: "#fefdfb",
+  backgroundMuted: "#eef0e5",
+  foreground: "#2b2a26",
+  accent: "#6b7d5f",
+  accentWarm: "#b17a4a",
+};
+
+export async function getThemeColors() {
+  const supabase = supabasePublic();
+  const { data } = await supabase.from("pages").select("content").eq("slug", "theme").maybeSingle();
+  const content = (data?.content as Record<string, string>) ?? {};
+  return {
+    background: content.background || THEME_DEFAULTS.background,
+    backgroundMuted: content.backgroundMuted || THEME_DEFAULTS.backgroundMuted,
+    foreground: content.foreground || THEME_DEFAULTS.foreground,
+    accent: content.accent || THEME_DEFAULTS.accent,
+    accentWarm: content.accentWarm || THEME_DEFAULTS.accentWarm,
+  };
+}
+
 export async function getMedia(page: string) {
   const supabase = supabasePublic();
   const { data } = await supabase
