@@ -5,9 +5,11 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
 import { Container } from "./container";
+import { RichText } from "./rich-text";
 import { navItems, siteConfig } from "@/lib/site";
+import { CTA_DEFAULTS } from "@/lib/content";
 
-export function Header() {
+export function Header({ ctaButton = CTA_DEFAULTS.ctaButton }: { ctaButton?: string }) {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
 
@@ -38,7 +40,7 @@ export function Header() {
           href="/contact"
           className="ml-10 hidden lg:inline-flex items-center whitespace-nowrap rounded-full bg-[var(--accent)] px-6 py-2.5 font-script text-2xl text-white transition-opacity hover:opacity-90"
         >
-          Parlons de votre projet
+          <RichText value={ctaButton} />
         </Link>
 
         <button

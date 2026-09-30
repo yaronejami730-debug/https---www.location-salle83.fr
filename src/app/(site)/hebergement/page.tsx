@@ -8,7 +8,7 @@ import { mediaUrl } from "@/lib/supabase-public";
 import { staticHebergementPhotos } from "@/lib/static-gallery";
 import { getSchema, fieldValue } from "@/lib/page-schemas";
 import { RichText } from "@/components/rich-text";
-import { sanitizeRichText, parseAligned } from "@/lib/sanitize-html";
+import { sanitizeInlineHtml, parseAligned } from "@/lib/sanitize-html";
 
 const schema = getSchema("hebergement")!;
 const amenityIcons = ["wifi", "parking", "kitchen", "pool"] as const;
@@ -74,7 +74,7 @@ export default async function HebergementPage() {
           >
             <span
               style={parseAligned(f("booking_cta")).align !== "left" ? { textAlign: parseAligned(f("booking_cta")).align } : undefined}
-              dangerouslySetInnerHTML={{ __html: sanitizeRichText(parseAligned(f("booking_cta")).html) }}
+              dangerouslySetInnerHTML={{ __html: sanitizeInlineHtml(parseAligned(f("booking_cta")).html) }}
             />
           </a>
         </Container>

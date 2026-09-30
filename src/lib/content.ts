@@ -36,6 +36,12 @@ export async function getReviews() {
   return data ?? [];
 }
 
+export const CTA_DEFAULTS = {
+  ctaTitle: "Parlons de votre projet",
+  ctaText: "Recevez une proposition personnalisée sous 48h.",
+  ctaButton: "Parlons de votre projet",
+};
+
 export async function getSiteSettings() {
   const supabase = supabasePublic();
   const { data } = await supabase.from("pages").select("content").eq("slug", "global").maybeSingle();
@@ -44,6 +50,9 @@ export async function getSiteSettings() {
     tagline: content.tagline || siteConfig.tagline,
     phone: content.phone || siteConfig.phone,
     email: content.email || siteConfig.email,
+    ctaTitle: content.cta_title || CTA_DEFAULTS.ctaTitle,
+    ctaText: content.cta_text || CTA_DEFAULTS.ctaText,
+    ctaButton: content.cta_button || CTA_DEFAULTS.ctaButton,
   };
 }
 

@@ -9,6 +9,9 @@ export async function saveSettings(formData: FormData) {
     tagline: String(formData.get("tagline") ?? "").trim(),
     phone: String(formData.get("phone") ?? "").trim(),
     email: String(formData.get("email") ?? "").trim(),
+    cta_title: String(formData.get("cta_title") ?? "").trim(),
+    cta_text: String(formData.get("cta_text") ?? "").trim(),
+    cta_button: String(formData.get("cta_button") ?? "").trim(),
   };
 
   await supabase.from("pages").upsert({

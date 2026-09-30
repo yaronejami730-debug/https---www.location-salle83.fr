@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Image from "next/image";
-import { sanitizeRichText, parseAligned } from "@/lib/sanitize-html";
+import { sanitizeInlineHtml, parseAligned } from "@/lib/sanitize-html";
 
 type EntryGateProps = {
   heroTitle: string;
@@ -99,17 +99,17 @@ export function EntryGate({ heroTitle, heroAccent, heroDescription }: EntryGateP
         <h1
           className="animate-write-in max-w-4xl font-script text-5xl leading-[1.3] sm:text-7xl"
           style={{ animationDelay: "300ms", textAlign: title.align !== "left" ? title.align : undefined }}
-          dangerouslySetInnerHTML={{ __html: sanitizeRichText(title.html) }}
+          dangerouslySetInnerHTML={{ __html: sanitizeInlineHtml(title.html) }}
         />
         <p
           className="animate-write-in mt-2 font-script text-5xl leading-[1.3] sm:text-7xl"
           style={{ animationDelay: "2200ms", textAlign: accent.align !== "left" ? accent.align : undefined }}
-          dangerouslySetInnerHTML={{ __html: sanitizeRichText(accent.html) }}
+          dangerouslySetInnerHTML={{ __html: sanitizeInlineHtml(accent.html) }}
         />
         <p
           className="animate-fade-in-up mt-8 max-w-xl font-script text-2xl text-white/85 sm:text-3xl"
           style={{ animationDelay: "4500ms", textAlign: description.align !== "left" ? description.align : undefined }}
-          dangerouslySetInnerHTML={{ __html: sanitizeRichText(description.html) }}
+          dangerouslySetInnerHTML={{ __html: sanitizeInlineHtml(description.html) }}
         />
 
         <button

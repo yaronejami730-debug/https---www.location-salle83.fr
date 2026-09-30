@@ -4,7 +4,7 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { Reveal } from "./reveal";
-import { sanitizeRichText, stripHtml, parseAligned } from "@/lib/sanitize-html";
+import { sanitizeInlineHtml, stripHtml, parseAligned } from "@/lib/sanitize-html";
 
 type Choice = { href: string; label: string; photo: string };
 
@@ -90,7 +90,7 @@ export function ChoiceCards({ choices }: { choices: Choice[] }) {
                 <span className="relative z-10 mb-12 inline-flex items-center gap-2 rounded-full border border-white/60 px-6 py-3 text-sm tracking-wide text-white transition-colors group-hover:bg-white group-hover:text-[var(--foreground)]">
                   <span
                     style={label.align !== "left" ? { textAlign: label.align } : undefined}
-                    dangerouslySetInnerHTML={{ __html: sanitizeRichText(label.html) }}
+                    dangerouslySetInnerHTML={{ __html: sanitizeInlineHtml(label.html) }}
                   />
                   <span className="transition-transform duration-300 group-hover:translate-x-1">→</span>
                 </span>

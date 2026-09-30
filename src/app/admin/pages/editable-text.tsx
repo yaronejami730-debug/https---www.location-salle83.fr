@@ -36,6 +36,16 @@ export function EditableText({
     onChange(sanitizeRichText(ref.current?.innerHTML ?? ""));
   }
 
+  // Left to the browser, Enter inserts a new <div> per line, which is
+  // invalid nested inside a <p>/<h1> on the public site (this broke
+  // hydration for real — see sanitize-html.ts). Insert a plain <br> instead.
+  function onKeyDown(e: React.KeyboardEvent<HTMLElement>) {
+    if (e.key !== "Enter") return;
+    e.preventDefault();
+    document.execCommand("insertHTML", false, "<br>");
+    onChange(sanitizeRichText(ref.current?.innerHTML ?? ""));
+  }
+
   function applyAlign(target: Align) {
     const el = ref.current;
     if (!el) return;
@@ -87,6 +97,7 @@ export function EditableText({
         suppressContentEditableWarning
         onFocus={() => setFocused(true)}
         onBlur={() => setFocused(false)}
+        onKeyDown={onKeyDown}
         onInput={(e: React.FormEvent<HTMLElement>) => onChange(sanitizeRichText(e.currentTarget.innerHTML))}
         data-placeholder={placeholder}
         className={`editable-field rounded outline-none ${className}`}

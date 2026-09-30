@@ -1,4 +1,4 @@
-import { sanitizeRichText, parseAligned } from "@/lib/sanitize-html";
+import { sanitizeInlineHtml, parseAligned } from "@/lib/sanitize-html";
 
 /**
  * Public-site renderer for text authored with the admin rich-text editor
@@ -21,7 +21,7 @@ export function RichText({
     <Tag
       className={className}
       style={align !== "left" ? { textAlign: align } : undefined}
-      dangerouslySetInnerHTML={{ __html: sanitizeRichText(html) }}
+      dangerouslySetInnerHTML={{ __html: sanitizeInlineHtml(html) }}
     />
   );
 }

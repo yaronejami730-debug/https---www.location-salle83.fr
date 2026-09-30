@@ -7,6 +7,11 @@ const ALLOWED_BLOCK_TAGS = new Set(["div", "span"]);
  * text-align style). Everything else — scripts, links, event handlers,
  * arbitrary attributes — is stripped. Pure string function, safe to run on
  * both the client (live preview) and the server (before persisting).
+ *
+ * Used for the SAVE/EDIT path only (EditableText, savePageContent), where a
+ * div/span wrapper may legitimately be the value's outer alignment marker.
+ * Render paths must use `sanitizeInlineHtml` on the content returned by
+ * `parseAligned` instead — see its doc comment for why.
  */
 export function sanitizeRichText(html: string): string {
   if (!html) return "";
@@ -20,6 +25,32 @@ export function sanitizeRichText(html: string): string {
       const alignMatch = styleMatch ? /text-align\s*:\s*(left|center|right|justify)/i.exec(styleMatch[1]) : null;
       return alignMatch ? `<${tag} style="text-align:${alignMatch[1]}">` : `<${tag}>`;
     }
+    return "";
+  });
+  return out;
+}
+
+/**
+ * Stricter sanitizer for rendering: only the inline formatting tags survive,
+ * never div/span. Use this on the `html` returned by `parseAligned`, never
+ * raw stored values — a bare block tag anywhere inside a <p>/<h1>-<h6> is
+ * invalid HTML that browsers silently restructure, which previously caused
+ * a real React hydration mismatch (both from the admin's own alignment
+ * wrapper, and separately from unrelated legacy content that happened to
+ * contain a literal "<div>"). Block tags have no legitimate reason to
+ * appear here once the outer alignment wrapper has already been unwrapped.
+ */
+export function sanitizeInlineHtml(html: string): string {
+  if (!html) return "";
+  let out = html.replace(/<(script|style)[^>]*>[\s\S]*?<\/\1>/gi, "");
+  out = out.replace(/<(\/?)([a-zA-Z0-9]+)[^>]*>/g, (match, closing: string, tagRaw: string) => {
+    const tag = tagRaw.toLowerCase();
+    if (ALLOWED_INLINE_TAGS.has(tag)) return closing ? `</${tag}>` : `<${tag}>`;
+    // A bare block tag (div/span with no valid align style — e.g. legacy
+    // content, or a browser inserting a <div> per line on Enter) has no
+    // business surviving here, but dropping it silently would run two
+    // paragraphs together. Degrade it to a line break instead.
+    if (ALLOWED_BLOCK_TAGS.has(tag)) return closing ? "" : "<br>";
     return "";
   });
   return out;

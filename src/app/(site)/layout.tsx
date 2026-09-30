@@ -34,7 +34,7 @@ export default async function SiteLayout({ children }: { children: React.ReactNo
   return (
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
-      <Header />
+      <Header ctaButton={settings.ctaButton} />
       <main className="flex-1">
         <PageTransition>{children}</PageTransition>
       </main>
