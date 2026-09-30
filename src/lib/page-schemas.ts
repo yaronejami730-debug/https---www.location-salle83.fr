@@ -1,8 +1,30 @@
-export type FieldType = "text" | "textarea";
+export type FieldType = "text" | "textarea" | "list";
 
-export type PageField = { key: string; label: string; type: FieldType; default: string };
+export type ListItemField = { key: string; label: string; type: "text" | "textarea" };
+
+export type PageField = {
+  key: string;
+  label: string;
+  type: FieldType;
+  default: string;
+  /** "list" fields only: shape of each card, and the JSON-stringified default array. */
+  itemFields?: ListItemField[];
+};
 
 export type PageSchema = { slug: string; label: string; fields: PageField[] };
+
+/** A "list" field's value is a JSON array of objects keyed by itemFields[].key. */
+export type ListItem = Record<string, string>;
+
+export function parseListField(value: string): ListItem[] {
+  if (!value) return [];
+  try {
+    const parsed = JSON.parse(value);
+    return Array.isArray(parsed) ? parsed : [];
+  } catch {
+    return [];
+  }
+}
 
 export const pageSchemas: PageSchema[] = [
   {
@@ -97,12 +119,20 @@ export const pageSchemas: PageSchema[] = [
     fields: [
       { key: "hero_title", label: "Hero — titre", type: "text", default: "3 hectares de nature préservée en plein cœur du Var" },
       { key: "hero_description", label: "Hero — sous-titre", type: "textarea", default: "Bâtisses en pierre, jardins méditerranéens et lumière de Provence : un lieu pensé pour accueillir vos plus beaux moments." },
-      { key: "feature1_title", label: "Atout 1 — titre", type: "text", default: "Piscine & espaces extérieurs" },
-      { key: "feature1_text", label: "Atout 1 — texte", type: "textarea", default: "Piscine, boulodrome, terrain de volley et espace enfants pour profiter du domaine entre deux réceptions." },
-      { key: "feature2_title", label: "Atout 2 — titre", type: "text", default: "Cuisine professionnelle" },
-      { key: "feature2_text", label: "Atout 2 — texte", type: "textarea", default: "Cuisine équipée aux normes, ouverte aux traiteurs, avec chambres froides et matériel professionnel." },
-      { key: "feature3_title", label: "Atout 3 — titre", type: "text", default: "Étang & nature" },
-      { key: "feature3_text", label: "Atout 3 — texte", type: "textarea", default: "Un étang et des jardins méditerranéens offrant un cadre naturel pour vos photos et vidéos." },
+      {
+        key: "features",
+        label: "Atouts (cartes)",
+        type: "list",
+        itemFields: [
+          { key: "title", label: "Titre", type: "text" },
+          { key: "text", label: "Texte", type: "textarea" },
+        ],
+        default: JSON.stringify([
+          { title: "Piscine & espaces extérieurs", text: "Piscine, boulodrome, terrain de volley et espace enfants pour profiter du domaine entre deux réceptions." },
+          { title: "Cuisine professionnelle", text: "Cuisine équipée aux normes, ouverte aux traiteurs, avec chambres froides et matériel professionnel." },
+          { title: "Étang & nature", text: "Un étang et des jardins méditerranéens offrant un cadre naturel pour vos photos et vidéos." },
+        ]),
+      },
       { key: "amenities_title", label: "Équipements — titre", type: "text", default: "Équipements" },
       { key: "amenity1", label: "Équipement 1", type: "text", default: "Wifi inclus" },
       { key: "amenity2", label: "Équipement 2", type: "text", default: "Parking inclus" },

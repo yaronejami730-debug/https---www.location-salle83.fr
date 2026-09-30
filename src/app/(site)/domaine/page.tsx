@@ -5,7 +5,7 @@ import { CtaSection } from "@/components/cta-section";
 import { Container } from "@/components/container";
 import { getPageContent, getMedia } from "@/lib/content";
 import { mediaUrl } from "@/lib/supabase-public";
-import { getSchema, fieldValue } from "@/lib/page-schemas";
+import { getSchema, fieldValue, parseListField } from "@/lib/page-schemas";
 import { RichText } from "@/components/rich-text";
 import { AmenityIcon } from "@/components/amenity-icon";
 import { LocationMap } from "@/components/location-map";
@@ -51,10 +51,10 @@ export default async function DomainePage() {
 
       <section className="py-20">
         <Container className="grid gap-8 sm:grid-cols-3">
-          {[1, 2, 3].map((n) => (
-            <div key={n} className="rounded-2xl bg-[var(--background-muted)] p-8">
-              <RichText as="h3" value={f(`feature${n}_title`)} className="font-serif text-xl text-[var(--foreground)]" />
-              <RichText as="p" value={f(`feature${n}_text`)} className="mt-3 text-sm text-[var(--foreground)]/70" />
+          {parseListField(f("features")).map((feature, i) => (
+            <div key={i} className="rounded-2xl bg-[var(--background-muted)] p-8">
+              <RichText as="h3" value={feature.title} className="font-serif text-xl text-[var(--foreground)]" />
+              <RichText as="p" value={feature.text} className="mt-3 text-sm text-[var(--foreground)]/70" />
             </div>
           ))}
         </Container>
