@@ -3,6 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { supabaseAdmin } from "@/lib/supabase-admin";
 import { getSchema } from "@/lib/page-schemas";
+import { sanitizeRichText } from "@/lib/sanitize-html";
 
 export async function savePageContent(
   slug: string,
@@ -14,7 +15,7 @@ export async function savePageContent(
 
   const cleaned: Record<string, string> = {};
   for (const field of schema.fields) {
-    const value = (content[field.key] ?? "").trim();
+    const value = sanitizeRichText((content[field.key] ?? "").trim());
     if (value) cleaned[field.key] = value;
   }
 

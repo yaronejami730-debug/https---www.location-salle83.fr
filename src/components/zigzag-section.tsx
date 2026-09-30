@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { Container } from "./container";
 import { FadeCarousel } from "./fade-carousel";
+import { RichText } from "./rich-text";
 
 export function ZigzagSection({
   title,
@@ -26,8 +27,8 @@ export function ZigzagSection({
           <FadeCarousel photos={images} intervalMs={intervalMs} startDelayMs={startDelayMs} />
         </div>
         <div>
-          <h2 className="font-serif text-3xl text-[var(--accent)]">{title}</h2>
-          <p className="mt-4 whitespace-pre-line text-[var(--foreground)]/70">{text}</p>
+          <RichText as="h2" value={title} className="font-serif text-3xl text-[var(--accent)]" />
+          <RichText as="p" value={text} className="mt-4 whitespace-pre-line text-[var(--foreground)]/70" />
           {cta && (
             <Link
               href={cta.href}

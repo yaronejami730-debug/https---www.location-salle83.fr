@@ -1,6 +1,7 @@
 import Image from "next/image";
 import { Container } from "./container";
 import { HeroFadeImage } from "./hero-fade-image";
+import { RichText } from "./rich-text";
 
 export function PageHero({
   eyebrow,
@@ -33,8 +34,8 @@ export function PageHero({
         <div className="absolute inset-0 bg-black/55" />
         <Container className="relative z-10 max-w-2xl">
           <p className={`text-white/90 ${eyebrowFont}`}>{eyebrow}</p>
-          <h1 className={`mt-4 text-white ${titleFont}`}>{title}</h1>
-          {description && <p className="mt-5 text-white/85">{description}</p>}
+          <RichText as="h1" value={title} className={`mt-4 text-white ${titleFont}`} />
+          {description && <RichText as="p" value={description} className="mt-5 text-white/85" />}
         </Container>
       </section>
     );
@@ -44,8 +45,8 @@ export function PageHero({
     <section className="bg-[var(--background)] py-20 text-center">
       <Container className="max-w-2xl">
         <p className={`text-[var(--accent)] ${eyebrowFont}`}>{eyebrow}</p>
-        <h1 className={`mt-4 text-[var(--foreground)] ${titleFont}`}>{title}</h1>
-        {description && <p className="mt-5 text-[var(--foreground)]/70">{description}</p>}
+        <RichText as="h1" value={title} className={`mt-4 text-[var(--foreground)] ${titleFont}`} />
+        {description && <RichText as="p" value={description} className="mt-5 text-[var(--foreground)]/70" />}
       </Container>
     </section>
   );
