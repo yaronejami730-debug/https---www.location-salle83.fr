@@ -24,7 +24,7 @@ export async function GET(request: Request) {
 
   let sent = 0;
   for (const lead of leads ?? []) {
-    const { subject, html } = wasteSortingEmail({ fullName: lead.full_name });
+    const { subject, html } = await wasteSortingEmail({ fullName: lead.full_name });
     await sendEmail(lead.email, subject, html, lead.full_name);
     await supabase.from("leads").update({ departure_email_sent_at: new Date().toISOString() }).eq("id", lead.id);
     sent++;

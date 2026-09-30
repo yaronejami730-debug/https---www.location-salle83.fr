@@ -66,7 +66,7 @@ export const pageSchemas: PageSchema[] = [
   },
   {
     slug: "seminaire",
-    label: "Séminaire",
+    label: "Séminaire & Événements",
     fields: [
       { key: "hero_title", label: "Hero — titre", type: "text", default: "Travail, détente et cohésion dans un cadre privilégié" },
       { key: "hero_description", label: "Hero — sous-titre", type: "textarea", default: "Séminaires, formations, événements d'entreprise, incentive : à 30 minutes de Grasse, Antibes, Cannes, Fréjus-Saint-Raphaël ou Draguignan." },
@@ -81,16 +81,8 @@ export const pageSchemas: PageSchema[] = [
       { key: "feature1_interval", label: "Atout 1 — vitesse fondu (s)", type: "text", default: "6" },
       { key: "feature2_interval", label: "Atout 2 — vitesse fondu (s)", type: "text", default: "6" },
       { key: "feature3_interval", label: "Atout 3 — vitesse fondu (s)", type: "text", default: "6" },
-    ],
-  },
-  {
-    slug: "evenements",
-    label: "Événements & réceptions",
-    fields: [
-      { key: "hero_title", label: "Hero — titre", type: "text", default: "Un cadre unique pour tous vos événements privés" },
-      { key: "hero_description", label: "Hero — sous-titre", type: "textarea", default: "Entre Cannes et Draguignan, un lieu privatif pour vos soirées et réceptions : nous vous mettons en relation avec traiteurs, DJ et photographes selon vos besoins." },
-      { key: "intro_title", label: "Introduction — titre", type: "text", default: "Une soirée sur mesure" },
-      { key: "intro_text", label: "Introduction — texte", type: "textarea", default: "Vous souhaitez organiser une soirée originale avec ou sans animation, dans un lieu privatif pour vous et vos amis ? Pour vos soirées, réceptions, banquets, soirées à thème, soirées dansantes, soirées de gala, soirées jeu ou quiz, dans un lieu calme et agréable avec possibilité de restauration et d'hébergement, nous vous mettons en relation directe avec des traiteurs, cuisiniers, animateurs, artistes, décorateurs, DJ, photographes et prestataires de spectacles." },
+      { key: "events_title", label: "Types d'événements — titre", type: "text", default: "Un cadre unique pour tous vos événements privés" },
+      { key: "events_text", label: "Types d'événements — texte", type: "textarea", default: "Vous souhaitez organiser une soirée originale avec ou sans animation, dans un lieu privatif pour vous et vos amis ? Pour vos soirées, réceptions, banquets, soirées à thème, soirées dansantes, soirées de gala, soirées jeu ou quiz, dans un lieu calme et agréable avec possibilité de restauration et d'hébergement, nous vous mettons en relation directe avec des traiteurs, cuisiniers, animateurs, artistes, décorateurs, DJ, photographes et prestataires de spectacles." },
       { key: "event1", label: "Type d'événement 1", type: "text", default: "Anniversaires, communions & baptêmes" },
       { key: "event2", label: "Type d'événement 2", type: "text", default: "Soirées à thème & réveillon" },
       { key: "event3", label: "Type d'événement 3", type: "text", default: "Tournages & shootings" },

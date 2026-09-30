@@ -502,39 +502,27 @@ export function PageEditor({
               </section>
             );
           })}
-        </>
-      )}
-
-      {schema.slug === "evenements" && (
-        <>
-          <section className="bg-[var(--background-muted)] py-16 text-center">
-            <Container className="max-w-2xl">
-              <EditableText as="h1" value={val("hero_title")} onChange={set("hero_title")} className="font-serif text-4xl text-[var(--foreground)]" />
-              <EditableText value={val("hero_description")} onChange={set("hero_description")} className="mt-4 text-[var(--foreground)]/70" />
-            </Container>
-          </section>
-
-          <section className="py-16">
-            <Container className="max-w-2xl">
-              <EditableText value={val("intro_text")} onChange={set("intro_text")} className="whitespace-pre-line text-[var(--foreground)]/70" />
-            </Container>
-          </section>
-
-          <section className="py-16">
-            <Container className="grid grid-cols-2 gap-4 sm:grid-cols-4">
-              {[1, 2, 3, 4].map((n) => (
-                <div key={n} className="rounded-xl bg-[var(--background-muted)] px-4 py-6 text-center">
-                  <EditableText value={val(`event${n}`)} onChange={set(`event${n}`)} className="text-sm text-[var(--foreground)]" />
-                </div>
-              ))}
-            </Container>
-          </section>
 
           <section className="py-16 bg-[var(--background-muted)]">
             <Container>
+              <EditableText as="h2" value={val("events_title")} onChange={set("events_title")} className="text-center font-serif text-3xl text-[var(--foreground)]" />
+              <EditableText value={val("events_text")} onChange={set("events_text")} className="mx-auto mt-4 max-w-xl text-center text-sm text-[var(--foreground)]/70" />
+
+              <div className="mt-10 grid grid-cols-2 gap-4 sm:grid-cols-4">
+                {[1, 2, 3, 4].map((n) => (
+                  <div key={n} className="rounded-xl bg-[var(--background)] px-4 py-6 text-center">
+                    <EditableText value={val(`event${n}`)} onChange={set(`event${n}`)} className="text-sm text-[var(--foreground)]" />
+                  </div>
+                ))}
+              </div>
+            </Container>
+          </section>
+
+          <section className="py-16">
+            <Container>
               <EditableText as="h2" value={val("pricing_title")} onChange={set("pricing_title")} className="text-center font-serif text-3xl text-[var(--foreground)]" />
               <EditableText value={val("pricing_note")} onChange={set("pricing_note")} className="mx-auto mt-4 max-w-xl text-center text-sm text-[var(--foreground)]/70" />
-              <div className="mt-8 overflow-x-auto rounded-2xl border border-black/5 bg-[var(--background)]">
+              <div className="mt-8 overflow-x-auto rounded-2xl border border-black/5 bg-[var(--background-muted)]">
                 <table className="w-full min-w-[560px] text-sm">
                   <thead>
                     <tr className="border-b border-black/5 text-left text-[var(--foreground)]/60">

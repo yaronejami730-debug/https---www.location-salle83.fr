@@ -1,5 +1,6 @@
 import "server-only";
 import { siteConfig } from "@/lib/site";
+import { getThemeColors } from "@/lib/content";
 
 const CONTACT_NAME = "Gonzague Tassou";
 const CONTACT_PHONE_HREF = `tel:${siteConfig.phone.replace(/\s/g, "")}`;
@@ -17,6 +18,7 @@ function baseEmail({
   ctaLabel,
   ctaUrl,
   postCta,
+  theme,
 }: {
   title: string;
   heading: string;
@@ -24,6 +26,7 @@ function baseEmail({
   ctaLabel?: string;
   ctaUrl?: string;
   postCta?: string;
+  theme: { foreground: string; accent: string };
 }): string {
   return `<!DOCTYPE html>
 <html lang="fr">
@@ -54,7 +57,7 @@ function baseEmail({
 
   <tr><td align="center" style="padding-bottom:24px;">
     <h1 class="h1" style="font-family:Georgia,'Times New Roman',serif;font-size:30px;font-weight:normal;
-      color:#2b2a26;letter-spacing:0;margin:0;line-height:1.25;text-align:center;">
+      color:${theme.foreground};letter-spacing:0;margin:0;line-height:1.25;text-align:center;">
       ${heading}
     </h1>
   </td></tr>
@@ -70,7 +73,7 @@ function baseEmail({
       ? `
   <tr><td align="center" style="padding-bottom:${postCta ? "16px" : "48px"};">
     <a href="${ctaUrl}"
-      style="display:inline-block;background:#5c6b4a;color:#ffffff;font-size:15px;
+      style="display:inline-block;background:${theme.accent};color:#ffffff;font-size:15px;
       font-weight:bold;text-decoration:none;padding:16px 40px;border-radius:9999px;
       letter-spacing:0.01em;">
       ${ctaLabel}
@@ -115,19 +118,20 @@ const bins = [
   { name: "Poubelle carton", color: "#a68a5c", description: "Carton à plat" },
 ];
 
-export function welcomeEmail(params: {
+export async function welcomeEmail(params: {
   civility?: string;
   lastName?: string;
   fullName: string;
   quote?: { total: number; arrhes: number } | null;
-}): { subject: string; html: string } {
+}): Promise<{ subject: string; html: string }> {
   const { civility, lastName, fullName, quote } = params;
+  const theme = await getThemeColors();
   const greetingName = civility && lastName ? `${civility} ${lastName}` : fullName;
 
   const quoteBlock = quote
     ? `
       <p style="margin:28px 0 4px;font-size:13px;color:#8a887f;text-transform:uppercase;letter-spacing:0.1em;">Votre estimation</p>
-      <p style="margin:0;font-family:Georgia,'Times New Roman',serif;font-size:32px;color:#5c6b4a;">${quote.total} €</p>
+      <p style="margin:0;font-family:Georgia,'Times New Roman',serif;font-size:32px;color:${theme.accent};">${quote.total} €</p>
       <p style="margin:6px 0 0;font-size:13px;color:#8a887f;">
         Arrhes à la réservation (50 %) : ${quote.arrhes} € · Caution à l'arrivée : 1 000 €
       </p>`
@@ -152,18 +156,20 @@ export function welcomeEmail(params: {
       body,
       ctaLabel: `Contacter Monsieur ${CONTACT_NAME}`,
       ctaUrl: CONTACT_PHONE_HREF,
+      theme,
     }),
   };
 }
 
-export function wasteSortingEmail(params: { fullName: string }): { subject: string; html: string } {
+export async function wasteSortingEmail(params: { fullName: string }): Promise<{ subject: string; html: string }> {
+  const theme = await getThemeColors();
   const binsHtml = bins
     .map(
       (b) => `
       <tr>
         <td style="padding:10px 0;border-bottom:1px solid #eceef0;text-align:left;">
           <span style="display:inline-block;width:11px;height:11px;border-radius:50%;background:${b.color};margin-right:10px;vertical-align:middle;"></span>
-          <strong style="color:#2b2a26;">${b.name}</strong>
+          <strong style="color:${theme.foreground};">${b.name}</strong>
           <span style="color:#8a887f;"> — ${b.description}</span>
         </td>
       </tr>`,
@@ -190,11 +196,13 @@ export function wasteSortingEmail(params: { fullName: string }): { subject: stri
       title: "Avant votre départ",
       heading: "Avant votre départ",
       body,
+      theme,
     }),
   };
 }
 
-export function faqFollowUpEmail(params: { fullName: string }): { subject: string; html: string } {
+export async function faqFollowUpEmail(params: { fullName: string }): Promise<{ subject: string; html: string }> {
+  const theme = await getThemeColors();
   const body = `
     <p>Bonjour ${params.fullName},</p>
     <p>
@@ -211,6 +219,7 @@ export function faqFollowUpEmail(params: { fullName: string }): { subject: strin
       body,
       ctaLabel: "Consulter la FAQ",
       ctaUrl: `${SITE_URL}/faq`,
+      theme,
     }),
   };
 }

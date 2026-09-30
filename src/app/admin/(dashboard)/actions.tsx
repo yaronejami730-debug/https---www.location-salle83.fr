@@ -33,7 +33,7 @@ export async function sendDepartureEmailNow(id: string) {
   const { data: lead, error } = await supabase.from("leads").select("full_name, email").eq("id", id).single();
   if (error || !lead) throw new Error("lead_not_found");
 
-  const { subject, html } = wasteSortingEmail({ fullName: lead.full_name });
+  const { subject, html } = await wasteSortingEmail({ fullName: lead.full_name });
   await sendEmail(lead.email, subject, html, lead.full_name);
   await supabase.from("leads").update({ departure_email_sent_at: new Date().toISOString() }).eq("id", id);
   revalidatePath("/admin");

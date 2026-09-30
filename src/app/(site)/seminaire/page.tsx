@@ -11,7 +11,6 @@ import { getSchema, fieldValue } from "@/lib/page-schemas";
 import { pricingBrackets } from "@/lib/pricing";
 
 const seminaireSchema = getSchema("seminaire")!;
-const evenementsSchema = getSchema("evenements")!;
 
 export async function generateMetadata(): Promise<Metadata> {
   const content = await getPageContent("seminaire");
@@ -26,17 +25,14 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function SeminaireEvenementsPage() {
-  const [seminaireContent, evenementsContent, zigzag1, zigzag2, zigzag3] = await Promise.all([
+  const [seminaireContent, zigzag1, zigzag2, zigzag3] = await Promise.all([
     getPageContent("seminaire"),
-    getPageContent("evenements"),
     getMedia("seminaire-zigzag-1"),
     getMedia("seminaire-zigzag-2"),
     getMedia("seminaire-zigzag-3"),
   ]);
   const cs = seminaireContent?.content ?? {};
-  const ce = evenementsContent?.content ?? {};
   const fs = (key: string) => fieldValue(cs, seminaireSchema.fields.find((x) => x.key === key)!);
-  const fe = (key: string) => fieldValue(ce, evenementsSchema.fields.find((x) => x.key === key)!);
 
   const toImages = (rows: typeof zigzag1, fallbackIndex: number) =>
     rows.length > 0
@@ -49,7 +45,7 @@ export default async function SeminaireEvenementsPage() {
     { n: 3, title: fs("feature3_title"), text: fs("feature3_text"), images: toImages(zigzag3, 5), interval: Number(fs("feature3_interval")) * 1000, delay: 4400 },
   ];
 
-  const events = [fe("event1"), fe("event2"), fe("event3"), fe("event4")];
+  const events = [fs("event1"), fs("event2"), fs("event3"), fs("event4")];
 
   return (
     <>
@@ -69,8 +65,8 @@ export default async function SeminaireEvenementsPage() {
 
       <section className="py-20 bg-[var(--background-muted)]">
         <Container>
-          <h2 className="text-center font-serif text-3xl text-[var(--foreground)]">{fe("intro_title")}</h2>
-          <p className="mx-auto mt-4 max-w-xl text-center text-sm text-[var(--foreground)]/70">{fe("intro_text")}</p>
+          <h2 className="text-center font-serif text-3xl text-[var(--foreground)]">{fs("events_title")}</h2>
+          <p className="mx-auto mt-4 max-w-xl text-center text-sm text-[var(--foreground)]/70">{fs("events_text")}</p>
 
           <div className="mt-10 grid grid-cols-2 gap-6 sm:grid-cols-4">
             {events.map((e) => (
@@ -84,8 +80,8 @@ export default async function SeminaireEvenementsPage() {
 
       <section className="py-20">
         <Container>
-          <h2 className="text-center font-serif text-3xl text-[var(--foreground)]">{fe("pricing_title")}</h2>
-          <p className="mx-auto mt-4 max-w-xl text-center text-sm text-[var(--foreground)]/70">{fe("pricing_note")}</p>
+          <h2 className="text-center font-serif text-3xl text-[var(--foreground)]">{fs("pricing_title")}</h2>
+          <p className="mx-auto mt-4 max-w-xl text-center text-sm text-[var(--foreground)]/70">{fs("pricing_note")}</p>
 
           <div className="mt-10 overflow-x-auto rounded-2xl border border-black/5 bg-[var(--background-muted)]">
             <table className="w-full min-w-[640px] text-sm">

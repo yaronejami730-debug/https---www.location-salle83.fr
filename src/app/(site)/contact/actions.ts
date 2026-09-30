@@ -79,7 +79,7 @@ export async function submitLead(input: SubmitLeadInput) {
      <p>Voir la fiche complète dans le back-office.</p>`,
   );
 
-  const welcome = welcomeEmail({
+  const welcome = await welcomeEmail({
     civility: values.civility,
     lastName: values.lastName,
     fullName: values.fullName,
@@ -89,7 +89,7 @@ export async function submitLead(input: SubmitLeadInput) {
 
   after(async () => {
     await new Promise((resolve) => setTimeout(resolve, FAQ_FOLLOW_UP_DELAY_MS));
-    const followUp = faqFollowUpEmail({ fullName: values.fullName });
+    const followUp = await faqFollowUpEmail({ fullName: values.fullName });
     await sendEmail(values.email, followUp.subject, followUp.html, values.fullName);
   });
 
