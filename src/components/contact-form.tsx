@@ -10,6 +10,37 @@ import { AddressAutocomplete } from "./address-autocomplete";
 import { computeQuote, findBracket, pricingBrackets } from "@/lib/pricing";
 import { leadReference } from "@/lib/lead-reference";
 import { submitLead } from "@/app/(site)/contact/actions";
+import { RichText } from "@/components/rich-text";
+
+export type ContactFormLabels = {
+  eventLabel: string;
+  eventMariage: string;
+  eventSeminaire: string;
+  eventReception: string;
+  eventHebergement: string;
+  eventAutre: string;
+  hebergementTitle: string;
+  hebergementText: string;
+  hebergementCta: string;
+  dateLabel: string;
+  guestsLabel: string;
+  optionsLabel: string;
+  optionLendemain: string;
+  optionPiscine: string;
+  optionVaisselle: string;
+  optionCuisine: string;
+  chapiteauLabel: string;
+  civilityLabel: string;
+  firstNameLabel: string;
+  lastNameLabel: string;
+  addressLabel: string;
+  emailLabel: string;
+  phoneLabel: string;
+  messageLabel: string;
+  submitLabel: string;
+  successTitle: string;
+  successText: string;
+};
 
 const schema = z
   .object({
@@ -41,31 +72,31 @@ const schema = z
 
 type FormValues = z.infer<typeof schema>;
 
-const eventOptions: { value: FormValues["eventType"]; label: string }[] = [
-  { value: "mariage", label: "Mariage" },
-  { value: "seminaire", label: "Séminaire" },
-  { value: "reception", label: "Événements & réceptions" },
-  { value: "hebergement", label: "Hébergement" },
-  { value: "autre", label: "Autre" },
-];
-
 const HEBERGEMENT_BOOKING_URL = "https://www.domainedelabegude.com/fr";
 
-const optionFields: {
-  name: "lendemain" | "piscine" | "vaisselle" | "cuisine";
-  label: string;
-  priceKey: "lendemain" | "piscine" | "vaisselle" | "cuisine";
-}[] = [
-  { name: "lendemain", label: "Accès le lendemain", priceKey: "lendemain" },
-  { name: "piscine", label: "Accès piscine", priceKey: "piscine" },
-  { name: "vaisselle", label: "Vaisselle complète", priceKey: "vaisselle" },
-  { name: "cuisine", label: "Cuisine professionnelle", priceKey: "cuisine" },
-];
-
-export function ContactForm() {
+export function ContactForm({ labels }: { labels: ContactFormLabels }) {
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
   const [lastQuote, setLastQuote] = useState<ReturnType<typeof computeQuote>>(null);
   const [lastReference, setLastReference] = useState<string | null>(null);
+
+  const eventOptions: { value: FormValues["eventType"]; label: string }[] = [
+    { value: "mariage", label: labels.eventMariage },
+    { value: "seminaire", label: labels.eventSeminaire },
+    { value: "reception", label: labels.eventReception },
+    { value: "hebergement", label: labels.eventHebergement },
+    { value: "autre", label: labels.eventAutre },
+  ];
+
+  const optionFields: {
+    name: "lendemain" | "piscine" | "vaisselle" | "cuisine";
+    label: string;
+    priceKey: "lendemain" | "piscine" | "vaisselle" | "cuisine";
+  }[] = [
+    { name: "lendemain", label: labels.optionLendemain, priceKey: "lendemain" },
+    { name: "piscine", label: labels.optionPiscine, priceKey: "piscine" },
+    { name: "vaisselle", label: labels.optionVaisselle, priceKey: "vaisselle" },
+    { name: "cuisine", label: labels.optionCuisine, priceKey: "cuisine" },
+  ];
 
   const {
     register,
@@ -128,11 +159,8 @@ export function ContactForm() {
   if (status === "success") {
     return (
       <div className="rounded-2xl border border-black/5 bg-[var(--background-muted)] p-8 text-center">
-        <p className="font-serif text-xl text-[var(--foreground)]">Merci pour votre demande</p>
-        <p className="mt-2 text-sm text-[var(--foreground)]/70">
-          Vous allez recevoir d&apos;ici quelques secondes un mail récapitulatif reprenant votre numéro de demande
-          ainsi que l&apos;estimation ci-dessous.
-        </p>
+        <RichText as="p" value={labels.successTitle} className="font-serif text-xl text-[var(--foreground)]" />
+        <RichText as="p" value={labels.successText} className="mt-2 text-sm text-[var(--foreground)]/70" />
         {lastReference && (
           <p className="mt-3 text-sm text-[var(--foreground)]/70">
             Votre numéro de demande : <span className="font-medium text-[var(--foreground)]">{lastReference}</span>
@@ -171,7 +199,9 @@ export function ContactForm() {
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
       <div>
-        <span className="mb-2 block text-sm text-[var(--foreground)]/80">Votre événement</span>
+        <span className="mb-2 block text-sm text-[var(--foreground)]/80">
+          <RichText value={labels.eventLabel} />
+        </span>
         <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5">
           {eventOptions.map((opt) => (
             <label
@@ -179,7 +209,7 @@ export function ContactForm() {
               className="flex cursor-pointer items-center justify-center rounded-lg border border-black/10 px-3 py-3 text-center text-sm has-[:checked]:border-[var(--accent)] has-[:checked]:bg-[var(--accent)]/10"
             >
               <input type="radio" value={opt.value} {...register("eventType")} className="sr-only" />
-              {opt.label}
+              <RichText value={opt.label} />
             </label>
           ))}
         </div>
@@ -187,24 +217,24 @@ export function ContactForm() {
 
       {watched.eventType === "hebergement" ? (
         <div className="rounded-2xl border border-black/10 bg-[var(--background-muted)] p-8 text-center">
-          <p className="font-serif text-lg text-[var(--foreground)]">Réservation d&apos;hébergement</p>
-          <p className="mx-auto mt-2 max-w-sm text-sm text-[var(--foreground)]/70">
-            Les séjours en mazet se réservent directement sur notre site de réservation, avec les disponibilités en temps réel.
-          </p>
+          <RichText as="p" value={labels.hebergementTitle} className="font-serif text-lg text-[var(--foreground)]" />
+          <RichText as="p" value={labels.hebergementText} className="mx-auto mt-2 max-w-sm text-sm text-[var(--foreground)]/70" />
           <a
             href={HEBERGEMENT_BOOKING_URL}
             target="_blank"
             rel="noopener noreferrer"
             className="mt-5 inline-flex rounded-full bg-[var(--accent)] px-6 py-3 text-sm text-white hover:opacity-90"
           >
-            Réserver un hébergement ↗
+            <RichText value={labels.hebergementCta} />
           </a>
         </div>
       ) : (
         <>
       <div className="grid gap-6 sm:grid-cols-2">
         <div>
-          <label className="mb-2 block text-sm text-[var(--foreground)]/80">Date souhaitée</label>
+          <label className="mb-2 block text-sm text-[var(--foreground)]/80">
+            <RichText value={labels.dateLabel} />
+          </label>
           <Controller
             name="eventDate"
             control={control}
@@ -212,14 +242,18 @@ export function ContactForm() {
           />
         </div>
         <div>
-          <label className="mb-2 block text-sm text-[var(--foreground)]/80">Nombre de personnes</label>
+          <label className="mb-2 block text-sm text-[var(--foreground)]/80">
+            <RichText value={labels.guestsLabel} />
+          </label>
           <input type="number" min={1} {...register("guestCount")} className="w-full rounded-lg border border-black/10 px-4 py-3 text-sm" />
           {errors.guestCount && <p className="mt-1 text-xs text-red-600">{errors.guestCount.message}</p>}
         </div>
       </div>
 
       <div>
-        <span className="mb-2 block text-sm text-[var(--foreground)]/80">Options souhaitées</span>
+        <span className="mb-2 block text-sm text-[var(--foreground)]/80">
+          <RichText value={labels.optionsLabel} />
+        </span>
         <div className="grid gap-3 sm:grid-cols-2">
           {optionFields.map((opt) => (
             <label
@@ -230,7 +264,9 @@ export function ContactForm() {
               <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-md border border-black/20 text-[10px] text-transparent peer-checked:border-[var(--accent)] peer-checked:bg-[var(--accent)] peer-checked:text-white">
                 ✓
               </span>
-              <span className="flex-1 text-[var(--foreground)]">{opt.label}</span>
+              <span className="flex-1 text-[var(--foreground)]">
+                <RichText value={opt.label} />
+              </span>
               <span className="text-xs text-[var(--foreground)]/50">+{previewBracket[opt.priceKey]} €</span>
             </label>
           ))}
@@ -238,7 +274,7 @@ export function ContactForm() {
 
         <div className="mt-3 flex items-center justify-between rounded-xl border border-black/10 px-4 py-3.5">
           <span className="flex items-center gap-3 text-sm text-[var(--foreground)]">
-            Chapiteaux <span className="text-xs text-[var(--foreground)]/50">(200 €/pièce)</span>
+            <RichText value={labels.chapiteauLabel} /> <span className="text-xs text-[var(--foreground)]/50">(200 €/pièce)</span>
           </span>
           <Controller
             name="chapiteauCount"
@@ -295,7 +331,9 @@ export function ContactForm() {
       </div>
 
       <div>
-        <span className="mb-2 block text-sm text-[var(--foreground)]/80">Civilité (plusieurs choix possibles)</span>
+        <span className="mb-2 block text-sm text-[var(--foreground)]/80">
+          <RichText value={labels.civilityLabel} />
+        </span>
         <div className="flex gap-3">
           {(["madame", "monsieur"] as const).map((value) => (
             <label
@@ -312,19 +350,25 @@ export function ContactForm() {
 
       <div className="grid gap-6 sm:grid-cols-2">
         <div>
-          <label className="mb-2 block text-sm text-[var(--foreground)]/80">Prénom</label>
+          <label className="mb-2 block text-sm text-[var(--foreground)]/80">
+            <RichText value={labels.firstNameLabel} />
+          </label>
           <input {...register("firstName")} className="w-full rounded-lg border border-black/10 px-4 py-3 text-sm" />
           {errors.firstName && <p className="mt-1 text-xs text-red-600">{errors.firstName.message}</p>}
         </div>
         <div>
-          <label className="mb-2 block text-sm text-[var(--foreground)]/80">Nom</label>
+          <label className="mb-2 block text-sm text-[var(--foreground)]/80">
+            <RichText value={labels.lastNameLabel} />
+          </label>
           <input {...register("lastName")} className="w-full rounded-lg border border-black/10 px-4 py-3 text-sm" />
           {errors.lastName && <p className="mt-1 text-xs text-red-600">{errors.lastName.message}</p>}
         </div>
       </div>
 
       <div>
-        <label className="mb-2 block text-sm text-[var(--foreground)]/80">Adresse postale</label>
+        <label className="mb-2 block text-sm text-[var(--foreground)]/80">
+          <RichText value={labels.addressLabel} />
+        </label>
         <Controller
           name="address"
           control={control}
@@ -341,12 +385,16 @@ export function ContactForm() {
 
       <div className="grid gap-6 sm:grid-cols-2">
         <div>
-          <label className="mb-2 block text-sm text-[var(--foreground)]/80">Email</label>
+          <label className="mb-2 block text-sm text-[var(--foreground)]/80">
+            <RichText value={labels.emailLabel} />
+          </label>
           <input type="email" {...register("email")} className="w-full rounded-lg border border-black/10 px-4 py-3 text-sm" />
           {errors.email && <p className="mt-1 text-xs text-red-600">{errors.email.message}</p>}
         </div>
         <div>
-          <label className="mb-2 block text-sm text-[var(--foreground)]/80">Téléphone (facultatif)</label>
+          <label className="mb-2 block text-sm text-[var(--foreground)]/80">
+            <RichText value={labels.phoneLabel} />
+          </label>
           <input {...register("phone")} className="w-full rounded-lg border border-black/10 px-4 py-3 text-sm" />
           {errors.phone && <p className="mt-1 text-xs text-red-600">{errors.phone.message}</p>}
         </div>
@@ -354,7 +402,9 @@ export function ContactForm() {
 
       {watched.eventType === "autre" && (
         <div>
-          <label className="mb-2 block text-sm text-[var(--foreground)]/80">Précisez votre demande</label>
+          <label className="mb-2 block text-sm text-[var(--foreground)]/80">
+            <RichText value={labels.messageLabel} />
+          </label>
           <textarea {...register("message")} rows={4} className="w-full rounded-lg border border-black/10 px-4 py-3 text-sm" />
           {errors.message && <p className="mt-1 text-xs text-red-600">{errors.message.message}</p>}
         </div>
@@ -379,7 +429,7 @@ export function ContactForm() {
         disabled={status === "loading"}
         className="inline-flex w-full items-center justify-center rounded-full bg-[var(--accent)] px-6 py-3.5 text-sm text-white transition-opacity hover:opacity-90 disabled:opacity-60 sm:w-auto"
       >
-        {status === "loading" ? "Envoi en cours..." : "Recevoir ma proposition"}
+        {status === "loading" ? "Envoi en cours..." : <RichText value={labels.submitLabel} />}
       </button>
 
       {status === "error" && (

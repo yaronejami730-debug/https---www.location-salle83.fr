@@ -24,13 +24,43 @@ export default async function ContactPage() {
   const c = pageContent?.content ?? {};
   const f = (key: string) => fieldValue(c, schema.fields.find((x) => x.key === key)!);
 
+  const labels = {
+    eventLabel: f("form_event_label"),
+    eventMariage: f("form_event_mariage"),
+    eventSeminaire: f("form_event_seminaire"),
+    eventReception: f("form_event_reception"),
+    eventHebergement: f("form_event_hebergement"),
+    eventAutre: f("form_event_autre"),
+    hebergementTitle: f("form_hebergement_title"),
+    hebergementText: f("form_hebergement_text"),
+    hebergementCta: f("form_hebergement_cta"),
+    dateLabel: f("form_date_label"),
+    guestsLabel: f("form_guests_label"),
+    optionsLabel: f("form_options_label"),
+    optionLendemain: f("form_option_lendemain"),
+    optionPiscine: f("form_option_piscine"),
+    optionVaisselle: f("form_option_vaisselle"),
+    optionCuisine: f("form_option_cuisine"),
+    chapiteauLabel: f("form_chapiteau_label"),
+    civilityLabel: f("form_civility_label"),
+    firstNameLabel: f("form_firstname_label"),
+    lastNameLabel: f("form_lastname_label"),
+    addressLabel: f("form_address_label"),
+    emailLabel: f("form_email_label"),
+    phoneLabel: f("form_phone_label"),
+    messageLabel: f("form_message_label"),
+    submitLabel: f("form_submit_label"),
+    successTitle: f("form_success_title"),
+    successText: f("form_success_text"),
+  };
+
   return (
     <>
       <PageHero eyebrow="Contact" title={f("hero_title")} />
 
       <section className="py-20">
         <Container className="max-w-2xl">
-          <ContactForm />
+          <ContactForm labels={labels} />
         </Container>
       </section>
     </>

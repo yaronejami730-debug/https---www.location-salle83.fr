@@ -660,8 +660,20 @@ export function PageEditor({
 
           {schema.slug === "contact" && (
             <section className="py-16">
-              <Container className="max-w-md text-center text-sm text-[var(--foreground)]/50">
-                Le formulaire de devis (options, calcul, envoi) s&apos;affiche ici sur le site — non éditable visuellement, structure fixe.
+              <Container className="max-w-2xl">
+                <p className="mb-6 text-sm text-[var(--foreground)]/50">
+                  Le formulaire de devis (calcul, envoi) garde sa structure fixe, mais tous ses libellés sont modifiables ci-dessous.
+                </p>
+                <div className="grid gap-4 sm:grid-cols-2">
+                  {schema.fields
+                    .filter((field) => field.key.startsWith("form_"))
+                    .map((field) => (
+                      <div key={field.key} className="rounded-xl border border-black/10 bg-[var(--background)] p-3">
+                        <p className="mb-1.5 text-xs text-[var(--foreground)]/50">{field.label}</p>
+                        <EditableText value={val(field.key)} onChange={set(field.key)} className="text-sm text-[var(--foreground)]" />
+                      </div>
+                    ))}
+                </div>
               </Container>
             </section>
           )}
