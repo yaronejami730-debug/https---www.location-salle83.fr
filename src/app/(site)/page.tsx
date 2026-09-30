@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
 import Image from "next/image";
-import Link from "next/link";
+import { ChoiceCards } from "@/components/choice-cards";
 import { Container } from "@/components/container";
+import { CounterStat } from "@/components/counter-stat";
 import { EntryGate } from "@/components/entry-gate";
 import { LogoMarquee } from "@/components/logo-marquee";
 import { Reveal } from "@/components/reveal";
@@ -78,19 +79,19 @@ export default async function HomePage() {
             </div>
 
             <div className="mt-14">
-              <p className="mb-4 text-center text-sm font-bold normal-case tracking-[0.05em] text-[var(--foreground)]/70">
+              <p className="mb-4 text-center text-base font-bold normal-case tracking-[0.05em] text-[var(--foreground)]/80 sm:text-lg">
                 {f("stats_title")}
               </p>
               <div className="flex flex-col overflow-hidden rounded-2xl border border-black/10 bg-[var(--background)] shadow-xl sm:flex-row">
-                <div className="grid grid-cols-2 gap-y-6 px-6 py-8 sm:flex sm:flex-1 sm:flex-nowrap sm:items-center sm:justify-between sm:gap-4 sm:px-10 sm:py-9">
+                <div className="grid grid-cols-2 gap-y-8 px-6 py-10 sm:flex sm:flex-1 sm:flex-nowrap sm:items-center sm:justify-between sm:gap-4 sm:px-10 sm:py-12">
                   {mainStats.map((s) => (
                     <div key={s.label} className="text-center sm:shrink-0">
-                      <p className="font-serif text-3xl text-[var(--accent)] sm:text-4xl">{s.value}</p>
-                      <p className="text-[10px] uppercase tracking-[0.12em] text-[var(--foreground)]/50 sm:text-xs">{s.label}</p>
+                      <CounterStat value={s.value} className="font-serif text-3xl text-[var(--accent)] sm:text-4xl" />
+                      <p className="mt-1 text-[10px] uppercase tracking-[0.12em] text-[var(--foreground)]/50 sm:text-xs">{s.label}</p>
                     </div>
                   ))}
                 </div>
-                <div className="flex shrink-0 items-center justify-center border-t border-black/10 bg-[var(--accent)]/8 px-8 py-6 text-center sm:border-t-0 sm:border-l sm:w-72 sm:py-9">
+                <div className="flex shrink-0 items-center justify-center border-t border-black/10 bg-[var(--accent)]/8 px-8 py-8 text-center sm:border-t-0 sm:border-l sm:w-72 sm:py-12">
                   <p className="font-serif text-lg text-[var(--foreground)] sm:text-xl">{sideStat}</p>
                 </div>
               </div>
@@ -103,29 +104,7 @@ export default async function HomePage() {
         <Reveal>
           <Container>
             <h2 className="text-center font-script text-5xl text-[var(--foreground)] sm:text-6xl">{f("choices_title")}</h2>
-            <div className="mt-10 grid gap-5 sm:grid-cols-3">
-              {choices.map((choice, i) => (
-                <Reveal key={choice.href} delayMs={i * 100}>
-                  <Link
-                    href={choice.href}
-                    className="group relative flex aspect-[3/4] items-end justify-center overflow-hidden rounded-2xl text-center"
-                  >
-                    <Image
-                      src={choice.photo}
-                      alt={choice.label}
-                      fill
-                      className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"
-                      sizes="(min-width: 640px) 33vw, 100vw"
-                    />
-                    <div className="absolute inset-0 bg-black/30 transition-colors duration-500 group-hover:bg-black/50" />
-                    <span className="relative z-10 mb-12 inline-flex items-center gap-2 rounded-full border border-white/60 px-6 py-3 text-sm tracking-wide text-white transition-colors group-hover:bg-white group-hover:text-[var(--foreground)]">
-                      {choice.label}
-                      <span className="transition-transform duration-300 group-hover:translate-x-1">→</span>
-                    </span>
-                  </Link>
-                </Reveal>
-              ))}
-            </div>
+            <ChoiceCards choices={choices} />
           </Container>
         </Reveal>
       </section>

@@ -3,7 +3,7 @@ import { Container } from "./container";
 
 export function CtaSection() {
   return (
-    <section className="py-24 text-center">
+    <section className="py-16 text-center">
       <Container className="max-w-xl">
         <h2 className="font-serif text-3xl text-[var(--foreground)]">Parlons de votre projet</h2>
         <p className="mt-4 text-[var(--foreground)]/70">Recevez une proposition personnalisée sous 48h.</p>

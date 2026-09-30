@@ -85,7 +85,7 @@ export function GalleryLightbox({
   }
 
   return (
-    <div className="fixed inset-0 z-[60] flex h-screen flex-col bg-black">
+    <div className="fixed inset-0 z-[60] flex h-screen flex-col bg-[var(--foreground)]">
       <audio ref={audioRef} src="/audio/slideshow.mp3" loop />
 
       <div className="flex items-center justify-between px-4 py-3 text-white/90">

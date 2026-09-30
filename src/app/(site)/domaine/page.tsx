@@ -40,7 +40,7 @@ export default async function DomainePage() {
     <>
       <PageHero eyebrow="Le domaine" title={f("hero_title")} description={f("hero_description")} />
 
-      <section className="py-16">
+      <section className="pt-4 pb-16">
         <Container>
           <div className="relative aspect-[16/9] w-full overflow-hidden rounded-3xl">
             <Image src={poolPhoto} alt="Piscine extérieure du domaine entourée de transats et d'arbres" fill className="object-cover" sizes="1200px" />

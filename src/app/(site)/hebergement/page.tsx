@@ -37,7 +37,7 @@ export default async function HebergementPage() {
     <>
       <PageHero eyebrow="Hébergement" title={f("hero_title")} description={f("hero_description")} />
 
-      <section className="py-20">
+      <section className="pt-4 pb-20">
         <Container className="grid items-center gap-10 sm:grid-cols-2">
           <div className="relative aspect-[4/3] overflow-hidden rounded-2xl">
             <FadeCarousel photos={images} intervalMs={6000} />

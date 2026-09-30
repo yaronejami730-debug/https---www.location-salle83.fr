@@ -1,12 +1,63 @@
 @import "tailwindcss";
 
 :root {
-  --background: #faf8f4;
-  --background-muted: #f2ede4;
+  --background: #fefdfb;
+  --background-muted: #eef0e5;
   --foreground: #2b2a26;
   --accent: #6b7d5f;
   --accent-warm: #b17a4a;
 }
+
+/* Version 2 — beige & pêche */
+:root[data-theme="v2"] { --background: #fdf6f0; --background-muted: #f8e6d9; --foreground: #322822; --accent: #d98b6c; --accent-warm: #c1694a; }
+/* Version 3 — ivoire & ardoise */
+:root[data-theme="v3"] { --background: #f9f7f2; --background-muted: #eaeef0; --foreground: #262a2d; --accent: #3c5064; --accent-warm: #6d8298; }
+/* Version 4 — champagne & bordeaux */
+:root[data-theme="v4"] { --background: #faf6f1; --background-muted: #f1e3e0; --foreground: #2d2422; --accent: #7a3040; --accent-warm: #a8586a; }
+/* Version 5 — beige & terracotta */
+:root[data-theme="v5"] { --background: #fbf6f0; --background-muted: #f4e4d8; --foreground: #2f2822; --accent: #c1633f; --accent-warm: #8c4a30; }
+/* Version 6 — blanc & lavande */
+:root[data-theme="v6"] { --background: #faf8fb; --background-muted: #ede8f2; --foreground: #2a2830; --accent: #7d6b96; --accent-warm: #a794c2; }
+/* Version 7 — ivoire & moutarde */
+:root[data-theme="v7"] { --background: #faf7ee; --background-muted: #f2e6c8; --foreground: #2c2a20; --accent: #b98a2e; --accent-warm: #8a6620; }
+/* Version 8 — blanc & rose poudré */
+:root[data-theme="v8"] { --background: #fdf6f6; --background-muted: #f6e5e6; --foreground: #302626; --accent: #c98a93; --accent-warm: #a3626d; }
+/* Version 9 — blanc & vert forêt */
+:root[data-theme="v9"] { --background: #f7f8f2; --background-muted: #e6ebe1; --foreground: #22271f; --accent: #3f5d43; --accent-warm: #294630; }
+/* Version 10 — blanc & bleu canard */
+:root[data-theme="v10"] { --background: #f4f9f8; --background-muted: #dcece9; --foreground: #20302d; --accent: #2f6f6a; --accent-warm: #1f4f4b; }
+/* Version 11 — beige & caramel */
+:root[data-theme="v11"] { --background: #fbf6ef; --background-muted: #f2e1cb; --foreground: #2e2620; --accent: #a9702f; --accent-warm: #7c521f; }
+/* Version 12 — blanc & prune */
+:root[data-theme="v12"] { --background: #f9f5f7; --background-muted: #ecdfe6; --foreground: #2a232a; --accent: #5c3450; --accent-warm: #7d4a6e; }
+/* Version 13 — beige & or rosé */
+:root[data-theme="v13"] { --background: #fbf5f1; --background-muted: #f2e2d6; --foreground: #302722; --accent: #b98570; --accent-warm: #8c5c48; }
+/* Version 14 — blanc & bleu marine */
+:root[data-theme="v14"] { --background: #f5f6f8; --background-muted: #e2e6ec; --foreground: #20242e; --accent: #2c3e55; --accent-warm: #455f7c; }
+/* Version 15 — blanc & corail */
+:root[data-theme="v15"] { --background: #fdf5f3; --background-muted: #f8dfd9; --foreground: #302422; --accent: #d9645a; --accent-warm: #a8483f; }
+
+.site-logo {
+  filter: none;
+  transition: filter 0.3s ease;
+}
+
+/* Filters computed from the logo's actual base color (olive, H68 S43% L34%),
+   rotated/saturated to match each theme's accent hue. */
+:root[data-theme="v2"] .site-logo { filter: hue-rotate(-51deg) saturate(1.4) brightness(1.15); }
+:root[data-theme="v3"] .site-logo { filter: hue-rotate(142deg) saturate(0.6) brightness(0.82); }
+:root[data-theme="v4"] .site-logo { filter: hue-rotate(-81deg) saturate(1.0) brightness(0.84); }
+:root[data-theme="v5"] .site-logo { filter: hue-rotate(-51deg) saturate(1.2) brightness(1.0); }
+:root[data-theme="v6"] .site-logo { filter: hue-rotate(-163deg) saturate(0.4) brightness(1.0); }
+:root[data-theme="v7"] .site-logo { filter: hue-rotate(-28deg) saturate(1.4) brightness(0.96); }
+:root[data-theme="v8"] .site-logo { filter: hue-rotate(-77deg) saturate(0.9) brightness(1.17); }
+:root[data-theme="v9"] .site-logo { filter: hue-rotate(60deg) saturate(0.45) brightness(0.81); }
+:root[data-theme="v10"] .site-logo { filter: hue-rotate(107deg) saturate(0.95) brightness(0.82); }
+:root[data-theme="v11"] .site-logo { filter: hue-rotate(-36deg) saturate(1.35) brightness(0.93); }
+:root[data-theme="v12"] .site-logo { filter: hue-rotate(-110deg) saturate(0.65) brightness(0.79); }
+:root[data-theme="v13"] .site-logo { filter: hue-rotate(-51deg) saturate(0.8) brightness(1.09); }
+:root[data-theme="v14"] .site-logo { filter: hue-rotate(146deg) saturate(0.75) brightness(0.76); }
+:root[data-theme="v15"] .site-logo { filter: hue-rotate(-63deg) saturate(1.45) brightness(1.11); }
 
 @theme inline {
   --color-background: var(--background);

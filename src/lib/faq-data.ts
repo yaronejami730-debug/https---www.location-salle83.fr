@@ -49,10 +49,10 @@ export const chatbotFaq: FaqEntry[] = [
   {
     id: "pmr",
     category: "accessibilite",
-    keywords: ["mobilite", "reduite", "handicap", "pmr", "accessible", "fauteuil"],
+    keywords: ["mobilite", "reduite", "handicap", "pmr", "accessible", "fauteuil", "gite adapte"],
     question: "Le domaine est-il accessible aux personnes à mobilité réduite ?",
     answer:
-      "Les hébergements sont annoncés accessibles aux personnes à mobilité réduite par le domaine. Pour un besoin précis — cheminement, sanitaires, place de stationnement — appelez avant de réserver afin qu'il soit vérifié sur place.",
+      "Oui. Les espaces principaux de réception et les circulations sont accessibles aux personnes à mobilité réduite, et un gîte est adapté pour l'hébergement. N'hésitez pas à nous préciser vos besoins lors de votre demande, afin qu'ils soient vérifiés sur place.",
     variants: [
       "est-ce adapté aux personnes handicapées",
       "une personne en fauteuil peut-elle venir",
@@ -62,6 +62,9 @@ export const chatbotFaq: FaqEntry[] = [
       "l'accès est-il adapté",
       "je viens avec une personne en fauteuil",
       "est-ce adapté pour quelqu'un qui a des difficultés à marcher",
+      "les lieux sont-ils adaptés aux personnes handicapées",
+      "le domaine est-il accessible pmr",
+      "y a-t-il un gîte adapté pmr",
     ],
   },
   {
@@ -111,10 +114,10 @@ export const chatbotFaq: FaqEntry[] = [
   {
     id: "capacite",
     category: "location",
-    keywords: ["capacite", "personnes", "invites", "accueillir", "maximum"],
+    keywords: ["capacite", "personnes", "invites", "accueillir", "maximum", "minimum", "25", "150"],
     question: "Quelle est la capacité pour un événement ?",
     answer:
-      "La grille tarifaire couvre les groupes jusqu'à 110 personnes, par paliers de 40, 50, 65, 80, 95 et 110 participants. Au-delà, cela est possible en combinant salle, terrasse et chapiteaux, soit devis sur demande.",
+      "Le domaine accueille de 25 à 150 invités, en dîner assis comme en cocktail. La grille tarifaire est structurée par paliers jusqu'à 110 personnes (40, 50, 65, 80, 95, 110) ; au-delà, cela reste possible en combinant salle, terrasse et chapiteaux, sur devis.",
     variants: [
       "combien de personnes pouvez-vous accueillir",
       "combien d'invités maximum",
@@ -129,6 +132,11 @@ export const chatbotFaq: FaqEntry[] = [
       "capacite salle",
       "nombre maximum d'invités",
       "on sera 80 c'est possible",
+      "quel est le nombre minimum d'invités",
+      "on peut être 150",
+      "on peut être seulement 25",
+      "quelle est la capacité maximale",
+      "vous acceptez les petits groupes",
     ],
   },
   {
@@ -202,7 +210,7 @@ export const chatbotFaq: FaqEntry[] = [
     keywords: ["traiteur", "impose", "cuisinier", "repas"],
     question: "Faut-il prendre un traiteur imposé ?",
     answer:
-      "Non. Ni restauration ni traiteur ne sont imposés. Une cuisine professionnelle de 49 m² est mise à disposition en supplément (200 à 290 € selon le nombre de convives) pour votre traiteur, votre cuisinier à domicile ou vous-même.",
+      "Non. Ni restauration ni traiteur ne sont imposés. Une cuisine professionnelle de 49 m² est mise à disposition en supplément (200 à 290 € selon le nombre de convives) pour votre traiteur, votre cuisinier à domicile ou vous-même. Si besoin, nous pouvons également vous mettre en relation avec notre réseau de prestataires de confiance.",
     variants: [
       "peut-on choisir son traiteur",
       "avez-vous un traiteur impose",
@@ -251,10 +259,10 @@ export const chatbotFaq: FaqEntry[] = [
   {
     id: "heure-fin",
     category: "logistique",
-    keywords: ["heure", "musique", "bruit", "reglementation"],
+    keywords: ["heure", "musique", "bruit", "reglementation", "04h30", "limite"],
     question: "Jusqu'à quelle heure la fête peut-elle durer ?",
     answer:
-      "Jusqu'à quatre heures du matin. En cours de soirée, le volume de la musique est baissé et certaines portes et fenêtres sont fermées, pour préserver la tranquillité des résidents et respecter la réglementation sur le bruit.",
+      "Jusqu'à 4h30 maximum. En cours de soirée, le volume de la musique est baissé et certaines portes et fenêtres sont fermées, pour préserver la tranquillité des résidents et respecter la réglementation sur le bruit.",
     variants: [
       "jusqu'à quelle heure peut-on faire la fête",
       "à quelle heure doit-on arrêter la musique",
@@ -268,15 +276,18 @@ export const chatbotFaq: FaqEntry[] = [
       "heure maximum",
       "fin de soirée",
       "musique jusqu'à quelle heure",
+      "y a-t-il une limite horaire à respecter",
+      "jusqu'à 4h30",
+      "quelle est la limite horaire",
     ],
   },
   {
     id: "reservation",
     category: "reservation",
-    keywords: ["reserver", "reservation", "contrat", "acompte", "arrhes", "caution", "solde"],
+    keywords: ["reserver", "reservation", "contrat", "acompte", "arrhes", "caution", "solde", "paiement", "cb", "virement"],
     question: "Comment réserve-t-on, et que faut-il prévoir ?",
     answer:
-      "La réservation est actée par la signature du contrat et le versement de 50 % du montant total, non remboursables en cas d'annulation. Le solde et une caution de 1 000 € sont réglés à l'arrivée. Il faut également fournir une attestation de responsabilité civile — votre assureur la délivre gratuitement dans la plupart des cas.",
+      "La réservation est actée par la signature du contrat et le versement d'arrhes de 50 % du montant total, non remboursables en cas d'annulation. Le solde restant est réglé un mois avant la date de l'événement, par CB ou virement, avec une caution de 1 000 € à l'arrivée. Il faut également fournir une attestation de responsabilité civile — votre assureur la délivre gratuitement dans la plupart des cas.",
     variants: [
       "comment réserver",
       "comment faire pour bloquer une date",
@@ -293,6 +304,10 @@ export const chatbotFaq: FaqEntry[] = [
       "quelle assurance faut-il",
       "attestation responsabilité civile",
       "conditions réservation",
+      "comment s'effectue le paiement",
+      "des arrhes sont-ils demandés",
+      "on paie comment",
+      "paiement par carte ou virement",
     ],
   },
   {
@@ -520,5 +535,131 @@ export const chatbotFaq: FaqEntry[] = [
     question: "Comment obtenir un devis ?",
     answer: "Remplissez le formulaire de la page Contact avec votre date et le nombre d'invités : nous revenons vers vous sous 48h.",
     variants: ["comment vous contacter", "je veux un devis", "vous êtes disponibles à quelle date", "comment avoir un prix personnalisé"],
+  },
+  {
+    id: "espaces-disponibles",
+    category: "equipements",
+    keywords: ["espace", "espaces", "terrasse", "jardin", "plan d'eau", "piste", "danse", "parking", "ceremonie", "laique", "piscine"],
+    question: "De quels espaces disposez-vous pour célébrer votre événement ?",
+    answer:
+      "Terrasse, jardin avec un magnifique plan d'eau, piste de danse, grand parking, cuisine professionnelle pour vous ou votre traiteur, espace pour une cérémonie laïque, piscine et, en complément, des hébergements sur place.",
+    variants: [
+      "quels espaces sont disponibles",
+      "quels espaces proposez-vous",
+      "de quels espaces disposez-vous",
+      "il y a quoi sur le domaine",
+      "qu'est-ce qui est disponible sur place",
+    ],
+  },
+  {
+    id: "configuration-reception",
+    category: "location",
+    keywords: ["configuration", "debout", "assis", "cocktail", "diner"],
+    question: "Quelle configuration proposez-vous pour la réception ?",
+    answer: "Le domaine propose une réception debout (cocktail) ou assise, selon votre choix.",
+    variants: [
+      "quelle configuration proposez-vous",
+      "peut-on faire un cocktail debout",
+      "peut-on faire un dîner assis",
+      "la réception peut-elle être debout",
+    ],
+  },
+  {
+    id: "menus-specifiques",
+    category: "restauration",
+    keywords: ["menu", "menus", "specifique", "traiteur", "repas"],
+    question: "Proposez-vous des menus spécifiques ?",
+    answer: "Non, le domaine ne propose pas de menus : le choix se fait avec votre traiteur.",
+    variants: ["avez-vous des menus", "proposez-vous des menus specifiques", "qui choisit le menu", "le menu est-il imposé"],
+  },
+  {
+    id: "gateau-mariage",
+    category: "restauration",
+    keywords: ["gateau", "gateaux", "patisserie", "majoration"],
+    question: "Proposez-vous des gâteaux de mariage, et peut-on apporter le nôtre ?",
+    answer: "Le domaine ne propose pas de gâteau de mariage, mais vous pouvez apporter le vôtre sans majoration.",
+    variants: [
+      "proposez-vous des gateaux de mariage",
+      "puis-je apporter mon propre gateau de mariage",
+      "facturez-vous une majoration pour le gateau",
+      "peut-on amener notre wedding cake",
+    ],
+  },
+  {
+    id: "boissons-apportees",
+    category: "restauration",
+    keywords: ["boisson", "boissons", "alcool", "apporter", "majoration"],
+    question: "Puis-je apporter mes propres boissons ? Facturez-vous une majoration ?",
+    answer: "Oui, vous pouvez apporter vos propres boissons, sans majoration.",
+    variants: [
+      "puis-je apporter mes propres boissons",
+      "facturez-vous une majoration pour les boissons",
+      "peut-on amener notre propre alcool",
+      "droit de bouchon",
+    ],
+  },
+  {
+    id: "prestataires-libres",
+    category: "animation",
+    keywords: ["dj", "photographe", "prestataire", "impose", "fourni"],
+    question: "Le DJ ou le photographe sont-ils imposés ?",
+    answer:
+      "Non, ni le DJ ni le photographe ne sont imposés. Le domaine ne fournit pas directement ces services : vous êtes libre de choisir vos prestataires.",
+    variants: [
+      "le photographe est-il impose",
+      "proposez-vous un service dj",
+      "proposez-vous un photographe",
+      "puis-je choisir mon propre dj",
+      "puis-je choisir mon propre photographe",
+    ],
+  },
+  {
+    id: "equipements-inclus",
+    category: "equipements",
+    keywords: ["equipement", "equipements", "chapiteau", "piscine", "terrain de boules", "parking", "laverie", "self-laverie", "aire de jeux"],
+    question: "Quels équipements sont inclus dans la location ?",
+    answer:
+      "Cuisine professionnelle aux normes équipée, terrasse, chapiteau, piscine, terrain de boules, parking gratuit, aire de jeux pour enfants et self-laverie sont inclus dans la location.",
+    variants: ["quels sont les équipements", "qu'est-ce qui est inclus dans la location", "liste des équipements"],
+  },
+  {
+    id: "visite-avant-reservation",
+    category: "reservation",
+    keywords: ["visite", "visiter", "rendez-vous"],
+    question: "Peut-on visiter le domaine avant de réserver ?",
+    answer: "Oui, une visite sur rendez-vous est recommandée. Contactez-nous pour convenir d'un créneau.",
+    variants: ["peut-on visiter avant de réserver", "puis-je visiter le domaine", "organisez-vous des visites"],
+  },
+  {
+    id: "chapiteau-tarif",
+    category: "logistique",
+    keywords: ["chapiteau", "installer", "tarif", "prix"],
+    question: "Peut-on installer un chapiteau ?",
+    answer: "Oui, à partir de 250 € selon les dimensions — voir la rubrique Tarifs.",
+    variants: ["peut-on installer un chapiteau", "combien coûte un chapiteau", "prix chapiteau"],
+  },
+  {
+    id: "prix-fixe-location",
+    category: "reservation",
+    keywords: ["prix", "tarif", "fixe", "nuitee", "invites"],
+    question: "Existe-t-il un prix fixe pour louer le lieu ?",
+    answer: "Le tarif dépend du nombre d'invités et du nombre de nuitées : un devis personnalisé vous est établi selon votre événement.",
+    variants: ["existe-t-il un prix fixe", "le tarif est-il fixe", "comment est calculé le prix"],
+  },
+  {
+    id: "tarifs-saison",
+    category: "reservation",
+    keywords: ["saison", "tarif", "haute saison", "basse saison"],
+    question: "Les tarifs varient-ils selon la saison ?",
+    answer: "Oui, les tarifs peuvent varier selon la saison. Le devis personnalisé tient compte de votre date et de vos options.",
+    variants: ["les tarifs varient-ils selon la saison", "y a-t-il une haute saison", "le prix change selon la date"],
+  },
+  {
+    id: "situation-geographique",
+    category: "localisation",
+    keywords: ["campagne", "nature", "situation", "cadre"],
+    question: "Quelle est la situation géographique du domaine ?",
+    answer: "Le domaine est situé à la campagne, dans un cadre naturel préservé.",
+    variants: ["situation géographique", "c'est à la campagne ou en ville", "quel est le cadre du domaine"],
   },
 ];

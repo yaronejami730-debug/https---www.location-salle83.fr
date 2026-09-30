@@ -20,7 +20,7 @@ export default function FaqPage() {
         description="Cherchez par mot-clé ou filtrez par catégorie pour trouver votre réponse."
       />
 
-      <section className="py-20">
+      <section className="pt-4 pb-20">
         <Container className="max-w-3xl">
           <FaqList />
         </Container>

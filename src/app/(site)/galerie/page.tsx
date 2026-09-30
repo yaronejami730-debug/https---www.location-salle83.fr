@@ -37,7 +37,7 @@ export default async function GaleriePage() {
     <>
       <PageHero eyebrow="Galerie" title={f("hero_title")} description={f("hero_description")} />
 
-      <section className="py-20">
+      <section className="pt-4 pb-20">
         <Container>
           <GalleryGrid title={f("events_title")} photos={events} />
         </Container>
