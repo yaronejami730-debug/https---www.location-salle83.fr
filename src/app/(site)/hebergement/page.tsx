@@ -7,6 +7,8 @@ import { getPageContent, getMedia } from "@/lib/content";
 import { mediaUrl } from "@/lib/supabase-public";
 import { staticHebergementPhotos } from "@/lib/static-gallery";
 import { getSchema, fieldValue } from "@/lib/page-schemas";
+import { RichText } from "@/components/rich-text";
+import { sanitizeRichText, parseAligned } from "@/lib/sanitize-html";
 
 const schema = getSchema("hebergement")!;
 const amenityIcons = ["wifi", "parking", "kitchen", "pool"] as const;
@@ -43,17 +45,17 @@ export default async function HebergementPage() {
             <FadeCarousel photos={images} intervalMs={6000} />
           </div>
           <div>
-            <h2 className="font-serif text-3xl text-[var(--foreground)]">{f("intro_title")}</h2>
-            <p className="mt-4 text-[var(--foreground)]/70">{f("intro_text")}</p>
+            <RichText as="h2" value={f("intro_title")} className="font-serif text-3xl text-[var(--foreground)]" />
+            <RichText as="p" value={f("intro_text")} className="mt-4 text-[var(--foreground)]/70" />
 
-            <p className="mt-8 text-xs font-medium uppercase tracking-[0.15em] text-[var(--accent)]">{f("amenities_title")}</p>
+            <RichText as="p" value={f("amenities_title")} className="mt-8 text-xs font-medium uppercase tracking-[0.15em] text-[var(--accent)]" />
             <div className="mt-4 grid grid-cols-2 gap-4">
               {amenityIcons.map((icon, i) => (
                 <div key={icon} className="flex items-center gap-2.5">
                   <span className="text-[var(--accent)]">
                     <AmenityIcon name={icon} />
                   </span>
-                  <p className="text-sm text-[var(--foreground)]/70">{f(`amenity${i + 1}`)}</p>
+                  <RichText as="p" value={f(`amenity${i + 1}`)} className="text-sm text-[var(--foreground)]/70" />
                 </div>
               ))}
             </div>
@@ -70,7 +72,10 @@ export default async function HebergementPage() {
             rel="noopener noreferrer"
             className="inline-flex items-center gap-2 rounded-full bg-[var(--accent)] px-10 py-4 text-base tracking-wide text-white hover:opacity-90"
           >
-            {f("booking_cta")}
+            <span
+              style={parseAligned(f("booking_cta")).align !== "left" ? { textAlign: parseAligned(f("booking_cta")).align } : undefined}
+              dangerouslySetInnerHTML={{ __html: sanitizeRichText(parseAligned(f("booking_cta")).html) }}
+            />
           </a>
         </Container>
       </section>

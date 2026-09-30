@@ -4,6 +4,7 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { Reveal } from "./reveal";
+import { sanitizeRichText, stripHtml, parseAligned } from "@/lib/sanitize-html";
 
 type Choice = { href: string; label: string; photo: string };
 
@@ -54,6 +55,7 @@ export function ChoiceCards({ choices }: { choices: Choice[] }) {
         {choices.map((choice, i) => {
           const isSelected = selected === i;
           const isOther = selected !== null && !isSelected;
+          const label = parseAligned(choice.label);
           return (
             <Reveal key={choice.href} delayMs={i * 100}>
               <a
@@ -79,14 +81,17 @@ export function ChoiceCards({ choices }: { choices: Choice[] }) {
               >
                 <Image
                   src={choice.photo}
-                  alt={choice.label}
+                  alt={stripHtml(choice.label)}
                   fill
                   className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"
                   sizes="(min-width: 640px) 33vw, 100vw"
                 />
                 <div className="absolute inset-0 bg-black/30 transition-colors duration-500 group-hover:bg-black/50" />
                 <span className="relative z-10 mb-12 inline-flex items-center gap-2 rounded-full border border-white/60 px-6 py-3 text-sm tracking-wide text-white transition-colors group-hover:bg-white group-hover:text-[var(--foreground)]">
-                  {choice.label}
+                  <span
+                    style={label.align !== "left" ? { textAlign: label.align } : undefined}
+                    dangerouslySetInnerHTML={{ __html: sanitizeRichText(label.html) }}
+                  />
                   <span className="transition-transform duration-300 group-hover:translate-x-1">→</span>
                 </span>
               </a>

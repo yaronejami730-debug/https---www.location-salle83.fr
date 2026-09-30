@@ -1,14 +1,9 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { sanitizeRichText, detectAlign } from "@/lib/sanitize-html";
+import { sanitizeRichText, detectAlign, parseAligned } from "@/lib/sanitize-html";
 
 type Align = "left" | "center" | "right";
-
-function unwrapAlign(html: string): string {
-  const match = /^\s*<(div|span)\s+style="text-align:(?:center|right|justify)">([\s\S]*)<\/\1>\s*$/i.exec(html);
-  return match ? match[2] : html;
-}
 
 export function EditableText({
   value,
@@ -45,7 +40,7 @@ export function EditableText({
     const el = ref.current;
     if (!el) return;
     el.focus();
-    const inner = unwrapAlign(el.innerHTML);
+    const inner = parseAligned(el.innerHTML).html;
     const wrapped = target === "left" ? inner : `<div style="text-align:${target}">${inner}</div>`;
     const clean = sanitizeRichText(wrapped);
     el.innerHTML = clean;

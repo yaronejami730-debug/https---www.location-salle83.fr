@@ -6,6 +6,7 @@ import { Container } from "@/components/container";
 import { getPageContent, getMedia } from "@/lib/content";
 import { mediaUrl } from "@/lib/supabase-public";
 import { getSchema, fieldValue } from "@/lib/page-schemas";
+import { RichText } from "@/components/rich-text";
 import { AmenityIcon } from "@/components/amenity-icon";
 import { LocationMap } from "@/components/location-map";
 
@@ -52,8 +53,8 @@ export default async function DomainePage() {
         <Container className="grid gap-8 sm:grid-cols-3">
           {[1, 2, 3].map((n) => (
             <div key={n} className="rounded-2xl bg-[var(--background-muted)] p-8">
-              <h3 className="font-serif text-xl text-[var(--foreground)]">{f(`feature${n}_title`)}</h3>
-              <p className="mt-3 text-sm text-[var(--foreground)]/70">{f(`feature${n}_text`)}</p>
+              <RichText as="h3" value={f(`feature${n}_title`)} className="font-serif text-xl text-[var(--foreground)]" />
+              <RichText as="p" value={f(`feature${n}_text`)} className="mt-3 text-sm text-[var(--foreground)]/70" />
             </div>
           ))}
         </Container>
@@ -75,14 +76,14 @@ export default async function DomainePage() {
 
       <section className="py-16 bg-[var(--background-muted)]">
         <Container>
-          <h2 className="text-center font-serif text-2xl text-[var(--foreground)]">{f("amenities_title")}</h2>
+          <RichText as="h2" value={f("amenities_title")} className="text-center font-serif text-2xl text-[var(--foreground)]" />
           <div className="mx-auto mt-8 grid max-w-3xl grid-cols-2 gap-x-6 gap-y-6 sm:grid-cols-4">
             {amenityIcons.map((icon, i) => (
               <div key={icon} className="flex flex-col items-center gap-2 text-center">
                 <span className="flex h-11 w-11 items-center justify-center rounded-full bg-[var(--background)] text-[var(--accent)]">
                   <AmenityIcon name={icon} />
                 </span>
-                <p className="text-xs text-[var(--foreground)]/70">{f(`amenity${i + 1}`)}</p>
+                <RichText as="p" value={f(`amenity${i + 1}`)} className="text-xs text-[var(--foreground)]/70" />
               </div>
             ))}
           </div>

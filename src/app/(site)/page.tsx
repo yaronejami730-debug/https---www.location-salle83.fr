@@ -9,6 +9,7 @@ import { Reveal } from "@/components/reveal";
 import { getPageContent, getReviews, getMedia } from "@/lib/content";
 import { mediaUrl } from "@/lib/supabase-public";
 import { getSchema, fieldValue } from "@/lib/page-schemas";
+import { RichText } from "@/components/rich-text";
 
 const schema = getSchema("home")!;
 
@@ -73,26 +74,28 @@ export default async function HomePage() {
                 <Image src={histoirePhoto} alt="Notre histoire" fill className="object-cover" sizes="(min-width: 640px) 500px, 100vw" />
               </div>
               <div>
-                <h2 className="font-script text-5xl text-[var(--foreground)] sm:text-6xl">{f("histoire_title")}</h2>
-                <p className="mt-5 whitespace-pre-line text-[var(--foreground)]/70">{f("histoire_text")}</p>
+                <RichText as="h2" value={f("histoire_title")} className="font-script text-5xl text-[var(--foreground)] sm:text-6xl" />
+                <RichText as="p" value={f("histoire_text")} className="mt-5 whitespace-pre-line text-[var(--foreground)]/70" />
               </div>
             </div>
 
             <div className="mt-14">
-              <p className="mb-4 text-center text-base font-bold normal-case tracking-[0.05em] text-[var(--foreground)]/80 sm:text-lg">
-                {f("stats_title")}
-              </p>
+              <RichText
+                as="p"
+                value={f("stats_title")}
+                className="mb-4 text-center text-base font-bold normal-case tracking-[0.05em] text-[var(--foreground)]/80 sm:text-lg"
+              />
               <div className="flex flex-col overflow-hidden rounded-2xl border border-black/10 bg-[var(--background)] shadow-xl sm:flex-row">
                 <div className="grid grid-cols-2 gap-y-8 px-6 py-10 sm:flex sm:flex-1 sm:flex-nowrap sm:items-center sm:justify-between sm:gap-4 sm:px-10 sm:py-12">
                   {mainStats.map((s) => (
                     <div key={s.label} className="text-center sm:shrink-0">
                       <CounterStat value={s.value} className="font-serif text-3xl text-[var(--accent)] sm:text-4xl" />
-                      <p className="mt-1 text-[10px] uppercase tracking-[0.12em] text-[var(--foreground)]/50 sm:text-xs">{s.label}</p>
+                      <RichText as="p" value={s.label} className="mt-1 text-[10px] uppercase tracking-[0.12em] text-[var(--foreground)]/50 sm:text-xs" />
                     </div>
                   ))}
                 </div>
                 <div className="flex shrink-0 items-center justify-center border-t border-black/10 bg-[var(--accent)]/8 px-8 py-8 text-center sm:border-t-0 sm:border-l sm:w-72 sm:py-12">
-                  <p className="font-serif text-lg text-[var(--foreground)] sm:text-xl">{sideStat}</p>
+                  <RichText as="p" value={sideStat} className="font-serif text-lg text-[var(--foreground)] sm:text-xl" />
                 </div>
               </div>
             </div>
@@ -103,7 +106,7 @@ export default async function HomePage() {
       <section className="pt-24 pb-20">
         <Reveal>
           <Container>
-            <h2 className="text-center font-script text-5xl text-[var(--foreground)] sm:text-6xl">{f("choices_title")}</h2>
+            <RichText as="h2" value={f("choices_title")} className="text-center font-script text-5xl text-[var(--foreground)] sm:text-6xl" />
             <ChoiceCards choices={choices} />
           </Container>
         </Reveal>

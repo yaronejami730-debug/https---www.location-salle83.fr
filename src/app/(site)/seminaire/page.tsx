@@ -9,6 +9,7 @@ import { mediaUrl } from "@/lib/supabase-public";
 import { staticGalleryPhotos } from "@/lib/static-gallery";
 import { getSchema, fieldValue } from "@/lib/page-schemas";
 import { pricingBrackets } from "@/lib/pricing";
+import { RichText } from "@/components/rich-text";
 
 const seminaireSchema = getSchema("seminaire")!;
 
@@ -65,13 +66,13 @@ export default async function SeminaireEvenementsPage() {
 
       <section className="py-20 bg-[var(--background-muted)]">
         <Container>
-          <h2 className="text-center font-serif text-3xl text-[var(--foreground)]">{fs("events_title")}</h2>
-          <p className="mx-auto mt-4 max-w-xl text-center text-sm text-[var(--foreground)]/70">{fs("events_text")}</p>
+          <RichText as="h2" value={fs("events_title")} className="text-center font-serif text-3xl text-[var(--foreground)]" />
+          <RichText as="p" value={fs("events_text")} className="mx-auto mt-4 max-w-xl text-center text-sm text-[var(--foreground)]/70" />
 
           <div className="mt-10 grid grid-cols-2 gap-6 sm:grid-cols-4">
-            {events.map((e) => (
-              <div key={e} className="rounded-xl bg-[var(--background)] px-6 py-8 text-center">
-                <p className="text-sm text-[var(--foreground)]">{e}</p>
+            {events.map((e, i) => (
+              <div key={i} className="rounded-xl bg-[var(--background)] px-6 py-8 text-center">
+                <RichText as="p" value={e} className="text-sm text-[var(--foreground)]" />
               </div>
             ))}
           </div>
@@ -80,8 +81,8 @@ export default async function SeminaireEvenementsPage() {
 
       <section className="py-20">
         <Container>
-          <h2 className="text-center font-serif text-3xl text-[var(--foreground)]">{fs("pricing_title")}</h2>
-          <p className="mx-auto mt-4 max-w-xl text-center text-sm text-[var(--foreground)]/70">{fs("pricing_note")}</p>
+          <RichText as="h2" value={fs("pricing_title")} className="text-center font-serif text-3xl text-[var(--foreground)]" />
+          <RichText as="p" value={fs("pricing_note")} className="mx-auto mt-4 max-w-xl text-center text-sm text-[var(--foreground)]/70" />
 
           <div className="mt-10 overflow-x-auto rounded-2xl border border-black/5 bg-[var(--background-muted)]">
             <table className="w-full min-w-[640px] text-sm">

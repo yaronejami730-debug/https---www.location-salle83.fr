@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Image from "next/image";
 import { GalleryLightbox, type GalleryPhoto } from "./gallery-lightbox";
+import { RichText } from "./rich-text";
 
 export function GalleryGrid({ title, photos }: { title: string; photos: GalleryPhoto[] }) {
   const [lightbox, setLightbox] = useState<{ index: number; autoplay: boolean } | null>(null);
@@ -10,7 +11,7 @@ export function GalleryGrid({ title, photos }: { title: string; photos: GalleryP
   return (
     <>
       <div className="flex items-center justify-between gap-4">
-        <h2 className="font-serif text-2xl text-[var(--foreground)]">{title}</h2>
+        <RichText as="h2" value={title} className="font-serif text-2xl text-[var(--foreground)]" />
         {photos.length > 1 && (
           <button
             onClick={() => setLightbox({ index: 0, autoplay: true })}

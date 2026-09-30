@@ -7,6 +7,7 @@ import { getPageContent, getMedia } from "@/lib/content";
 import { mediaUrl } from "@/lib/supabase-public";
 import { staticGalleryPhotos } from "@/lib/static-gallery";
 import { getSchema, fieldValue } from "@/lib/page-schemas";
+import { RichText } from "@/components/rich-text";
 
 const schema = getSchema("mariage")!;
 
@@ -59,8 +60,8 @@ export default async function MariagePage() {
         <Container className="grid gap-8 sm:grid-cols-3">
           {features.map((ft) => (
             <div key={ft.title} className="rounded-2xl bg-[var(--background-muted)] p-8">
-              <h3 className="font-serif text-xl text-[var(--foreground)]">{ft.title}</h3>
-              <p className="mt-3 text-sm text-[var(--foreground)]/70">{ft.text}</p>
+              <RichText as="h3" value={ft.title} className="font-serif text-xl text-[var(--foreground)]" />
+              <RichText as="p" value={ft.text} className="mt-3 text-sm text-[var(--foreground)]/70" />
             </div>
           ))}
         </Container>

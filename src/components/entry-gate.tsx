@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Image from "next/image";
+import { sanitizeRichText, parseAligned } from "@/lib/sanitize-html";
 
 type EntryGateProps = {
   heroTitle: string;
@@ -27,6 +28,9 @@ function HalfPhoto({ side }: { side: "left" | "right" }) {
 }
 
 export function EntryGate({ heroTitle, heroAccent, heroDescription }: EntryGateProps) {
+  const title = parseAligned(heroTitle);
+  const accent = parseAligned(heroAccent);
+  const description = parseAligned(heroDescription);
   const [phase, setPhase] = useState<"closed" | "opening" | "open">("closed");
 
   useEffect(() => {
@@ -92,18 +96,21 @@ export function EntryGate({ heroTitle, heroAccent, heroDescription }: EntryGateP
           opening ? "pointer-events-none opacity-0" : ""
         }`}
       >
-        <h1 className="animate-write-in max-w-4xl font-script text-5xl leading-[1.3] sm:text-7xl" style={{ animationDelay: "300ms" }}>
-          {heroTitle}
-        </h1>
-        <p className="animate-write-in mt-2 font-script text-5xl leading-[1.3] sm:text-7xl" style={{ animationDelay: "2200ms" }}>
-          {heroAccent}
-        </p>
+        <h1
+          className="animate-write-in max-w-4xl font-script text-5xl leading-[1.3] sm:text-7xl"
+          style={{ animationDelay: "300ms", textAlign: title.align !== "left" ? title.align : undefined }}
+          dangerouslySetInnerHTML={{ __html: sanitizeRichText(title.html) }}
+        />
+        <p
+          className="animate-write-in mt-2 font-script text-5xl leading-[1.3] sm:text-7xl"
+          style={{ animationDelay: "2200ms", textAlign: accent.align !== "left" ? accent.align : undefined }}
+          dangerouslySetInnerHTML={{ __html: sanitizeRichText(accent.html) }}
+        />
         <p
           className="animate-fade-in-up mt-8 max-w-xl font-script text-2xl text-white/85 sm:text-3xl"
-          style={{ animationDelay: "4500ms" }}
-        >
-          {heroDescription}
-        </p>
+          style={{ animationDelay: "4500ms", textAlign: description.align !== "left" ? description.align : undefined }}
+          dangerouslySetInnerHTML={{ __html: sanitizeRichText(description.html) }}
+        />
 
         <button
           type="button"
