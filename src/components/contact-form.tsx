@@ -79,6 +79,12 @@ export function ContactForm() {
     defaultValues: {
       eventType: "mariage",
       guestCount: "",
+      firstName: "",
+      lastName: "",
+      address: "",
+      phone: "",
+      email: "",
+      message: "",
       lendemain: false,
       piscine: false,
       vaisselle: false,

@@ -50,14 +50,17 @@ body:has(#entry-gate[data-phase="closed"]) header {
   font-family: var(--font-script), cursive;
 }
 
+/* Opacity-only: a `transform` here (even mid-animation) would make this wrapper
+   a new containing block for any `position:fixed` descendant (e.g. EntryGate,
+   the gallery lightbox), pinning them to this box instead of the viewport for
+   the animation's duration — visible as a gap at the top equal to the header's
+   height until the animation ends. */
 @keyframes pageFadeIn {
   from {
     opacity: 0;
-    transform: translateY(10px);
   }
   to {
     opacity: 1;
-    transform: translateY(0);
   }
 }
 
