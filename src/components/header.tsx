@@ -36,7 +36,7 @@ export function Header() {
 
         <Link
           href="/contact"
-          className="hidden lg:inline-flex items-center whitespace-nowrap rounded-full bg-[var(--accent)] px-6 py-2.5 font-script text-2xl text-white transition-opacity hover:opacity-90"
+          className="ml-10 hidden lg:inline-flex items-center whitespace-nowrap rounded-full bg-[var(--accent)] px-6 py-2.5 font-script text-2xl text-white transition-opacity hover:opacity-90"
         >
           Parlons de votre projet
         </Link>
