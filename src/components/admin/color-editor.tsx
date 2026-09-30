@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useTransition } from "react";
+import { useEffect, useRef, useState, useTransition } from "react";
 import { saveTheme, resetTheme } from "@/app/admin/(dashboard)/couleurs/actions";
 
 type ThemeColors = {
@@ -43,6 +43,19 @@ export function ColorEditor({ initial }: { initial: ThemeColors }) {
   const [colors, setColors] = useState(initial);
   const [pending, startTransition] = useTransition();
   const [saved, setSaved] = useState(false);
+  const desktopFrame = useRef<HTMLIFrameElement>(null);
+  const phoneFrame = useRef<HTMLIFrameElement>(null);
+
+  // Initial colors travel via the iframe's URL (so there's no flash of
+  // default colors before the first postMessage); live edits after that
+  // are pushed straight into the already-loaded preview pages.
+  const [previewSrc] = useState(() => `/theme-preview?${new URLSearchParams(initial)}`);
+
+  useEffect(() => {
+    for (const frame of [desktopFrame.current, phoneFrame.current]) {
+      frame?.contentWindow?.postMessage({ type: "theme-preview-colors", colors }, window.location.origin);
+    }
+  }, [colors]);
 
   function set(key: keyof ThemeColors, value: string) {
     setColors((c) => ({ ...c, [key]: value }));
@@ -110,52 +123,40 @@ export function ColorEditor({ initial }: { initial: ThemeColors }) {
         </div>
       </form>
 
-      <div className="lg:sticky lg:top-6 lg:self-start">
-        <p className="mb-2 text-xs font-medium uppercase tracking-wide text-[var(--foreground)]/40">Aperçu en direct</p>
-        <div className="overflow-hidden rounded-2xl border border-black/10 shadow-sm" style={{ backgroundColor: colors.background }}>
-          {/* header */}
-          <div className="flex items-center justify-between px-5 py-4" style={{ backgroundColor: colors.background, borderBottom: "1px solid rgba(0,0,0,0.08)" }}>
-            <span style={{ color: colors.foreground, fontWeight: 700 }}>Domaine de la Bégude</span>
-            <div className="flex items-center gap-4 text-sm">
-              <span style={{ color: colors.accent }}>Mariage</span>
-              <span style={{ color: colors.foreground }}>Le domaine</span>
-              <span
-                className="rounded-full px-4 py-1.5 text-xs text-white"
-                style={{ backgroundColor: colors.accent }}
-              >
-                Parlons de votre projet
-              </span>
+      <div className="lg:sticky lg:top-6 lg:self-start space-y-8">
+        <div>
+          <p className="mb-2 text-xs font-medium text-[var(--foreground)]/60">🖥️ Sur ordinateur — le vrai site, en direct</p>
+          <div className="overflow-hidden rounded-xl border border-black/10 shadow-sm">
+            <div className="flex items-center gap-1.5 bg-black/10 px-3 py-2">
+              <span className="h-2.5 w-2.5 rounded-full bg-black/20" />
+              <span className="h-2.5 w-2.5 rounded-full bg-black/20" />
+              <span className="h-2.5 w-2.5 rounded-full bg-black/20" />
+            </div>
+            <div className="h-[480px] w-full overflow-hidden">
+              <iframe
+                ref={desktopFrame}
+                src={previewSrc}
+                title="Aperçu ordinateur"
+                style={{ width: 1280, height: 1140, border: "none", transform: "scale(0.4)", transformOrigin: "top left", pointerEvents: "none" }}
+              />
             </div>
           </div>
+        </div>
 
-          {/* page hero band (background-muted) */}
-          <div className="px-5 py-8 text-center" style={{ backgroundColor: colors.backgroundMuted }}>
-            <p className="text-xs uppercase tracking-[0.2em]" style={{ color: colors.accent }}>
-              Exemple
-            </p>
-            <p className="mt-2 text-2xl italic" style={{ color: colors.foreground, fontFamily: "cursive" }}>
-              Notre histoire
-            </p>
-          </div>
-
-          {/* body */}
-          <div className="space-y-4 px-5 py-6" style={{ backgroundColor: colors.background }}>
-            <p className="text-sm leading-relaxed" style={{ color: colors.foreground, opacity: 0.75 }}>
-              Voici à quoi ressemble un paragraphe de texte normal sur le site, avec ces couleurs.
-            </p>
-            <div className="flex items-center gap-3">
-              <span
-                className="inline-flex rounded-full px-5 py-2 text-sm text-white"
-                style={{ backgroundColor: colors.accent }}
-              >
-                Bouton principal
-              </span>
-              <span style={{ color: colors.accentWarm }}>★★★★★</span>
+        <div>
+          <p className="mb-2 text-xs font-medium text-[var(--foreground)]/60">📱 Sur téléphone — le vrai site, en direct</p>
+          <div className="mx-auto w-[300px] rounded-[2rem] border-[6px] border-black/85 bg-black/85 p-1.5 shadow-lg">
+            <div className="h-4" />
+            <div className="h-[520px] w-full overflow-hidden rounded-[1.1rem]">
+              <iframe
+                ref={phoneFrame}
+                src={previewSrc}
+                title="Aperçu téléphone"
+                style={{ width: 390, height: 693, border: "none", transform: "scale(0.738)", transformOrigin: "top left", pointerEvents: "none" }}
+              />
             </div>
-            <div className="rounded-xl p-4" style={{ backgroundColor: colors.backgroundMuted }}>
-              <p className="text-sm" style={{ color: colors.foreground }}>
-                Un bloc en fond secondaire (comme les chiffres-clés de la page d'accueil).
-              </p>
+            <div className="flex justify-center py-2">
+              <div className="h-1 w-20 rounded-full bg-white/40" />
             </div>
           </div>
         </div>
