@@ -43,7 +43,7 @@ export function PageHero({
   return (
     <section className="bg-[var(--background)] py-20 text-center">
       <Container className="max-w-2xl">
-        <p className={`text-[var(--foreground)] ${eyebrowFont}`}>{eyebrow}</p>
+        <p className={`text-[var(--accent)] ${eyebrowFont}`}>{eyebrow}</p>
         <h1 className={`mt-4 text-[var(--foreground)] ${titleFont}`}>{title}</h1>
         {description && <p className="mt-5 text-[var(--foreground)]/70">{description}</p>}
       </Container>
