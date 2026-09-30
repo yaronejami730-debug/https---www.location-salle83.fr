@@ -15,7 +15,7 @@ export default function FaqPage() {
   return (
     <>
       <PageHero
-        eyebrow="FAQ"
+        eyebrow="Faq"
         title="Questions fréquentes"
         description="Cherchez par mot-clé ou filtrez par catégorie pour trouver votre réponse."
       />

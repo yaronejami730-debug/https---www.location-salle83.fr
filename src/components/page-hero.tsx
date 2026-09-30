@@ -20,7 +20,7 @@ export function PageHero({
   scriptEyebrow?: boolean;
 }) {
   const titleFont = scriptTitle ? "font-script text-5xl sm:text-6xl" : "font-serif font-bold text-3xl sm:text-4xl";
-  const eyebrowFont = scriptEyebrow ? "font-script text-3xl sm:text-4xl normal-case tracking-normal" : "text-sm tracking-[0.2em] uppercase";
+  const eyebrowFont = scriptEyebrow ? "font-script font-bold text-3xl sm:text-4xl normal-case tracking-normal" : "text-sm tracking-[0.2em] uppercase";
 
   if (image) {
     return (
@@ -43,7 +43,7 @@ export function PageHero({
   return (
     <section className="bg-[var(--background)] py-20 text-center">
       <Container className="max-w-2xl">
-        <p className={`text-[var(--accent)] ${eyebrowFont}`}>{eyebrow}</p>
+        <p className={`text-[var(--foreground)] ${eyebrowFont}`}>{eyebrow}</p>
         <h1 className={`mt-4 text-[var(--foreground)] ${titleFont}`}>{title}</h1>
         {description && <p className="mt-5 text-[var(--foreground)]/70">{description}</p>}
       </Container>

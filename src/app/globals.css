@@ -38,7 +38,7 @@
 :root[data-theme="v15"] { --background: #fdf5f3; --background-muted: #f8dfd9; --foreground: #302422; --accent: #d9645a; --accent-warm: #a8483f; }
 
 .site-logo {
-  filter: none;
+  filter: brightness(0.72) saturate(1.15);
   transition: filter 0.3s ease;
 }
 
