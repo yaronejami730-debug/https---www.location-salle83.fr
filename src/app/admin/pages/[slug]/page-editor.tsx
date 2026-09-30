@@ -409,13 +409,13 @@ export function PageEditor({
           </section>
 
           <section className="py-16">
-            <Container className="grid gap-6 sm:grid-cols-3">
-              {[1, 2, 3].map((n) => (
-                <div key={n} className="rounded-2xl bg-[var(--background-muted)] p-6">
-                  <EditableText as="h3" value={val(`feature${n}_title`)} onChange={set(`feature${n}_title`)} className="font-serif text-xl text-[var(--foreground)]" />
-                  <EditableText value={val(`feature${n}_text`)} onChange={set(`feature${n}_text`)} className="mt-3 text-sm text-[var(--foreground)]/70" />
-                </div>
-              ))}
+            <Container>
+              <EditableCardList
+                items={parseListField(val("features"))}
+                itemFields={schema.fields.find((f) => f.key === "features")!.itemFields!}
+                onChange={(items) => set("features")(JSON.stringify(items))}
+                addLabel="Ajouter un atout"
+              />
             </Container>
           </section>
 

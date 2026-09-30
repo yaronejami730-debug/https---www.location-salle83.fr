@@ -6,7 +6,7 @@ import { IntroSection } from "@/components/intro-section";
 import { getPageContent, getMedia } from "@/lib/content";
 import { mediaUrl } from "@/lib/supabase-public";
 import { staticGalleryPhotos } from "@/lib/static-gallery";
-import { getSchema, fieldValue } from "@/lib/page-schemas";
+import { getSchema, fieldValue, parseListField } from "@/lib/page-schemas";
 import { RichText } from "@/components/rich-text";
 
 const schema = getSchema("mariage")!;
@@ -38,11 +38,7 @@ export default async function MariagePage() {
       ? rows.map((m) => ({ src: mediaUrl(m.storage_path), alt: m.alt ?? "" }))
       : [staticGalleryPhotos[fallbackIndex % staticGalleryPhotos.length]];
 
-  const features = [
-    { title: f("feature1_title"), text: f("feature1_text") },
-    { title: f("feature2_title"), text: f("feature2_text") },
-    { title: f("feature3_title"), text: f("feature3_text") },
-  ];
+  const features = parseListField(f("features"));
 
   return (
     <>
@@ -58,8 +54,8 @@ export default async function MariagePage() {
 
       <section className="py-20">
         <Container className="grid gap-8 sm:grid-cols-3">
-          {features.map((ft) => (
-            <div key={ft.title} className="rounded-2xl bg-[var(--background-muted)] p-8">
+          {features.map((ft, i) => (
+            <div key={i} className="rounded-2xl bg-[var(--background-muted)] p-8">
               <RichText as="h3" value={ft.title} className="font-serif text-xl text-[var(--foreground)]" />
               <RichText as="p" value={ft.text} className="mt-3 text-sm text-[var(--foreground)]/70" />
             </div>
