@@ -12,29 +12,31 @@ export function Header() {
   const [open, setOpen] = useState(false);
 
   return (
-    <header className="sticky top-0 z-50 border-b border-black/5 bg-[var(--background)]/90 backdrop-blur">
+    <header className="sticky top-0 z-50 border-b border-black/10 bg-[var(--background-muted)]/95 backdrop-blur">
       <Container className="flex h-44 items-center justify-between">
-        <Link href="/" className="flex items-center gap-2">
-          <Image src="/images/logo.png" alt={siteConfig.name} width={104} height={106} className="h-40 w-auto" priority />
-        </Link>
+        <div className="flex items-center gap-10">
+          <Link href="/" className="flex items-end gap-2 self-end">
+            <Image src="/images/logo.png" alt={siteConfig.name} width={104} height={106} className="site-logo h-44 w-auto shrink-0 translate-y-2" priority />
+          </Link>
 
-        <nav className="hidden lg:flex items-center gap-7">
-          {navItems.slice(1, -1).map((item) => (
-            <Link
-              key={item.href}
-              href={item.href}
-              className={`font-script text-2xl font-bold tracking-wide transition-colors hover:text-[var(--accent)] ${
-                pathname === item.href ? "text-[var(--accent)]" : "text-[var(--foreground)]/80"
-              }`}
-            >
-              {item.label}
-            </Link>
-          ))}
-        </nav>
+          <nav className="hidden lg:flex items-center gap-6">
+            {navItems.slice(1, -1).map((item) => (
+              <Link
+                key={item.href}
+                href={item.href}
+                className={`whitespace-nowrap font-script text-2xl font-bold tracking-wide transition-colors hover:text-[var(--accent)] ${
+                  pathname === item.href ? "text-[var(--accent)]" : "text-[var(--foreground)]/80"
+                }`}
+              >
+                {item.label}
+              </Link>
+            ))}
+          </nav>
+        </div>
 
         <Link
           href="/contact"
-          className="hidden lg:inline-flex items-center rounded-full bg-[var(--accent)] px-6 py-2.5 font-script text-2xl text-white transition-opacity hover:opacity-90"
+          className="hidden lg:inline-flex items-center whitespace-nowrap rounded-full bg-[var(--accent)] px-6 py-2.5 font-script text-2xl text-white transition-opacity hover:opacity-90"
         >
           Parlons de votre projet
         </Link>
@@ -51,7 +53,7 @@ export function Header() {
       </Container>
 
       {open && (
-        <div className="lg:hidden border-t border-black/5 bg-[var(--background)]">
+        <div className="lg:hidden border-t border-black/5 bg-[var(--background-muted)]">
           <Container className="flex flex-col gap-1 py-4">
             {navItems.map((item) => (
               <Link
