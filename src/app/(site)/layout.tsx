@@ -1,6 +1,7 @@
 import { Header } from "@/components/header";
 import { Footer } from "@/components/footer";
 import { PageTransition } from "@/components/page-transition";
+import { RouteTransitionCover } from "@/components/route-transition-cover";
 import { siteConfig } from "@/lib/site";
 import { getSiteSettings } from "@/lib/content";
 
@@ -38,6 +39,7 @@ export default async function SiteLayout({ children }: { children: React.ReactNo
         <PageTransition>{children}</PageTransition>
       </main>
       <Footer />
+      <RouteTransitionCover />
     </>
   );
 }
