@@ -6,7 +6,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   return (
     <div className="flex min-h-screen bg-[var(--background-muted)]">
       <AdminSidebar />
-      <main className="flex-1 p-10">{children}</main>
+      <main className="min-w-0 flex-1 overflow-x-hidden p-10">{children}</main>
     </div>
   );
 }

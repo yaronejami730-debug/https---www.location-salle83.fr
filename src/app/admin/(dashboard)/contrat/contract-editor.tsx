@@ -1,8 +1,10 @@
 "use client";
 
-import { useState, useTransition } from "react";
+import { useEffect, useRef, useState, useTransition } from "react";
 import { CONTRACT_CLAUSES, CLAUSE7_DEFAULTS } from "@/lib/contract-template";
 import { saveContractContent, previewContractPdf } from "./actions";
+
+const AUTO_PREVIEW_DELAY_MS = 900;
 
 export function ContractEditor({ initialContent }: { initialContent: Record<string, string> }) {
   const [content, setContent] = useState<Record<string, string>>(initialContent);
@@ -10,6 +12,7 @@ export function ContractEditor({ initialContent }: { initialContent: Record<stri
   const [savePending, startSave] = useTransition();
   const [previewPending, startPreview] = useTransition();
   const [saved, setSaved] = useState(false);
+  const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const val = (key: string, fallback: string) => content[key] ?? fallback;
   const set = (key: string) => (v: string) => setContent((prev) => ({ ...prev, [key]: v }));
@@ -22,12 +25,22 @@ export function ContractEditor({ initialContent }: { initialContent: Record<stri
     });
   }
 
-  function refreshPreview() {
+  function refreshPreview(target: Record<string, string>) {
     startPreview(async () => {
-      const base64 = await previewContractPdf(content);
+      const base64 = await previewContractPdf(target);
       setPreviewUrl(`data:application/pdf;base64,${base64}`);
     });
   }
+
+  // Real-time preview: regenerate automatically shortly after each edit,
+  // instead of requiring a manual click every time — "quoi qu'il arrive".
+  useEffect(() => {
+    if (debounceRef.current) clearTimeout(debounceRef.current);
+    debounceRef.current = setTimeout(() => refreshPreview(content), AUTO_PREVIEW_DELAY_MS);
+    return () => {
+      if (debounceRef.current) clearTimeout(debounceRef.current);
+    };
+  }, [content]);
 
   return (
     <div className="mt-6 grid gap-6 lg:grid-cols-[1fr_1fr] lg:items-start">
@@ -43,12 +56,13 @@ export function ContractEditor({ initialContent }: { initialContent: Record<stri
           </button>
           <button
             type="button"
-            onClick={refreshPreview}
+            onClick={() => refreshPreview(content)}
             disabled={previewPending}
             className="rounded-full border border-black/10 px-5 py-2 text-sm text-[var(--foreground)]/70 hover:bg-black/5 disabled:opacity-50"
           >
-            {previewPending ? "Génération..." : "Mettre à jour l'aperçu"}
+            {previewPending ? "Mise à jour..." : "Forcer l'aperçu"}
           </button>
+          <span className="text-xs text-[var(--foreground)]/40">L&apos;aperçu se met à jour automatiquement</span>
         </div>
 
         {CONTRACT_CLAUSES.slice(0, 5).map((c) => (
@@ -78,14 +92,16 @@ export function ContractEditor({ initialContent }: { initialContent: Record<stri
       </div>
 
       <div className="lg:sticky lg:top-24">
-        <div className="overflow-hidden rounded-2xl border border-black/10 bg-[var(--background-muted)]" style={{ height: "85vh" }}>
+        <div className="relative overflow-hidden rounded-2xl border border-black/10 bg-[var(--background-muted)]" style={{ height: "85vh" }}>
           {previewUrl ? (
             <iframe src={previewUrl} title="Aperçu du contrat" className="h-full w-full border-0" />
           ) : (
             <div className="flex h-full flex-col items-center justify-center gap-2 p-8 text-center text-sm text-[var(--foreground)]/50">
-              <p>Aucun aperçu généré pour l&apos;instant.</p>
-              <p>Cliquez sur « Mettre à jour l&apos;aperçu » pour voir le contrat avec vos modifications.</p>
+              <p>Génération de l&apos;aperçu...</p>
             </div>
+          )}
+          {previewPending && previewUrl && (
+            <div className="absolute right-3 top-3 rounded-full bg-[var(--foreground)]/80 px-3 py-1 text-xs text-white shadow">Mise à jour...</div>
           )}
         </div>
       </div>
