@@ -23,7 +23,7 @@ export function ContactFormEditor({ val, set }: Props) {
         <div>
           <span className={LABEL}>{t("form_event_label")}</span>
           <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5">
-            {["form_event_mariage", "form_event_seminaire", "form_event_reception", "form_event_hebergement", "form_event_autre"].map((k, i) => (
+            {["form_event_mariage", "form_event_reception", "form_event_hebergement", "form_event_autre"].map((k, i) => (
               <div key={k} className={`${CHOICE} ${i === 0 ? "border-[var(--accent)] bg-[var(--accent)]/10" : ""}`}>
                 {t(k)}
               </div>

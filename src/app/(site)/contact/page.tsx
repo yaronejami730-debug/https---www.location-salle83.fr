@@ -29,7 +29,6 @@ export default async function ContactPage() {
   const labels = {
     eventLabel: f("form_event_label"),
     eventMariage: f("form_event_mariage"),
-    eventSeminaire: f("form_event_seminaire"),
     eventReception: f("form_event_reception"),
     eventHebergement: f("form_event_hebergement"),
     eventAutre: f("form_event_autre"),

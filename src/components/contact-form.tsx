@@ -15,7 +15,6 @@ import { RichText } from "@/components/rich-text";
 export type ContactFormLabels = {
   eventLabel: string;
   eventMariage: string;
-  eventSeminaire: string;
   eventReception: string;
   eventHebergement: string;
   eventAutre: string;
@@ -94,7 +93,6 @@ export function ContactForm({ labels, pricingBrackets }: { labels: ContactFormLa
 
   const eventOptions: { value: FormValues["eventType"]; label: string }[] = [
     { value: "mariage", label: labels.eventMariage },
-    { value: "seminaire", label: labels.eventSeminaire },
     { value: "reception", label: labels.eventReception },
     { value: "hebergement", label: labels.eventHebergement },
     { value: "autre", label: labels.eventAutre },
