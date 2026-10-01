@@ -117,3 +117,21 @@ insert into public.pricing_brackets (key, label, max_guests, salle, lendemain, p
 ('80', '-80 pers.', 80, 2100, 350, 250, 130, 250, 3),
 ('95', '-95 pers.', 95, 2250, 400, 300, 140, 270, 4),
 ('110', '-110 pers.', 110, 2400, 450, 350, 150, 290, 5);
+
+-- Lot 8: Blog module — run this block to add it.
+create table public.blog_posts (
+  id uuid primary key default gen_random_uuid(),
+  slug text not null unique,
+  title text not null,
+  body text not null default '',
+  color text not null default '#8a6d3b',
+  published boolean not null default false,
+  sort_order integer not null default 0,
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now()
+);
+
+alter table public.blog_posts enable row level security;
+
+create policy "public read published blog_posts" on public.blog_posts for select to anon using (published = true);
+create policy "service role full access blog_posts" on public.blog_posts for all to service_role using (true) with check (true);

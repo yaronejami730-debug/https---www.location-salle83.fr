@@ -52,6 +52,13 @@ function Icon({ name }: { name: string }) {
           <path d="M9 13h6M9 17h6M9 9h1" />
         </svg>
       );
+    case "blog":
+      return (
+        <svg {...common}>
+          <rect x="4" y="4" width="16" height="16" rx="2" />
+          <path d="M8 9h8M8 13h8M8 17h5" />
+        </svg>
+      );
     case "settings":
       return (
         <svg {...common}>
@@ -78,6 +85,7 @@ const adminNav = [
   { label: "Demandes", href: "/admin", icon: "mail" },
   { label: "Contrat", href: "/admin/contrat", icon: "file" },
   { label: "Pages & SEO", href: "/admin/pages", icon: "home" },
+  { label: "Blog", href: "/admin/blog", icon: "blog" },
   { label: "Photos", href: "/admin/photos", icon: "image" },
   { label: "Avis", href: "/admin/avis", icon: "message" },
   { label: "FAQ", href: "/admin/faq", icon: "help" },
