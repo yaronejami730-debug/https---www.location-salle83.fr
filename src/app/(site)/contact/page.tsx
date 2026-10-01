@@ -52,6 +52,19 @@ export default async function ContactPage() {
     submitLabel: f("form_submit_label"),
     successTitle: f("form_success_title"),
     successText: f("form_success_text"),
+    civilityMadame: f("form_civility_madame"),
+    civilityMonsieur: f("form_civility_monsieur"),
+    referenceLabel: f("form_reference_label"),
+    quoteEstimateLabel: f("form_quote_estimate_label"),
+    quoteArrhesLabel: f("form_quote_arrhes_label"),
+    quoteCautionLabel: f("form_quote_caution_label"),
+    quoteMenageNote: f("form_quote_menage_note"),
+    quoteSuccessDisclaimer: f("form_quote_success_disclaimer"),
+    quoteEmptyHint: f("form_quote_empty_hint"),
+    exploreBefore: f("form_explore_before"),
+    exploreAfter: f("form_explore_after"),
+    submitLoadingLabel: f("form_submit_loading_label"),
+    errorMessage: f("form_error_message"),
   };
 
   return (

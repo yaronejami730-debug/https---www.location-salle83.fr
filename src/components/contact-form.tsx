@@ -40,6 +40,19 @@ export type ContactFormLabels = {
   submitLabel: string;
   successTitle: string;
   successText: string;
+  civilityMadame: string;
+  civilityMonsieur: string;
+  referenceLabel: string;
+  quoteEstimateLabel: string;
+  quoteArrhesLabel: string;
+  quoteCautionLabel: string;
+  quoteMenageNote: string;
+  quoteSuccessDisclaimer: string;
+  quoteEmptyHint: string;
+  exploreBefore: string;
+  exploreAfter: string;
+  submitLoadingLabel: string;
+  errorMessage: string;
 };
 
 const schema = z
@@ -163,34 +176,34 @@ export function ContactForm({ labels }: { labels: ContactFormLabels }) {
         <RichText as="p" value={labels.successText} className="mt-2 text-sm text-[var(--foreground)]/70" />
         {lastReference && (
           <p className="mt-3 text-sm text-[var(--foreground)]/70">
-            Votre numéro de demande : <span className="font-medium text-[var(--foreground)]">{lastReference}</span>
+            <RichText value={labels.referenceLabel} /> <span className="font-medium text-[var(--foreground)]">{lastReference}</span>
           </p>
         )}
         {lastQuote && (
           <div className="mx-auto mt-6 max-w-xs rounded-xl bg-[var(--background)] p-5 text-left text-sm">
             <p className="flex justify-between text-[var(--foreground)]/70">
-              <span>Estimation</span>
+              <RichText value={labels.quoteEstimateLabel} />
               <span className="font-medium text-[var(--foreground)]">{lastQuote.total} €</span>
             </p>
             <p className="mt-1 flex justify-between text-[var(--foreground)]/70">
-              <span>Arrhes (50%)</span>
+              <RichText value={labels.quoteArrhesLabel} />
               <span>{lastQuote.arrhes} €</span>
             </p>
             <p className="mt-1 flex justify-between text-[var(--foreground)]/70">
-              <span>Caution (à l&apos;arrivée)</span>
+              <RichText value={labels.quoteCautionLabel} />
               <span>1 000 €</span>
             </p>
             <p className="mt-3 text-xs text-[var(--foreground)]/50">
-              Estimation indicative, confirmée par notre équipe. Ménage à la charge du locataire, ou facturé 30 €/heure selon l&apos;état des lieux.
+              <RichText value={labels.quoteSuccessDisclaimer} /> <RichText value={labels.quoteMenageNote} />
             </p>
           </div>
         )}
         <p className="mx-auto mt-6 max-w-sm text-xs text-[var(--foreground)]/60">
-          En attendant, prenez le temps d&apos;explorer le site et notre{" "}
+          <RichText value={labels.exploreBefore} />{" "}
           <Link href="/faq" className="text-[var(--accent)] hover:underline">
             FAQ
           </Link>
-          , qui répond à la plupart des questions sur le domaine.
+          <RichText value={labels.exploreAfter} />
         </p>
       </div>
     );
@@ -309,7 +322,9 @@ export function ContactForm({ labels }: { labels: ContactFormLabels }) {
         {quote ? (
           <>
             <div className="flex items-baseline justify-between">
-              <span className="text-sm text-[var(--foreground)]/70">Estimation ({quote.bracket.label})</span>
+              <span className="text-sm text-[var(--foreground)]/70">
+                <RichText value={labels.quoteEstimateLabel} /> ({quote.bracket.label})
+              </span>
               <span className="font-serif text-2xl text-[var(--accent)]">{quote.total} €</span>
             </div>
             <p className="mt-1 text-xs text-[var(--foreground)]/50">
@@ -317,15 +332,15 @@ export function ContactForm({ labels }: { labels: ContactFormLabels }) {
             </p>
             <div className="mt-3 space-y-1 border-t border-black/10 pt-3 text-xs text-[var(--foreground)]/60">
               <p className="flex justify-between">
-                <span>Caution (à l&apos;arrivée, en espèces)</span>
+                <RichText value={labels.quoteCautionLabel} />
                 <span>1 000 €</span>
               </p>
-              <p>Ménage à la charge du locataire, ou facturé 30 €/heure selon l&apos;état des lieux.</p>
+              <RichText as="p" value={labels.quoteMenageNote} />
             </div>
           </>
         ) : (
           <p className="text-sm text-[var(--foreground)]/60">
-            Indiquez le nombre de personnes pour voir une estimation en direct.
+            <RichText value={labels.quoteEmptyHint} />
           </p>
         )}
       </div>
@@ -335,13 +350,18 @@ export function ContactForm({ labels }: { labels: ContactFormLabels }) {
           <RichText value={labels.civilityLabel} />
         </span>
         <div className="flex gap-3">
-          {(["madame", "monsieur"] as const).map((value) => (
+          {(
+            [
+              { value: "madame", label: labels.civilityMadame },
+              { value: "monsieur", label: labels.civilityMonsieur },
+            ] as const
+          ).map(({ value, label }) => (
             <label
               key={value}
-              className="flex flex-1 cursor-pointer items-center justify-center rounded-lg border border-black/10 px-3 py-3 text-center text-sm capitalize has-[:checked]:border-[var(--accent)] has-[:checked]:bg-[var(--accent)]/10"
+              className="flex flex-1 cursor-pointer items-center justify-center rounded-lg border border-black/10 px-3 py-3 text-center text-sm has-[:checked]:border-[var(--accent)] has-[:checked]:bg-[var(--accent)]/10"
             >
               <input type="checkbox" value={value} {...register("civility")} className="sr-only" />
-              {value}
+              <RichText value={label} />
             </label>
           ))}
         </div>
@@ -429,14 +449,10 @@ export function ContactForm({ labels }: { labels: ContactFormLabels }) {
         disabled={status === "loading"}
         className="inline-flex w-full items-center justify-center rounded-full bg-[var(--accent)] px-6 py-3.5 text-sm text-white transition-opacity hover:opacity-90 disabled:opacity-60 sm:w-auto"
       >
-        {status === "loading" ? "Envoi en cours..." : <RichText value={labels.submitLabel} />}
+        {status === "loading" ? <RichText value={labels.submitLoadingLabel} /> : <RichText value={labels.submitLabel} />}
       </button>
 
-      {status === "error" && (
-        <p className="text-sm text-red-600">
-          Une erreur est survenue. Merci de réessayer ou de nous appeler directement.
-        </p>
-      )}
+      {status === "error" && <RichText as="p" value={labels.errorMessage} className="text-sm text-red-600" />}
         </>
       )}
     </form>
