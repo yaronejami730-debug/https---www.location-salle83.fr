@@ -57,6 +57,7 @@ export default async function AdminPageEditorRoute({ params }: { params: Promise
         media={media ?? []}
         hebergementMedia={hebergementMedia ?? []}
         zigzagMedia={zigzagMedia}
+        hasCustomSlideshowAudio={settings.slideshowAudioUrl !== "/audio/slideshow.mp3"}
       />
       <Footer />
     </>
