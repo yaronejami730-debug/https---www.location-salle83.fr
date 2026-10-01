@@ -2,28 +2,31 @@
 
 import { revalidatePath } from "next/cache";
 import { supabaseAdmin } from "@/lib/supabase-admin";
+import type { FaqEntry } from "@/lib/faq";
 
-export async function addFaq(formData: FormData) {
+export async function saveFaqEntries(entries: FaqEntry[]) {
   const supabase = supabaseAdmin();
-  await supabase.from("faqs").insert({
-    question: String(formData.get("question") ?? "").trim(),
-    answer: String(formData.get("answer") ?? "").trim(),
-    page: String(formData.get("page") ?? "home"),
-  });
-  revalidatePath("/admin/faq");
-  revalidatePath("/");
-}
 
-export async function deleteFaq(id: string) {
-  const supabase = supabaseAdmin();
-  await supabase.from("faqs").delete().eq("id", id);
-  revalidatePath("/admin/faq");
-  revalidatePath("/");
-}
+  const rows = entries
+    .filter((e) => e.question.trim())
+    .map((e, i) => ({
+      category: e.category.trim() || "Général",
+      question: e.question.trim(),
+      answer: e.answer.trim(),
+      keywords: e.keywords.trim(),
+      published: e.published,
+      sort_order: i,
+    }));
 
-export async function toggleFaqPublished(id: string, published: boolean) {
-  const supabase = supabaseAdmin();
-  await supabase.from("faqs").update({ published }).eq("id", id);
+  const { error: deleteError } = await supabase.from("faq_entries").delete().not("id", "is", null);
+  if (deleteError) throw new Error(`Échec de l'enregistrement des FAQ : ${deleteError.message}`);
+
+  if (rows.length > 0) {
+    const { error: insertError } = await supabase.from("faq_entries").insert(rows);
+    if (insertError) throw new Error(`Échec de l'enregistrement des FAQ : ${insertError.message}`);
+  }
+
   revalidatePath("/admin/faq");
+  revalidatePath("/faq");
   revalidatePath("/");
 }

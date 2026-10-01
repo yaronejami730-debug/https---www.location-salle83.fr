@@ -3,6 +3,7 @@ import { PageHero } from "@/components/page-hero";
 import { Container } from "@/components/container";
 import { CtaSection } from "@/components/cta-section";
 import { FaqList } from "@/components/faq-list";
+import { getFaqEntries } from "@/lib/faq";
 
 export const metadata: Metadata = {
   title: "FAQ",
@@ -11,7 +12,9 @@ export const metadata: Metadata = {
   twitter: { images: ["/images/galerie/IMG_7450.jpg"] },
 };
 
-export default function FaqPage() {
+export default async function FaqPage() {
+  const entries = await getFaqEntries();
+
   return (
     <>
       <PageHero
@@ -22,7 +25,7 @@ export default function FaqPage() {
 
       <section className="pt-4 pb-20">
         <Container className="max-w-3xl">
-          <FaqList />
+          <FaqList entries={entries} />
         </Container>
       </section>
 

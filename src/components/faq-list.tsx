@@ -1,22 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { chatbotFaq } from "@/lib/faq-data";
-
-export const FAQ_CATEGORY_LABELS: Record<string, string> = {
-  hebergement: "Hébergement",
-  accessibilite: "Accessibilité",
-  equipements: "Équipements",
-  location: "Location",
-  animation: "Animation",
-  logistique: "Logistique",
-  restauration: "Restauration",
-  reservation: "Réservation",
-  localisation: "Localisation",
-  evenement: "Événements",
-};
-
-const CATEGORIES = Array.from(new Set(chatbotFaq.map((f) => f.category)));
+import type { FaqEntry } from "@/lib/faq";
 
 function normalize(text: string) {
   return text
@@ -25,27 +10,34 @@ function normalize(text: string) {
     .replace(/[̀-ͯ]/g, "");
 }
 
-export function FaqList({ compact = false }: { compact?: boolean }) {
+export function FaqList({ entries, compact = false }: { entries: FaqEntry[]; compact?: boolean }) {
   const [query, setQuery] = useState("");
   const [category, setCategory] = useState<string | null>(null);
   const [openId, setOpenId] = useState<string | null>(null);
 
+  const categories = useMemo(() => Array.from(new Set(entries.map((f) => f.category))), [entries]);
+
   const grouped = useMemo(() => {
     const q = normalize(query.trim());
-    const filtered = chatbotFaq.filter((f) => {
+    const filtered = entries.filter((f) => {
       if (category && f.category !== category) return false;
       if (!q) return true;
-      return normalize(f.question).includes(q) || normalize(f.answer).includes(q) || f.keywords.some((k) => normalize(k).includes(q));
+      const keywordHit = f.keywords
+        .split(",")
+        .map((k) => k.trim())
+        .filter(Boolean)
+        .some((k) => normalize(k).includes(q));
+      return normalize(f.question).includes(q) || normalize(f.answer).includes(q) || keywordHit;
     });
 
-    const byCategory = new Map<string, typeof chatbotFaq>();
+    const byCategory = new Map<string, typeof entries>();
     for (const entry of filtered) {
       const list = byCategory.get(entry.category) ?? [];
       list.push(entry);
       byCategory.set(entry.category, list);
     }
     return byCategory;
-  }, [query, category]);
+  }, [entries, query, category]);
 
   return (
     <div>
@@ -70,7 +62,7 @@ export function FaqList({ compact = false }: { compact?: boolean }) {
           >
             Toutes
           </button>
-          {CATEGORIES.map((cat) => (
+          {categories.map((cat) => (
             <button
               key={cat}
               onClick={() => {
@@ -83,7 +75,7 @@ export function FaqList({ compact = false }: { compact?: boolean }) {
                   : "border-black/15 text-[var(--foreground)] hover:bg-black/5"
               }`}
             >
-              {FAQ_CATEGORY_LABELS[cat] ?? cat}
+              {cat}
             </button>
           ))}
         </div>
@@ -99,7 +91,7 @@ export function FaqList({ compact = false }: { compact?: boolean }) {
                 compact ? "px-2.5 py-1 text-[11px]" : "px-3 py-1.5 text-xs"
               }`}
             >
-              {FAQ_CATEGORY_LABELS[cat] ?? cat}
+              {cat}
             </p>
             <div className="space-y-2.5">
               {entries.map((f) => {

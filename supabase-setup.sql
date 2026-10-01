@@ -135,3 +135,23 @@ alter table public.blog_posts enable row level security;
 
 create policy "public read published blog_posts" on public.blog_posts for select to anon using (published = true);
 create policy "service role full access blog_posts" on public.blog_posts for all to service_role using (true) with check (true);
+
+-- Lot: editable FAQ entries — the real, categorized FAQ shown on /faq
+-- (previously a hardcoded list in src/lib/faq-data.ts, not admin-editable).
+-- Run this block to add it; the ~35 existing questions get migrated in by a
+-- one-off script right after, not by this SQL (too much free text to hand-type).
+create table public.faq_entries (
+  id uuid primary key default gen_random_uuid(),
+  category text not null,
+  question text not null,
+  answer text not null,
+  keywords text not null default '',
+  sort_order integer not null default 0,
+  published boolean not null default true,
+  created_at timestamptz not null default now()
+);
+
+alter table public.faq_entries enable row level security;
+
+create policy "public read published faq_entries" on public.faq_entries for select to anon using (published = true);
+create policy "service role full access faq_entries" on public.faq_entries for all to service_role using (true) with check (true);
