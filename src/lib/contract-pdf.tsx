@@ -2,7 +2,7 @@ import "server-only";
 import { Document, Page, Text, View, Image, StyleSheet } from "@react-pdf/renderer";
 import { siteConfig } from "@/lib/site";
 import type { PricingBracket } from "@/lib/pricing";
-import { CONTRACT_CLAUSES, CLAUSE7_DEFAULTS, clauseValue, parseClauseBody } from "@/lib/contract-template";
+import { CONTRACT_CLAUSES, CLAUSE7_DEFAULTS, clauseValue, hasPageBreak, parseClauseBody } from "@/lib/contract-template";
 
 const styles = StyleSheet.create({
   page: { padding: 36, paddingBottom: 50, fontSize: 9, fontFamily: "Helvetica", color: "#2b2a26" },
@@ -104,9 +104,9 @@ function Bullet({ children }: { children: React.ReactNode }) {
 // Title + its first line of body wrapped together (wrap={false}) so a numbered
 // section heading can never land alone at the bottom of a page with its body
 // pushed to the next one.
-function Heading({ number, title, children }: { number: string; title: string; children?: React.ReactNode }) {
+function Heading({ number, title, children, pageBreak }: { number: string; title: string; children?: React.ReactNode; pageBreak?: boolean }) {
   return (
-    <View style={styles.heading} wrap={false}>
+    <View style={styles.heading} wrap={false} break={pageBreak}>
       <Text style={styles.sectionTitle}>
         {number}) {title}
       </Text>
@@ -169,7 +169,7 @@ export function ContractPdfDocument({
           </View>
         </View>
 
-        <View style={styles.section}>
+        <View style={styles.section} break={hasPageBreak(clauseContent, "clause1")}>
           <Text style={styles.sectionTitle}>1) EVENEMENT :</Text>
           <View style={styles.row}>
             <Text style={styles.label}>Date</Text>
@@ -236,13 +236,14 @@ export function ContractPdfDocument({
         </View>
 
         {CONTRACT_CLAUSES.slice(0, 5).map((c) => (
-          <Heading key={c.key} number={c.number} title={clause(c.titleKey, c.titleDefault)}>
+          <Heading key={c.key} number={c.number} title={clause(c.titleKey, c.titleDefault)} pageBreak={hasPageBreak(clauseContent, c.key)}>
             <ClauseBody body={clause(c.bodyKey, c.bodyDefault)} />
           </Heading>
         ))}
 
         <Heading
           number="7"
+          pageBreak={hasPageBreak(clauseContent, "clause7")}
           title={clause(CLAUSE7_DEFAULTS.titleKey, CLAUSE7_DEFAULTS.titleDefault)}
         >
           <View style={styles.row}>
@@ -252,12 +253,12 @@ export function ContractPdfDocument({
         </Heading>
 
         {CONTRACT_CLAUSES.slice(5).map((c) => (
-          <Heading key={c.key} number={c.number} title={clause(c.titleKey, c.titleDefault)}>
+          <Heading key={c.key} number={c.number} title={clause(c.titleKey, c.titleDefault)} pageBreak={hasPageBreak(clauseContent, c.key)}>
             <ClauseBody body={clause(c.bodyKey, c.bodyDefault)} />
           </Heading>
         ))}
 
-        <View style={styles.section} wrap={false}>
+        <View style={styles.section} wrap={false} break={hasPageBreak(clauseContent, "signature")}>
           <Text style={styles.paragraph}>Fayence, le _______________</Text>
           <Text style={[styles.paragraph, { marginTop: 16, fontFamily: "Helvetica-Bold" }]}>« Bon pour acceptation »</Text>
           <View style={[styles.row, { marginTop: 24 }]}>

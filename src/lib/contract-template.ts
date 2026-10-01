@@ -106,6 +106,15 @@ export const CLAUSE7_DEFAULTS = {
   labelDefault: "50 % du montant total payable le jour de la réservation, (non remboursées en cas d'annulation)",
 };
 
+/** Storage key of the "start this block on a new page" flag — clause keys, plus "clause1" (pricing) and "signature". */
+export function pageBreakKey(blockKey: string): string {
+  return `${blockKey}_pagebreak`;
+}
+
+export function hasPageBreak(content: Record<string, string> | undefined, blockKey: string): boolean {
+  return content?.[pageBreakKey(blockKey)] === "1";
+}
+
 export function clauseValue(content: Record<string, string> | undefined, key: string, fallback: string): string {
   return content?.[key]?.trim() || fallback;
 }
