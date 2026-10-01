@@ -219,7 +219,7 @@ export function PageEditor({
     <div className="relative">
       <div className="fixed inset-x-0 top-0 z-40 h-1.5 bg-[var(--accent)]" />
 
-      <div className="fixed right-4 top-4 z-50 flex flex-col items-end gap-2">
+      <div className="fixed right-4 top-48 z-50 flex flex-col items-end gap-2">
         {toolbarOpen ? (
           <div className="flex items-center gap-2 rounded-full border border-black/10 bg-[var(--background)]/95 px-2 py-1.5 shadow-lg backdrop-blur">
             <Link href="/admin/pages" className="rounded-full px-2.5 py-1.5 text-xs text-[var(--foreground)]/60 hover:bg-black/5" title="Toutes les pages">

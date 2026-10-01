@@ -1,6 +1,9 @@
 import { notFound } from "next/navigation";
 import { supabaseAdmin } from "@/lib/supabase-admin";
 import { getSchema } from "@/lib/page-schemas";
+import { getSiteSettings } from "@/lib/content";
+import { Header } from "@/components/header";
+import { Footer } from "@/components/footer";
 import { PageEditor } from "./page-editor";
 
 export const dynamic = "force-dynamic";
@@ -21,7 +24,8 @@ export default async function AdminPageEditorRoute({ params }: { params: Promise
         ? ["home-histoire", "home-choice-mariage", "home-choice-evenements", "home-choice-domaine"]
         : [];
 
-  const [{ data: row }, { data: faqs }, { data: reviews }, { data: media }, { data: hebergementMedia }, zigzagRows] = await Promise.all([
+  const [settings, { data: row }, { data: faqs }, { data: reviews }, { data: media }, { data: hebergementMedia }, zigzagRows] = await Promise.all([
+    getSiteSettings(),
     supabase.from("pages").select("*").eq("slug", slug).maybeSingle(),
     slug === "home" ? supabase.from("faqs").select("*").eq("page", "home").eq("published", true).order("sort_order") : Promise.resolve({ data: [] }),
     slug === "home" ? supabase.from("reviews").select("*").eq("published", true).order("sort_order") : Promise.resolve({ data: [] }),
@@ -41,16 +45,20 @@ export default async function AdminPageEditorRoute({ params }: { params: Promise
   const zigzagMedia = Object.fromEntries(zigzagCategories.map((cat, i) => [cat, zigzagRows[i]?.data ?? []]));
 
   return (
-    <PageEditor
-      schema={schema}
-      initialContent={(row?.content as Record<string, string>) ?? {}}
-      initialSeoTitle={row?.seo_title ?? ""}
-      initialSeoDescription={row?.seo_description ?? ""}
-      faqs={faqs ?? []}
-      reviews={reviews ?? []}
-      media={media ?? []}
-      hebergementMedia={hebergementMedia ?? []}
-      zigzagMedia={zigzagMedia}
-    />
+    <>
+      <Header ctaButton={settings.ctaButton} />
+      <PageEditor
+        schema={schema}
+        initialContent={(row?.content as Record<string, string>) ?? {}}
+        initialSeoTitle={row?.seo_title ?? ""}
+        initialSeoDescription={row?.seo_description ?? ""}
+        faqs={faqs ?? []}
+        reviews={reviews ?? []}
+        media={media ?? []}
+        hebergementMedia={hebergementMedia ?? []}
+        zigzagMedia={zigzagMedia}
+      />
+      <Footer />
+    </>
   );
 }
