@@ -19,7 +19,7 @@ export type NavItem = { label: string; href: string };
 export const navItems: NavItem[] = [
   { label: "Accueil", href: "/" },
   { label: "Mariage", href: "/mariage" },
-  { label: "Séminaire & Événements", href: "/seminaire" },
+  { label: "Paris & Événements", href: "/seminaire" },
   { label: "Le domaine", href: "/domaine" },
   { label: "Hébergement", href: "/hebergement" },
   { label: "Galerie", href: "/galerie" },

@@ -15,6 +15,7 @@ import { mediaUrl } from "@/lib/supabase-public";
 import { EditableAmenityList, type AmenityItem } from "./amenity-list-editor";
 import { LocationMap } from "@/components/location-map";
 import { LogoMarquee } from "@/components/logo-marquee";
+import { ContactFormEditor } from "./contact-form-editor";
 
 type MediaRow = { id: string; storage_path: string; alt: string | null; page: string; sort_order: number };
 type FaqRow = { id: string; question: string; answer: string };
@@ -643,18 +644,9 @@ export function PageEditor({
             <section className="py-16">
               <Container className="max-w-2xl">
                 <p className="mb-6 text-sm text-[var(--foreground)]/50">
-                  Le formulaire de devis (calcul, envoi) garde sa structure fixe, mais tous ses libellés sont modifiables ci-dessous.
+                  Aperçu identique au formulaire du site : cliquez sur n&apos;importe quel texte pour le modifier. Les champs sont inactifs ici.
                 </p>
-                <div className="grid gap-4 sm:grid-cols-2">
-                  {schema.fields
-                    .filter((field) => field.key.startsWith("form_"))
-                    .map((field) => (
-                      <div key={field.key} className="rounded-xl border border-black/10 bg-[var(--background)] p-3">
-                        <p className="mb-1.5 text-xs text-[var(--foreground)]/50">{field.label}</p>
-                        <EditableText value={val(field.key)} onChange={set(field.key)} className="text-sm text-[var(--foreground)]" />
-                      </div>
-                    ))}
-                </div>
+                <ContactFormEditor val={val} set={set} />
               </Container>
             </section>
           )}

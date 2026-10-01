@@ -60,7 +60,7 @@ export const pageSchemas: PageSchema[] = [
       { key: "hebergement_text", label: "Section Hébergement — texte", type: "textarea", default: "15 mazets de 2 à 6 personnes, literie 4 étoiles, wifi et télévision, pour prolonger la fête et accueillir vos proches directement sur place." },
       { key: "choices_title", label: "Section 3 choix — titre", type: "text", default: "Que recherchez-vous ?" },
       { key: "choice_mariage_label", label: "Choix 1 — libellé", type: "text", default: "Mariage" },
-      { key: "choice_evenements_label", label: "Choix 2 — libellé", type: "text", default: "Séminaire & Événements" },
+      { key: "choice_evenements_label", label: "Choix 2 — libellé", type: "text", default: "Paris & Événements" },
       { key: "choice_domaine_label", label: "Choix 3 — libellé", type: "text", default: "Le domaine" },
       { key: "faq_title", label: "Section FAQ — titre", type: "text", default: "Questions fréquentes" },
       { key: "cta_title", label: "CTA final — titre", type: "text", default: "Parlons de votre projet" },
@@ -104,9 +104,9 @@ export const pageSchemas: PageSchema[] = [
   },
   {
     slug: "seminaire",
-    label: "Séminaire & Événements",
+    label: "Paris & Événements",
     fields: [
-      { key: "eyebrow", label: "Hero — eyebrow (petit texte script au-dessus du titre)", type: "text", default: "Tarif & Événements" },
+      { key: "eyebrow", label: "Hero — eyebrow (petit texte script au-dessus du titre)", type: "text", default: "Paris & Événements" },
       { key: "hero_title", label: "Hero — titre", type: "text", default: "Travail, détente et cohésion dans un cadre privilégié" },
       { key: "hero_description", label: "Hero — sous-titre", type: "textarea", default: "Séminaires, formations, événements d'entreprise, incentive : à 30 minutes de Grasse, Antibes, Cannes, Fréjus-Saint-Raphaël ou Draguignan." },
       { key: "intro_title", label: "Introduction — titre", type: "text", default: "Un cadre propice au travail" },
