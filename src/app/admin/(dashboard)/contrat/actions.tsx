@@ -7,6 +7,7 @@ import { renderToBuffer } from "@react-pdf/renderer";
 import { supabaseAdmin } from "@/lib/supabase-admin";
 import { computeQuote, getPricingBrackets } from "@/lib/pricing";
 import { ContractPdfDocument } from "@/lib/contract-pdf";
+import { resolveClauses, hasPageBreak } from "@/lib/contract-template";
 
 export async function saveContractContent(content: Record<string, string>) {
   const supabase = supabaseAdmin();
@@ -60,7 +61,9 @@ export async function previewContractPdf(content: Record<string, string>): Promi
       logoDataUri={logoDataUri}
       qrCodeDataUri={null}
       options={{ lendemain: true, piscine: true, vaisselle: true, cuisine: true, chapiteauCount: 1 }}
-      clauseContent={content}
+      clauses={resolveClauses(content)}
+      clause1PageBreak={hasPageBreak(content, "clause1")}
+      signaturePageBreak={hasPageBreak(content, "signature")}
     />,
   );
 

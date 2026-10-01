@@ -2,7 +2,8 @@ import "server-only";
 import { Document, Page, Text, View, Image, StyleSheet } from "@react-pdf/renderer";
 import { siteConfig } from "@/lib/site";
 import type { PricingBracket } from "@/lib/pricing";
-import { CONTRACT_CLAUSES, CLAUSE7_DEFAULTS, clauseValue, hasPageBreak, parseClauseBody } from "@/lib/contract-template";
+import type { ClauseItem } from "@/lib/contract-template";
+import { parseClauseBody } from "@/lib/contract-template";
 
 const styles = StyleSheet.create({
   page: { padding: 36, paddingBottom: 50, fontSize: 9, fontFamily: "Helvetica", color: "#2b2a26" },
@@ -63,8 +64,10 @@ export type ContractPdfProps = {
   logoDataUri: string | null;
   qrCodeDataUri: string | null;
   options: { lendemain: boolean; piscine: boolean; vaisselle: boolean; cuisine: boolean; chapiteauCount: number };
-  /** Raw "contrat" page content (slug "contrat") — clause2_title, clause2_body, etc. Falls back to the built-in defaults for anything missing. */
-  clauseContent?: Record<string, string>;
+  /** Resolved clause list (already merged with defaults) — see resolveClauses() in contract-template.ts. */
+  clauses: ClauseItem[];
+  clause1PageBreak?: boolean;
+  signaturePageBreak?: boolean;
 };
 
 function ClauseBody({ body }: { body: string }) {
@@ -131,9 +134,10 @@ export function ContractPdfDocument({
   logoDataUri,
   qrCodeDataUri,
   options,
-  clauseContent,
+  clauses,
+  clause1PageBreak,
+  signaturePageBreak,
 }: ContractPdfProps) {
-  const clause = (key: string, fallback: string) => clauseValue(clauseContent, key, fallback);
   return (
     <Document>
       <Page size="A4" style={styles.page} wrap>
@@ -169,7 +173,7 @@ export function ContractPdfDocument({
           </View>
         </View>
 
-        <View style={styles.section} break={hasPageBreak(clauseContent, "clause1")}>
+        <View style={styles.section} break={clause1PageBreak}>
           <Text style={styles.sectionTitle}>1) EVENEMENT :</Text>
           <View style={styles.row}>
             <Text style={styles.label}>Date</Text>
@@ -235,30 +239,20 @@ export function ContractPdfDocument({
           </View>
         </View>
 
-        {CONTRACT_CLAUSES.slice(0, 5).map((c) => (
-          <Heading key={c.key} number={c.number} title={clause(c.titleKey, c.titleDefault)} pageBreak={hasPageBreak(clauseContent, c.key)}>
-            <ClauseBody body={clause(c.bodyKey, c.bodyDefault)} />
+        {clauses.map((c, i) => (
+          <Heading key={c.id} number={String(i + 2)} title={c.title} pageBreak={c.pageBreak}>
+            {c.special === "arrhes" ? (
+              <View style={styles.row}>
+                <Text style={styles.label}>{c.body}</Text>
+                <Text style={styles.value}>{arrhes} €</Text>
+              </View>
+            ) : (
+              <ClauseBody body={c.body} />
+            )}
           </Heading>
         ))}
 
-        <Heading
-          number="7"
-          pageBreak={hasPageBreak(clauseContent, "clause7")}
-          title={clause(CLAUSE7_DEFAULTS.titleKey, CLAUSE7_DEFAULTS.titleDefault)}
-        >
-          <View style={styles.row}>
-            <Text style={styles.label}>{clause(CLAUSE7_DEFAULTS.labelKey, CLAUSE7_DEFAULTS.labelDefault)}</Text>
-            <Text style={styles.value}>{arrhes} €</Text>
-          </View>
-        </Heading>
-
-        {CONTRACT_CLAUSES.slice(5).map((c) => (
-          <Heading key={c.key} number={c.number} title={clause(c.titleKey, c.titleDefault)} pageBreak={hasPageBreak(clauseContent, c.key)}>
-            <ClauseBody body={clause(c.bodyKey, c.bodyDefault)} />
-          </Heading>
-        ))}
-
-        <View style={styles.section} wrap={false} break={hasPageBreak(clauseContent, "signature")}>
+        <View style={styles.section} wrap={false} break={signaturePageBreak}>
           <Text style={styles.paragraph}>Fayence, le _______________</Text>
           <Text style={[styles.paragraph, { marginTop: 16, fontFamily: "Helvetica-Bold" }]}>« Bon pour acceptation »</Text>
           <View style={[styles.row, { marginTop: 24 }]}>

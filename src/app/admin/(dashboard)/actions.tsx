@@ -10,6 +10,7 @@ import { getPricingBrackets, CHAPITEAU_UNIT_PRICE } from "@/lib/pricing";
 import { leadReference } from "@/lib/lead-reference";
 import { siteConfig } from "@/lib/site";
 import { ContractPdfDocument } from "@/lib/contract-pdf";
+import { resolveClauses, hasPageBreak } from "@/lib/contract-template";
 import { sendEmail } from "@/lib/mail";
 import { wasteSortingEmail } from "@/lib/email-templates";
 
@@ -104,7 +105,9 @@ export async function generateContractPdf(leadId: string, extra: { eventDateOver
         cuisine: lead.option_cuisine,
         chapiteauCount: lead.option_chapiteau_count ?? 0,
       }}
-      clauseContent={clauseContent}
+      clauses={resolveClauses(clauseContent)}
+      clause1PageBreak={hasPageBreak(clauseContent, "clause1")}
+      signaturePageBreak={hasPageBreak(clauseContent, "signature")}
     />,
   );
 
