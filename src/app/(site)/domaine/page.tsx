@@ -10,8 +10,6 @@ import { RichText } from "@/components/rich-text";
 import { AmenityIcon } from "@/components/amenity-icon";
 import { LocationMap } from "@/components/location-map";
 
-const amenityIcons = ["wifi", "parking", "pool", "paw", "child", "restaurant", "kitchen", "fitness"] as const;
-
 const schema = getSchema("domaine")!;
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -78,12 +76,12 @@ export default async function DomainePage() {
         <Container>
           <RichText as="h2" value={f("amenities_title")} className="text-center font-serif text-2xl text-[var(--foreground)]" />
           <div className="mx-auto mt-8 grid max-w-3xl grid-cols-2 gap-x-6 gap-y-6 sm:grid-cols-4">
-            {amenityIcons.map((icon, i) => (
-              <div key={icon} className="flex flex-col items-center gap-2 text-center">
+            {parseListField(f("amenities")).map((item, i) => (
+              <div key={i} className="flex flex-col items-center gap-2 text-center">
                 <span className="flex h-11 w-11 items-center justify-center rounded-full bg-[var(--background)] text-[var(--accent)]">
-                  <AmenityIcon name={icon} />
+                  <AmenityIcon name={item.icon} />
                 </span>
-                <RichText as="p" value={f(`amenity${i + 1}`)} className="text-xs text-[var(--foreground)]/70" />
+                <RichText as="p" value={item.text} className="text-xs text-[var(--foreground)]/70" />
               </div>
             ))}
           </div>

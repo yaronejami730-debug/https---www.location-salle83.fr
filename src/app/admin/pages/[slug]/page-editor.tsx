@@ -12,11 +12,9 @@ import { parseListField } from "@/lib/page-schemas";
 import type { PricingBracket } from "@/lib/pricing";
 import { PricingGridEditor } from "./pricing-grid-editor";
 import { mediaUrl } from "@/lib/supabase-public";
-import { AmenityIcon } from "@/components/amenity-icon";
+import { EditableAmenityList, type AmenityItem } from "./amenity-list-editor";
 import { LocationMap } from "@/components/location-map";
 import { LogoMarquee } from "@/components/logo-marquee";
-
-const amenityIcons = ["wifi", "parking", "pool", "paw", "child", "restaurant", "kitchen", "fitness"] as const;
 
 type MediaRow = { id: string; storage_path: string; alt: string | null; page: string; sort_order: number };
 type FaqRow = { id: string; question: string; answer: string };
@@ -565,15 +563,11 @@ export function PageEditor({
                     onChange={set("amenities_title")}
                     className="mt-8 text-xs font-medium uppercase tracking-[0.15em] text-[var(--accent)]"
                   />
-                  <div className="mt-4 grid grid-cols-2 gap-4">
-                    {(["wifi", "parking", "kitchen", "pool"] as const).map((icon, i) => (
-                      <div key={icon} className="flex items-center gap-2.5">
-                        <span className="text-[var(--accent)]">
-                          <AmenityIcon name={icon} />
-                        </span>
-                        <EditableText value={val(`amenity${i + 1}`)} onChange={set(`amenity${i + 1}`)} className="text-sm text-[var(--foreground)]/70" />
-                      </div>
-                    ))}
+                  <div className="mt-4">
+                    <EditableAmenityList
+                      items={parseListField(val("amenities")) as AmenityItem[]}
+                      onChange={(items) => set("amenities")(JSON.stringify(items))}
+                    />
                   </div>
                 </div>
               </Container>
@@ -625,15 +619,11 @@ export function PageEditor({
               <section className="py-16 bg-[var(--background-muted)]">
                 <Container>
                   <EditableText as="h2" value={val("amenities_title")} onChange={set("amenities_title")} className="text-center font-serif text-2xl text-[var(--foreground)]" />
-                  <div className="mx-auto mt-8 grid max-w-3xl grid-cols-2 gap-x-6 gap-y-6 sm:grid-cols-4">
-                    {amenityIcons.map((icon, i) => (
-                      <div key={icon} className="flex flex-col items-center gap-2 text-center">
-                        <span className="flex h-11 w-11 items-center justify-center rounded-full bg-[var(--background)] text-[var(--accent)]">
-                          <AmenityIcon name={icon} />
-                        </span>
-                        <EditableText value={val(`amenity${i + 1}`)} onChange={set(`amenity${i + 1}`)} className="text-xs text-[var(--foreground)]/70" />
-                      </div>
-                    ))}
+                  <div className="mx-auto mt-8 max-w-3xl">
+                    <EditableAmenityList
+                      items={parseListField(val("amenities")) as AmenityItem[]}
+                      onChange={(items) => set("amenities")(JSON.stringify(items))}
+                    />
                   </div>
                 </Container>
               </section>

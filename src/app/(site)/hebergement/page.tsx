@@ -6,12 +6,11 @@ import { AmenityIcon } from "@/components/amenity-icon";
 import { getPageContent, getMedia } from "@/lib/content";
 import { mediaUrl } from "@/lib/supabase-public";
 import { staticHebergementPhotos } from "@/lib/static-gallery";
-import { getSchema, fieldValue } from "@/lib/page-schemas";
+import { getSchema, fieldValue, parseListField } from "@/lib/page-schemas";
 import { RichText } from "@/components/rich-text";
 import { sanitizeInlineHtml, parseAligned } from "@/lib/sanitize-html";
 
 const schema = getSchema("hebergement")!;
-const amenityIcons = ["wifi", "parking", "kitchen", "pool"] as const;
 
 export async function generateMetadata(): Promise<Metadata> {
   const content = await getPageContent("hebergement");
@@ -50,12 +49,12 @@ export default async function HebergementPage() {
 
             <RichText as="p" value={f("amenities_title")} className="mt-8 text-xs font-medium uppercase tracking-[0.15em] text-[var(--accent)]" />
             <div className="mt-4 grid grid-cols-2 gap-4">
-              {amenityIcons.map((icon, i) => (
-                <div key={icon} className="flex items-center gap-2.5">
+              {parseListField(f("amenities")).map((item, i) => (
+                <div key={i} className="flex items-center gap-2.5">
                   <span className="text-[var(--accent)]">
-                    <AmenityIcon name={icon} />
+                    <AmenityIcon name={item.icon} />
                   </span>
-                  <RichText as="p" value={f(`amenity${i + 1}`)} className="text-sm text-[var(--foreground)]/70" />
+                  <RichText as="p" value={item.text} className="text-sm text-[var(--foreground)]/70" />
                 </div>
               ))}
             </div>
