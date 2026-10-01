@@ -8,7 +8,7 @@ import { LogoMarquee } from "@/components/logo-marquee";
 import { Reveal } from "@/components/reveal";
 import { getPageContent, getReviews, getMedia } from "@/lib/content";
 import { mediaUrl } from "@/lib/supabase-public";
-import { getSchema, fieldValue } from "@/lib/page-schemas";
+import { getSchema, fieldValue, parseListField } from "@/lib/page-schemas";
 import { RichText } from "@/components/rich-text";
 
 const schema = getSchema("home")!;
@@ -54,12 +54,7 @@ export default async function HomePage() {
     },
   ];
 
-  const mainStats = [
-    { value: f("stat1_value"), label: f("stat1_label") },
-    { value: f("stat2_value"), label: f("stat2_label") },
-    { value: f("stat3_value"), label: f("stat3_label") },
-    { value: f("stat4_value"), label: f("stat4_label") },
-  ];
+  const mainStats = parseListField(f("stats"));
   const sideStat = f("stat5_label");
 
   return (
@@ -87,8 +82,8 @@ export default async function HomePage() {
               />
               <div className="flex flex-col overflow-hidden rounded-2xl border border-black/10 bg-[var(--background)] shadow-xl sm:flex-row">
                 <div className="grid grid-cols-2 gap-y-8 px-6 py-10 sm:flex sm:flex-1 sm:flex-nowrap sm:items-center sm:justify-between sm:gap-4 sm:px-10 sm:py-12">
-                  {mainStats.map((s) => (
-                    <div key={s.label} className="text-center sm:shrink-0">
+                  {mainStats.map((s, i) => (
+                    <div key={i} className="text-center sm:shrink-0">
                       <CounterStat value={s.value} className="font-serif text-3xl text-[var(--accent)] sm:text-4xl" />
                       <RichText as="p" value={s.label} className="mt-1 text-[10px] uppercase tracking-[0.12em] text-[var(--foreground)]/50 sm:text-xs" />
                     </div>

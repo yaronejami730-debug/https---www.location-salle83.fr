@@ -347,13 +347,15 @@ export function PageEditor({
           <section className="py-16">
             <Container>
               <EditableText as="h2" value={val("stats_title")} onChange={set("stats_title")} className="text-center font-serif text-3xl text-[var(--foreground)]" />
-              <div className="mt-10 grid grid-cols-2 divide-x divide-y divide-black/10 overflow-hidden rounded-2xl border border-black/10 sm:grid-cols-4 sm:divide-y-0">
-                {[1, 2, 3, 4].map((n) => (
-                  <div key={n} className="flex flex-col items-center justify-center gap-1.5 px-4 py-8 text-center">
-                    <EditableText value={val(`stat${n}_value`)} onChange={set(`stat${n}_value`)} className="font-serif text-4xl text-[var(--accent)]" />
-                    <EditableText value={val(`stat${n}_label`)} onChange={set(`stat${n}_label`)} className="text-xs uppercase tracking-[0.15em] text-[var(--foreground)]/50" />
-                  </div>
-                ))}
+              <div className="mt-10">
+                <EditableCardList
+                  items={parseListField(val("stats"))}
+                  itemFields={schema.fields.find((f) => f.key === "stats")!.itemFields!}
+                  onChange={(items) => set("stats")(JSON.stringify(items))}
+                  addLabel="Ajouter un chiffre"
+                  gridClassName="grid grid-cols-2 gap-4 sm:grid-cols-4"
+                  cardClassName="rounded-2xl border border-black/10 px-4 py-8 text-center"
+                />
               </div>
             </Container>
           </section>
