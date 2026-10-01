@@ -15,10 +15,17 @@ export function Header({ ctaButton = CTA_DEFAULTS.ctaButton }: { ctaButton?: str
 
   return (
     <header className="sticky top-0 z-50 border-b border-black/10 bg-[var(--background-muted)]/95 backdrop-blur">
-      <Container className="flex h-44 items-center justify-between">
+      <Container className="flex h-20 items-center justify-between sm:h-28 lg:h-44">
         <div className="flex items-center gap-10">
           <Link href="/" className="flex items-end gap-2 self-end">
-            <Image src="/images/logo.png" alt={siteConfig.name} width={104} height={106} className="site-logo h-44 w-auto shrink-0 translate-y-2" priority />
+            <Image
+              src="/images/logo.png"
+              alt={siteConfig.name}
+              width={104}
+              height={106}
+              className="site-logo h-20 w-auto shrink-0 sm:h-28 lg:h-44 lg:translate-y-2"
+              priority
+            />
           </Link>
 
           <nav className="hidden lg:flex items-center gap-6">
