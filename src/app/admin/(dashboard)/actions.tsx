@@ -6,7 +6,7 @@ import { revalidatePath } from "next/cache";
 import { renderToBuffer } from "@react-pdf/renderer";
 import QRCode from "qrcode";
 import { supabaseAdmin } from "@/lib/supabase-admin";
-import { pricingBrackets, CHAPITEAU_UNIT_PRICE } from "@/lib/pricing";
+import { getPricingBrackets, CHAPITEAU_UNIT_PRICE } from "@/lib/pricing";
 import { leadReference } from "@/lib/lead-reference";
 import { siteConfig } from "@/lib/site";
 import { ContractPdfDocument } from "@/lib/contract-pdf";
@@ -44,6 +44,7 @@ export async function generateContractPdf(leadId: string, extra: { eventDateOver
   const { data: lead, error } = await supabase.from("leads").select("*").eq("id", leadId).single();
   if (error || !lead) throw new Error("lead_not_found");
 
+  const pricingBrackets = await getPricingBrackets();
   const bracket = pricingBrackets.find((b) => b.key === lead.pricing_bracket) ?? pricingBrackets[0];
 
   const { data: contractRow } = await supabase.from("pages").select("content").eq("slug", "contrat").maybeSingle();

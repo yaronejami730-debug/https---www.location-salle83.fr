@@ -1,3 +1,5 @@
+import { supabasePublic } from "./supabase-public";
+
 export type PricingBracket = {
   key: string;
   label: string;
@@ -9,7 +11,8 @@ export type PricingBracket = {
   cuisine: number;
 };
 
-export const pricingBrackets: PricingBracket[] = [
+/** Repli si la table pricing_brackets est vide ou inaccessible. */
+export const DEFAULT_PRICING_BRACKETS: PricingBracket[] = [
   { key: "40", label: "-40 pers.", maxGuests: 40, salle: 1700, lendemain: 250, piscine: 150, vaisselle: 110, cuisine: 200 },
   { key: "50", label: "-50 pers.", maxGuests: 50, salle: 1800, lendemain: 250, piscine: 150, vaisselle: 110, cuisine: 200 },
   { key: "65", label: "-65 pers.", maxGuests: 65, salle: 1950, lendemain: 300, piscine: 200, vaisselle: 120, cuisine: 230 },
@@ -29,20 +32,36 @@ export type QuoteOptions = {
   chapiteauCount: number;
 };
 
-export function findBracket(guestCount: number): PricingBracket | null {
+export async function getPricingBrackets(): Promise<PricingBracket[]> {
+  const supabase = supabasePublic();
+  const { data } = await supabase.from("pricing_brackets").select("*").order("sort_order", { ascending: true });
+  if (!data || data.length === 0) return DEFAULT_PRICING_BRACKETS;
+  return data.map((row) => ({
+    key: row.key,
+    label: row.label,
+    maxGuests: row.max_guests,
+    salle: row.salle,
+    lendemain: row.lendemain,
+    piscine: row.piscine,
+    vaisselle: row.vaisselle,
+    cuisine: row.cuisine,
+  }));
+}
+
+export function findBracket(guestCount: number, brackets: PricingBracket[]): PricingBracket | null {
   if (!guestCount || guestCount <= 0) return null;
-  return pricingBrackets.find((b) => guestCount <= b.maxGuests) ?? null;
+  return brackets.find((b) => guestCount <= b.maxGuests) ?? null;
 }
 
 /** Phrase prête à injecter dans le contexte du chatbot : tarif de base de la salle pour ce nombre d'invités. */
-export function describeBaseRate(guestCount: number): string | null {
-  const bracket = findBracket(guestCount);
+export function describeBaseRate(guestCount: number, brackets: PricingBracket[]): string | null {
+  const bracket = findBracket(guestCount, brackets);
   if (!bracket) return null;
   return `Pour un événement jusqu'à ${bracket.maxGuests} personnes, le tarif de base de la location de la salle est de ${bracket.salle} €. En supplément selon les besoins : le lendemain (${bracket.lendemain} €), l'accès piscine le lendemain (${bracket.piscine} €), la vaisselle (${bracket.vaisselle} €), la cuisine professionnelle (${bracket.cuisine} €), et les chapiteaux (${CHAPITEAU_UNIT_PRICE} € l'unité). Un acompte de 50 % du montant total est demandé à la réservation.`;
 }
 
-export function computeQuote(options: QuoteOptions) {
-  const bracket = findBracket(options.guestCount);
+export function computeQuote(options: QuoteOptions, brackets: PricingBracket[]) {
+  const bracket = findBracket(options.guestCount, brackets);
   if (!bracket) return null;
 
   const chapiteauTotal = Math.max(0, options.chapiteauCount) * CHAPITEAU_UNIT_PRICE;

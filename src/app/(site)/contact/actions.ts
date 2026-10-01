@@ -3,7 +3,7 @@
 import { z } from "zod";
 import { after } from "next/server";
 import { supabaseAdmin } from "@/lib/supabase-admin";
-import { computeQuote } from "@/lib/pricing";
+import { computeQuote, getPricingBrackets } from "@/lib/pricing";
 import { sendAlertEmail, sendEmail } from "@/lib/mail";
 import { welcomeEmail, faqFollowUpEmail } from "@/lib/email-templates";
 
@@ -32,14 +32,18 @@ export type SubmitLeadInput = z.infer<typeof schema>;
 export async function submitLead(input: SubmitLeadInput) {
   const values = schema.parse(input);
 
-  const quote = computeQuote({
-    guestCount: Number(values.guestCount) || 0,
-    lendemain: values.lendemain,
-    piscine: values.piscine,
-    vaisselle: values.vaisselle,
-    cuisine: values.cuisine,
-    chapiteauCount: Number(values.chapiteauCount) || 0,
-  });
+  const brackets = await getPricingBrackets();
+  const quote = computeQuote(
+    {
+      guestCount: Number(values.guestCount) || 0,
+      lendemain: values.lendemain,
+      piscine: values.piscine,
+      vaisselle: values.vaisselle,
+      cuisine: values.cuisine,
+      chapiteauCount: Number(values.chapiteauCount) || 0,
+    },
+    brackets,
+  );
 
   const supabase = supabaseAdmin();
   const { data, error } = await supabase

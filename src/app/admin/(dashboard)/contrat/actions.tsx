@@ -5,7 +5,7 @@ import path from "node:path";
 import { revalidatePath } from "next/cache";
 import { renderToBuffer } from "@react-pdf/renderer";
 import { supabaseAdmin } from "@/lib/supabase-admin";
-import { computeQuote, pricingBrackets } from "@/lib/pricing";
+import { computeQuote, getPricingBrackets } from "@/lib/pricing";
 import { ContractPdfDocument } from "@/lib/contract-pdf";
 
 export async function saveContractContent(content: Record<string, string>) {
@@ -22,8 +22,12 @@ export async function saveContractContent(content: Record<string, string>) {
 
 /** Renders a preview PDF against sample lead data — this editor has no real lead attached, it's the template. */
 export async function previewContractPdf(content: Record<string, string>): Promise<string> {
-  const bracket = pricingBrackets[2];
-  const quote = computeQuote({ guestCount: bracket.maxGuests, lendemain: true, piscine: true, vaisselle: true, cuisine: true, chapiteauCount: 1 })!;
+  const pricingBrackets = await getPricingBrackets();
+  const bracket = pricingBrackets[Math.min(2, pricingBrackets.length - 1)];
+  const quote = computeQuote(
+    { guestCount: bracket.maxGuests, lendemain: true, piscine: true, vaisselle: true, cuisine: true, chapiteauCount: 1 },
+    pricingBrackets,
+  )!;
 
   let logoDataUri: string | null = null;
   try {

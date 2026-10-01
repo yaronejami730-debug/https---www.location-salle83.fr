@@ -7,7 +7,7 @@ import { useState } from "react";
 import { z } from "zod";
 import { DatePicker } from "./date-picker";
 import { AddressAutocomplete } from "./address-autocomplete";
-import { computeQuote, findBracket, pricingBrackets } from "@/lib/pricing";
+import { computeQuote, findBracket, type PricingBracket } from "@/lib/pricing";
 import { leadReference } from "@/lib/lead-reference";
 import { submitLead } from "@/app/(site)/contact/actions";
 import { RichText } from "@/components/rich-text";
@@ -87,7 +87,7 @@ type FormValues = z.infer<typeof schema>;
 
 const HEBERGEMENT_BOOKING_URL = "https://www.domainedelabegude.com/fr";
 
-export function ContactForm({ labels }: { labels: ContactFormLabels }) {
+export function ContactForm({ labels, pricingBrackets }: { labels: ContactFormLabels; pricingBrackets: PricingBracket[] }) {
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
   const [lastQuote, setLastQuote] = useState<ReturnType<typeof computeQuote>>(null);
   const [lastReference, setLastReference] = useState<string | null>(null);
@@ -140,15 +140,18 @@ export function ContactForm({ labels }: { labels: ContactFormLabels }) {
   });
 
   const watched = watch();
-  const previewBracket = findBracket(Number(watched.guestCount) || 0) ?? pricingBrackets[0];
-  const quote = computeQuote({
-    guestCount: Number(watched.guestCount) || 0,
-    lendemain: watched.lendemain,
-    piscine: watched.piscine,
-    vaisselle: watched.vaisselle,
-    cuisine: watched.cuisine,
-    chapiteauCount: Number(watched.chapiteauCount) || 0,
-  });
+  const previewBracket = findBracket(Number(watched.guestCount) || 0, pricingBrackets) ?? pricingBrackets[0];
+  const quote = computeQuote(
+    {
+      guestCount: Number(watched.guestCount) || 0,
+      lendemain: watched.lendemain,
+      piscine: watched.piscine,
+      vaisselle: watched.vaisselle,
+      cuisine: watched.cuisine,
+      chapiteauCount: Number(watched.chapiteauCount) || 0,
+    },
+    pricingBrackets,
+  );
 
   async function onSubmit(values: FormValues) {
     setStatus("loading");

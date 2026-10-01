@@ -8,7 +8,7 @@ import { getPageContent, getMedia } from "@/lib/content";
 import { mediaUrl } from "@/lib/supabase-public";
 import { staticGalleryPhotos } from "@/lib/static-gallery";
 import { getSchema, fieldValue } from "@/lib/page-schemas";
-import { pricingBrackets } from "@/lib/pricing";
+import { getPricingBrackets } from "@/lib/pricing";
 import { RichText } from "@/components/rich-text";
 
 const seminaireSchema = getSchema("seminaire")!;
@@ -26,11 +26,12 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function SeminaireEvenementsPage() {
-  const [seminaireContent, zigzag1, zigzag2, zigzag3] = await Promise.all([
+  const [seminaireContent, zigzag1, zigzag2, zigzag3, pricingBrackets] = await Promise.all([
     getPageContent("seminaire"),
     getMedia("seminaire-zigzag-1"),
     getMedia("seminaire-zigzag-2"),
     getMedia("seminaire-zigzag-3"),
+    getPricingBrackets(),
   ]);
   const cs = seminaireContent?.content ?? {};
   const fs = (key: string) => fieldValue(cs, seminaireSchema.fields.find((x) => x.key === key)!);

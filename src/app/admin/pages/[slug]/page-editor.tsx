@@ -9,7 +9,8 @@ import { savePageContent } from "../actions";
 import { uploadPhoto, deletePhoto, reorderPhotos, replacePhoto, uploadSlideshowAudio, removeSlideshowAudio } from "../../(dashboard)/photos/actions";
 import type { PageSchema } from "@/lib/page-schemas";
 import { parseListField } from "@/lib/page-schemas";
-import { pricingBrackets } from "@/lib/pricing";
+import type { PricingBracket } from "@/lib/pricing";
+import { PricingGridEditor } from "./pricing-grid-editor";
 import { mediaUrl } from "@/lib/supabase-public";
 import { AmenityIcon } from "@/components/amenity-icon";
 import { LocationMap } from "@/components/location-map";
@@ -185,6 +186,7 @@ export function PageEditor({
   hebergementMedia,
   zigzagMedia,
   hasCustomSlideshowAudio,
+  pricingBrackets,
 }: {
   schema: PageSchema;
   initialContent: Record<string, string>;
@@ -196,6 +198,7 @@ export function PageEditor({
   hebergementMedia: MediaRow[];
   zigzagMedia: Record<string, MediaRow[]>;
   hasCustomSlideshowAudio: boolean;
+  pricingBrackets: PricingBracket[];
 }) {
   const [content, setContent] = useState<Record<string, string>>(initialContent);
   const [seoTitle, setSeoTitle] = useState(initialSeoTitle);
@@ -528,30 +531,9 @@ export function PageEditor({
             <Container>
               <EditableText as="h2" value={val("pricing_title")} onChange={set("pricing_title")} className="text-center font-serif text-3xl text-[var(--foreground)]" />
               <EditableText value={val("pricing_note")} onChange={set("pricing_note")} className="mx-auto mt-4 max-w-xl text-center text-sm text-[var(--foreground)]/70" />
-              <div className="mt-8 overflow-x-auto rounded-2xl border border-black/5 bg-[var(--background-muted)]">
-                <table className="w-full min-w-[560px] text-sm">
-                  <thead>
-                    <tr className="border-b border-black/5 text-left text-[var(--foreground)]/60">
-                      <th className="px-4 py-3 font-medium">Personnes</th>
-                      <th className="px-4 py-3 font-medium">La salle</th>
-                      <th className="px-4 py-3 font-medium">Lendemain</th>
-                      <th className="px-4 py-3 font-medium">Piscine</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {pricingBrackets.map((row) => (
-                      <tr key={row.key} className="border-b border-black/5 last:border-0">
-                        <td className="px-4 py-3 font-medium text-[var(--foreground)]">{row.label}</td>
-                        <td className="px-4 py-3 text-[var(--foreground)]/80">{row.salle} €</td>
-                        <td className="px-4 py-3 text-[var(--foreground)]/80">{row.lendemain} €</td>
-                        <td className="px-4 py-3 text-[var(--foreground)]/80">{row.piscine} €</td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
+              <PricingGridEditor initialBrackets={pricingBrackets} />
               <p className="mt-3 text-center text-xs text-[var(--foreground)]/40">
-                Tarifs non éditables ici — partagés avec le calculateur devis du formulaire de contact.
+                Grille partagée avec le calculateur de devis du formulaire de contact — s&apos;enregistre séparément du reste de la page.
               </p>
             </Container>
           </section>

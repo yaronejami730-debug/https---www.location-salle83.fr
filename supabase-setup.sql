@@ -89,3 +89,31 @@ create policy "service role manage media bucket" on storage.objects
   for all to service_role
   using (bucket_id = 'media')
   with check (bucket_id = 'media');
+
+-- Lot 2: editable pricing grid (grille tarifaire) — run this block to add it.
+create table public.pricing_brackets (
+  id uuid primary key default gen_random_uuid(),
+  key text not null,
+  label text not null,
+  max_guests integer not null,
+  salle integer not null default 0,
+  lendemain integer not null default 0,
+  piscine integer not null default 0,
+  vaisselle integer not null default 0,
+  cuisine integer not null default 0,
+  sort_order integer not null default 0,
+  created_at timestamptz not null default now()
+);
+
+alter table public.pricing_brackets enable row level security;
+
+create policy "public read pricing_brackets" on public.pricing_brackets for select to anon using (true);
+create policy "service role full access pricing_brackets" on public.pricing_brackets for all to service_role using (true) with check (true);
+
+insert into public.pricing_brackets (key, label, max_guests, salle, lendemain, piscine, vaisselle, cuisine, sort_order) values
+('40', '-40 pers.', 40, 1700, 250, 150, 110, 200, 0),
+('50', '-50 pers.', 50, 1800, 250, 150, 110, 200, 1),
+('65', '-65 pers.', 65, 1950, 300, 200, 120, 230, 2),
+('80', '-80 pers.', 80, 2100, 350, 250, 130, 250, 3),
+('95', '-95 pers.', 95, 2250, 400, 300, 140, 270, 4),
+('110', '-110 pers.', 110, 2400, 450, 350, 150, 290, 5);

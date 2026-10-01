@@ -33,7 +33,7 @@ export function PageHero({
         )}
         <div className="absolute inset-0 bg-black/55" />
         <Container className="relative z-10 max-w-2xl">
-          <p className={`text-white/90 ${eyebrowFont}`}>{eyebrow}</p>
+          <RichText as="p" value={eyebrow} className={`text-white/90 ${eyebrowFont}`} />
           <RichText as="h1" value={title} className={`mt-4 text-white ${titleFont}`} />
           {description && <RichText as="p" value={description} className="mt-5 text-white/85" />}
         </Container>
@@ -44,7 +44,7 @@ export function PageHero({
   return (
     <section className="bg-[var(--background)] py-20 text-center">
       <Container className="max-w-2xl">
-        <p className={`text-[var(--accent)] ${eyebrowFont}`}>{eyebrow}</p>
+        <RichText as="p" value={eyebrow} className={`text-[var(--accent)] ${eyebrowFont}`} />
         <RichText as="h1" value={title} className={`mt-4 text-[var(--foreground)] ${titleFont}`} />
         {description && <RichText as="p" value={description} className="mt-5 text-[var(--foreground)]/70" />}
       </Container>
