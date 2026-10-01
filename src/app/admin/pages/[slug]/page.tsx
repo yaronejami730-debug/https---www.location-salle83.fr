@@ -46,7 +46,7 @@ export default async function AdminPageEditorRoute({ params }: { params: Promise
 
   return (
     <>
-      <Header ctaButton={settings.ctaButton} />
+      <Header ctaButton={settings.ctaButton} interactive={false} />
       <PageEditor
         schema={schema}
         initialContent={(row?.content as Record<string, string>) ?? {}}

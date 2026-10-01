@@ -9,7 +9,7 @@ import { RichText } from "./rich-text";
 import { navItems, siteConfig } from "@/lib/site";
 import { CTA_DEFAULTS } from "@/lib/content";
 
-export function Header({ ctaButton = CTA_DEFAULTS.ctaButton }: { ctaButton?: string }) {
+export function Header({ ctaButton = CTA_DEFAULTS.ctaButton, interactive = true }: { ctaButton?: string; interactive?: boolean }) {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
 
@@ -29,17 +29,23 @@ export function Header({ ctaButton = CTA_DEFAULTS.ctaButton }: { ctaButton?: str
           </Link>
 
           <nav className="hidden lg:flex items-center gap-6">
-            {navItems.slice(1, -1).map((item) => (
-              <Link
-                key={item.href}
-                href={item.href}
-                className={`whitespace-nowrap font-script text-2xl font-bold tracking-wide transition-colors hover:text-[var(--accent)] ${
-                  pathname === item.href ? "text-[var(--foreground)]" : "text-[var(--accent)]"
-                }`}
-              >
-                {item.label}
-              </Link>
-            ))}
+            {navItems.slice(1, -1).map((item) =>
+              interactive ? (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  className={`whitespace-nowrap font-script text-2xl font-bold tracking-wide transition-colors hover:text-[var(--accent)] ${
+                    pathname === item.href ? "text-[var(--foreground)]" : "text-[var(--accent)]"
+                  }`}
+                >
+                  {item.label}
+                </Link>
+              ) : (
+                <span key={item.href} className="whitespace-nowrap font-script text-2xl font-bold tracking-wide text-[var(--accent)] cursor-default">
+                  {item.label}
+                </span>
+              ),
+            )}
           </nav>
         </div>
 
@@ -64,18 +70,24 @@ export function Header({ ctaButton = CTA_DEFAULTS.ctaButton }: { ctaButton?: str
       {open && (
         <div className="lg:hidden border-t border-black/5 bg-[var(--background-muted)]">
           <Container className="flex flex-col gap-1 py-4">
-            {navItems.map((item) => (
-              <Link
-                key={item.href}
-                href={item.href}
-                onClick={() => setOpen(false)}
-                className={`rounded-md px-3 py-3 font-script text-2xl font-bold ${
-                  pathname === item.href ? "bg-black/5 text-[var(--foreground)]" : "text-[var(--accent)]"
-                }`}
-              >
-                {item.label}
-              </Link>
-            ))}
+            {navItems.map((item) =>
+              interactive ? (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  onClick={() => setOpen(false)}
+                  className={`rounded-md px-3 py-3 font-script text-2xl font-bold ${
+                    pathname === item.href ? "bg-black/5 text-[var(--foreground)]" : "text-[var(--accent)]"
+                  }`}
+                >
+                  {item.label}
+                </Link>
+              ) : (
+                <span key={item.href} className="rounded-md px-3 py-3 font-script text-2xl font-bold text-[var(--accent)] cursor-default">
+                  {item.label}
+                </span>
+              ),
+            )}
           </Container>
         </div>
       )}
