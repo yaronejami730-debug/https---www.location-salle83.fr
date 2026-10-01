@@ -93,6 +93,7 @@ export async function generateContractPdf(leadId: string, extra: { eventDateOver
       eventDate={extra.eventDateOverride || lead.event_date || ""}
       guestCount={lead.guest_count ?? 0}
       bracket={bracket}
+      allBrackets={pricingBrackets}
       lineItems={lineItems}
       total={total}
       arrhes={arrhes}

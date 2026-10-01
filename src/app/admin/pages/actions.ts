@@ -14,16 +14,23 @@ export async function savePageContent(
   const schema = getSchema(slug);
   if (!schema) return;
 
-  const cleaned: Record<string, string> = {};
+  const supabase = supabaseAdmin();
+  // Read-merge-write: a client that loaded the page before a field existed in
+  // this schema (stale tab, concurrent editor) never has that key in `content`
+  // at all — skip it instead of wiping it out, same fix as the Paramètres
+  // data-loss bug. Only a key the submitting client actually has is touched.
+  const { data: existingRow } = await supabase.from("pages").select("content").eq("slug", slug).maybeSingle();
+  const merged: Record<string, string> = { ...((existingRow?.content as Record<string, string> | null) ?? {}) };
   for (const field of schema.fields) {
+    if (!(field.key in content)) continue;
     const value = sanitizeRichText((content[field.key] ?? "").trim());
-    if (value) cleaned[field.key] = value;
+    if (value) merged[field.key] = value;
+    else delete merged[field.key];
   }
 
-  const supabase = supabaseAdmin();
   const { error } = await supabase.from("pages").upsert({
     slug,
-    content: cleaned,
+    content: merged,
     seo_title: seo.title.trim() || null,
     seo_description: seo.description.trim() || null,
     updated_at: new Date().toISOString(),

@@ -51,6 +51,7 @@ export async function previewContractPdf(content: Record<string, string>): Promi
       eventDate="15/06/2026"
       guestCount={bracket.maxGuests}
       bracket={bracket}
+      allBrackets={pricingBrackets}
       lineItems={[
         { label: "Accès le lendemain", amount: bracket.lendemain },
         { label: "Accès piscine", amount: bracket.piscine },

@@ -58,6 +58,8 @@ export type ContractPdfProps = {
   eventDate: string;
   guestCount: number;
   bracket: PricingBracket;
+  /** Every bracket, for the full pricing table (ordered) — the live grid from pricing_brackets, not a fixed copy. */
+  allBrackets: PricingBracket[];
   lineItems: { label: string; amount: number }[];
   total: number;
   arrhes: number;
@@ -86,15 +88,6 @@ function ClauseBody({ body }: { body: string }) {
     </>
   );
 }
-
-const ALL_BRACKETS: PricingBracket[] = [
-  { key: "40", label: "-40 Pers", maxGuests: 40, salle: 1700, lendemain: 250, piscine: 150, vaisselle: 110, cuisine: 200 },
-  { key: "50", label: "-50 Pers", maxGuests: 50, salle: 1800, lendemain: 250, piscine: 150, vaisselle: 110, cuisine: 200 },
-  { key: "65", label: "-65 Pers", maxGuests: 65, salle: 1950, lendemain: 300, piscine: 200, vaisselle: 120, cuisine: 230 },
-  { key: "80", label: "-80 Pers", maxGuests: 80, salle: 2100, lendemain: 350, piscine: 250, vaisselle: 130, cuisine: 250 },
-  { key: "95", label: "-95 Pers", maxGuests: 95, salle: 2250, lendemain: 400, piscine: 300, vaisselle: 140, cuisine: 270 },
-  { key: "110", label: "-110 Pers", maxGuests: 110, salle: 2400, lendemain: 450, piscine: 350, vaisselle: 150, cuisine: 290 },
-];
 
 function Bullet({ children }: { children: React.ReactNode }) {
   return (
@@ -129,6 +122,7 @@ export function ContractPdfDocument({
   eventDate,
   guestCount,
   bracket,
+  allBrackets,
   lineItems,
   total,
   arrhes,
@@ -201,9 +195,9 @@ export function ContractPdfDocument({
               <Text style={styles.tCellHead}>Cuisine</Text>
               <Text style={styles.tCellHead}>Chapiteau</Text>
             </View>
-            {ALL_BRACKETS.map((b, i) => {
+            {allBrackets.map((b, i) => {
               const active = b.key === bracket.key;
-              const isLast = i === ALL_BRACKETS.length - 1;
+              const isLast = i === allBrackets.length - 1;
               const base = active ? styles.tCellActive : styles.tCell;
               const cellStyle = (selected: boolean) => (active && selected ? styles.tCellHighlight : base);
               return (
