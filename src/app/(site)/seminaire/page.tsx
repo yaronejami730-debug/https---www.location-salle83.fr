@@ -51,7 +51,7 @@ export default async function SeminaireEvenementsPage() {
   return (
     <>
       <PageHero
-        eyebrow="Séminaire & Événements"
+        eyebrow={fs("eyebrow")}
         title={fs("hero_title")}
         description={fs("hero_description")}
         image={{ src: "/images/galerie/IMG_7461.jpg", alt: "Séminaires et événements au Domaine de la Bégude" }}

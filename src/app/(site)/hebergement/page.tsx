@@ -37,7 +37,7 @@ export default async function HebergementPage() {
 
   return (
     <>
-      <PageHero eyebrow="Hébergement" title={f("hero_title")} description={f("hero_description")} />
+      <PageHero eyebrow={f("eyebrow")} title={f("hero_title")} description={f("hero_description")} />
 
       <section className="pt-4 pb-20">
         <Container className="grid items-center gap-10 sm:grid-cols-2">

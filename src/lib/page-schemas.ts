@@ -65,6 +65,7 @@ export const pageSchemas: PageSchema[] = [
     slug: "mariage",
     label: "Mariage",
     fields: [
+      { key: "eyebrow", label: "Hero — eyebrow (petit texte script au-dessus du titre)", type: "text", default: "Mariage" },
       { key: "hero_title", label: "Hero — titre", type: "text", default: "Votre réception, votre ambiance, vos invités" },
       { key: "hero_description", label: "Hero — sous-titre", type: "textarea", default: "Un cadre authentiquement provençal pour célébrer votre union entourés des vôtres, du vin d'honneur à la soirée dansante." },
       { key: "intro_title", label: "Introduction — titre", type: "text", default: "Une fête à votre image" },
@@ -98,6 +99,7 @@ export const pageSchemas: PageSchema[] = [
     slug: "seminaire",
     label: "Séminaire & Événements",
     fields: [
+      { key: "eyebrow", label: "Hero — eyebrow (petit texte script au-dessus du titre)", type: "text", default: "Séminaire & Événements" },
       { key: "hero_title", label: "Hero — titre", type: "text", default: "Travail, détente et cohésion dans un cadre privilégié" },
       { key: "hero_description", label: "Hero — sous-titre", type: "textarea", default: "Séminaires, formations, événements d'entreprise, incentive : à 30 minutes de Grasse, Antibes, Cannes, Fréjus-Saint-Raphaël ou Draguignan." },
       { key: "intro_title", label: "Introduction — titre", type: "text", default: "Un cadre propice au travail" },
@@ -125,6 +127,7 @@ export const pageSchemas: PageSchema[] = [
     slug: "domaine",
     label: "Le domaine",
     fields: [
+      { key: "eyebrow", label: "Hero — eyebrow (petit texte script au-dessus du titre)", type: "text", default: "Le domaine" },
       { key: "hero_title", label: "Hero — titre", type: "text", default: "3 hectares de nature préservée en plein cœur du Var" },
       { key: "hero_description", label: "Hero — sous-titre", type: "textarea", default: "Bâtisses en pierre, jardins méditerranéens et lumière de Provence : un lieu pensé pour accueillir vos plus beaux moments." },
       {
@@ -156,6 +159,7 @@ export const pageSchemas: PageSchema[] = [
     slug: "hebergement",
     label: "Hébergement",
     fields: [
+      { key: "eyebrow", label: "Hero — eyebrow (petit texte script au-dessus du titre)", type: "text", default: "Hébergement" },
       { key: "hero_title", label: "Hero — titre", type: "text", default: "15 mazets au cœur du domaine" },
       { key: "hero_description", label: "Hero — sous-titre", type: "textarea", default: "15 mazets de 2 à 6 personnes, literie 4 étoiles, wifi et télévision, pour accueillir vos proches et prolonger la fête sans quitter les lieux." },
       { key: "intro_title", label: "Section équipements — titre", type: "text", default: "Un confort pensé pour prolonger la fête" },
@@ -173,6 +177,7 @@ export const pageSchemas: PageSchema[] = [
     slug: "galerie",
     label: "Galerie",
     fields: [
+      { key: "eyebrow", label: "Hero — eyebrow (petit texte script au-dessus du titre)", type: "text", default: "Galerie" },
       { key: "hero_title", label: "Hero — titre", type: "text", default: "Le domaine en images" },
       { key: "hero_description", label: "Hero — sous-titre", type: "textarea", default: "Un aperçu des lieux, des réceptions et des hébergements du domaine." },
       { key: "events_title", label: "Section 1 — titre", type: "text", default: "Mariages & séminaires" },
@@ -183,6 +188,7 @@ export const pageSchemas: PageSchema[] = [
     slug: "contact",
     label: "Contact",
     fields: [
+      { key: "eyebrow", label: "Hero — eyebrow (petit texte script au-dessus du titre)", type: "text", default: "Contact" },
       { key: "hero_title", label: "Hero — titre", type: "text", default: "Parlons de votre projet" },
       { key: "hero_description", label: "Hero — sous-titre", type: "textarea", default: "Remplissez le formulaire ci-dessous, nous revenons vers vous sous 48h avec une proposition personnalisée." },
       { key: "form_event_label", label: "Formulaire — libellé \"Votre événement\"", type: "text", default: "Votre événement" },

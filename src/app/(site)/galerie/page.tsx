@@ -35,7 +35,7 @@ export default async function GaleriePage() {
 
   return (
     <>
-      <PageHero eyebrow="Galerie" title={f("hero_title")} description={f("hero_description")} />
+      <PageHero eyebrow={f("eyebrow")} title={f("hero_title")} description={f("hero_description")} />
 
       <section className="pt-4 pb-20">
         <Container>

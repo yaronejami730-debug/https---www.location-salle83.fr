@@ -395,7 +395,8 @@ export function PageEditor({
             <Image src="/images/mariage-hero.jpg" alt="" fill className="object-cover" sizes="100vw" />
             <div className="absolute inset-0 bg-black/45" />
             <Container className="relative z-10 max-w-2xl">
-              <EditableText as="h1" value={val("hero_title")} onChange={set("hero_title")} className="font-serif text-4xl text-white" />
+              <EditableText value={val("eyebrow")} onChange={set("eyebrow")} className="font-script font-bold text-3xl text-white/90 sm:text-4xl" />
+              <EditableText as="h1" value={val("hero_title")} onChange={set("hero_title")} className="mt-4 font-serif text-4xl text-white" />
               <EditableText value={val("hero_description")} onChange={set("hero_description")} className="mt-4 text-white/85" />
             </Container>
           </section>
@@ -461,7 +462,8 @@ export function PageEditor({
         <>
           <section className="flex h-[45vh] min-h-[360px] items-center justify-center bg-[var(--background-muted)] text-center">
             <Container className="max-w-2xl">
-              <EditableText as="h1" value={val("hero_title")} onChange={set("hero_title")} className="font-serif text-4xl text-[var(--foreground)]" />
+              <EditableText value={val("eyebrow")} onChange={set("eyebrow")} className="font-script font-bold text-3xl text-[var(--accent)] sm:text-4xl" />
+              <EditableText as="h1" value={val("hero_title")} onChange={set("hero_title")} className="mt-4 font-serif text-4xl text-[var(--foreground)]" />
               <EditableText value={val("hero_description")} onChange={set("hero_description")} className="mt-4 text-[var(--foreground)]/70" />
             </Container>
           </section>
@@ -556,9 +558,10 @@ export function PageEditor({
 
       {["domaine", "hebergement", "contact"].includes(schema.slug) && (
         <>
-          <section className="bg-[var(--background-muted)] py-16 text-center">
+          <section className="bg-[var(--background)] py-20 text-center">
             <Container className="max-w-2xl">
-              <EditableText as="h1" value={val("hero_title")} onChange={set("hero_title")} className="font-serif text-4xl text-[var(--foreground)]" />
+              <EditableText value={val("eyebrow")} onChange={set("eyebrow")} className="font-script font-bold text-3xl text-[var(--accent)] sm:text-4xl" />
+              <EditableText as="h1" value={val("hero_title")} onChange={set("hero_title")} className="mt-4 font-serif text-4xl text-[var(--foreground)]" />
               <EditableText value={val("hero_description")} onChange={set("hero_description")} className="mt-4 text-[var(--foreground)]/70" />
             </Container>
           </section>
@@ -684,9 +687,10 @@ export function PageEditor({
 
       {schema.slug === "galerie" && (
         <>
-          <section className="bg-[var(--background-muted)] py-16 text-center">
+          <section className="bg-[var(--background)] py-20 text-center">
             <Container className="max-w-2xl">
-              <EditableText as="h1" value={val("hero_title")} onChange={set("hero_title")} className="font-serif text-4xl text-[var(--foreground)]" />
+              <EditableText value={val("eyebrow")} onChange={set("eyebrow")} className="font-script font-bold text-3xl text-[var(--accent)] sm:text-4xl" />
+              <EditableText as="h1" value={val("hero_title")} onChange={set("hero_title")} className="mt-4 font-serif text-4xl text-[var(--foreground)]" />
               <EditableText value={val("hero_description")} onChange={set("hero_description")} className="mt-4 text-[var(--foreground)]/70" />
             </Container>
           </section>

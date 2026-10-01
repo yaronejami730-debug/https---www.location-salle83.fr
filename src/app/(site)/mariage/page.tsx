@@ -43,7 +43,7 @@ export default async function MariagePage() {
   return (
     <>
       <PageHero
-        eyebrow="Mariage"
+        eyebrow={f("eyebrow")}
         title={f("hero_title")}
         description={f("hero_description")}
         image={{ src: "/images/mariage-hero.jpg", alt: "Domaine de la Bégude au coucher du soleil" }}
