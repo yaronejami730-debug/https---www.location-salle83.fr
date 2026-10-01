@@ -5,7 +5,7 @@ import Image from "next/image";
 import { GalleryLightbox, type GalleryPhoto } from "./gallery-lightbox";
 import { RichText } from "./rich-text";
 
-export function GalleryGrid({ title, photos }: { title: string; photos: GalleryPhoto[] }) {
+export function GalleryGrid({ title, photos, audioSrc }: { title: string; photos: GalleryPhoto[]; audioSrc?: string }) {
   const [lightbox, setLightbox] = useState<{ index: number; autoplay: boolean } | null>(null);
 
   return (
@@ -45,6 +45,7 @@ export function GalleryGrid({ title, photos }: { title: string; photos: GalleryP
           photos={photos}
           startIndex={lightbox.index}
           autoplay={lightbox.autoplay}
+          audioSrc={audioSrc}
           onClose={() => setLightbox(null)}
         />
       )}

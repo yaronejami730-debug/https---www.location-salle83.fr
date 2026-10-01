@@ -25,11 +25,13 @@ export function GalleryLightbox({
   photos,
   startIndex,
   autoplay = false,
+  audioSrc = "/audio/slideshow.mp3",
   onClose,
 }: {
   photos: GalleryPhoto[];
   startIndex: number;
   autoplay?: boolean;
+  audioSrc?: string;
   onClose: () => void;
 }) {
   const [index, setIndex] = useState(startIndex);
@@ -86,7 +88,7 @@ export function GalleryLightbox({
 
   return (
     <div className="fixed inset-0 z-[60] flex h-screen flex-col bg-[var(--foreground)]">
-      <audio ref={audioRef} src="/audio/slideshow.mp3" loop />
+      <audio ref={audioRef} src={audioSrc} loop />
 
       <div className="flex items-center justify-between px-4 py-3 text-white/90">
         <p className="text-sm">

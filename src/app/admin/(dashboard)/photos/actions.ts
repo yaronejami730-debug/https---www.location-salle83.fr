@@ -81,3 +81,41 @@ export async function replacePhoto(id: string, oldStoragePath: string, page: str
 
   revalidatePath("/", "layout");
 }
+
+export async function uploadSlideshowAudio(formData: FormData) {
+  const file = formData.get("file") as File | null;
+  if (!file || file.size === 0) return;
+
+  const supabase = supabaseAdmin();
+  const path = `audio/slideshow-${crypto.randomUUID()}.mp3`;
+  const buffer = Buffer.from(await file.arrayBuffer());
+
+  const { error } = await supabase.storage.from("media").upload(path, buffer, { contentType: "audio/mpeg" });
+  if (error) throw error;
+
+  // Read-merge-write: this "global" row also holds tagline/phone/email/CTA
+  // fields saved from Paramètres — never overwrite it wholesale here.
+  const { data: row } = await supabase.from("pages").select("content").eq("slug", "global").maybeSingle();
+  const oldPath = (row?.content as Record<string, string> | undefined)?.slideshow_audio_path;
+  const content = { ...(row?.content as Record<string, string> | undefined), slideshow_audio_path: path };
+
+  await supabase.from("pages").upsert({ slug: "global", content, updated_at: new Date().toISOString() });
+  if (oldPath) await supabase.storage.from("media").remove([oldPath]);
+
+  revalidatePath("/", "layout");
+}
+
+export async function removeSlideshowAudio() {
+  const supabase = supabaseAdmin();
+  const { data: row } = await supabase.from("pages").select("content").eq("slug", "global").maybeSingle();
+  const oldPath = (row?.content as Record<string, string> | undefined)?.slideshow_audio_path;
+  if (!oldPath) return;
+
+  const content = { ...(row?.content as Record<string, string> | undefined) };
+  delete content.slideshow_audio_path;
+
+  await supabase.from("pages").upsert({ slug: "global", content, updated_at: new Date().toISOString() });
+  await supabase.storage.from("media").remove([oldPath]);
+
+  revalidatePath("/", "layout");
+}

@@ -3,7 +3,7 @@ import { PageHero } from "@/components/page-hero";
 import { CtaSection } from "@/components/cta-section";
 import { Container } from "@/components/container";
 import { GalleryGrid } from "@/components/gallery-grid";
-import { getPageContent, getMedia } from "@/lib/content";
+import { getPageContent, getMedia, getSiteSettings } from "@/lib/content";
 import { mediaUrl } from "@/lib/supabase-public";
 import { staticGalleryPhotos, staticHebergementPhotos } from "@/lib/static-gallery";
 import { getSchema, fieldValue } from "@/lib/page-schemas";
@@ -22,10 +22,11 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function GaleriePage() {
-  const [pageContent, eventPhotos, hebergementPhotos] = await Promise.all([
+  const [pageContent, eventPhotos, hebergementPhotos, settings] = await Promise.all([
     getPageContent("galerie"),
     getMedia("galerie"),
     getMedia("hebergement"),
+    getSiteSettings(),
   ]);
   const c = pageContent?.content ?? {};
   const f = (key: string) => fieldValue(c, schema.fields.find((x) => x.key === key)!);
@@ -39,13 +40,13 @@ export default async function GaleriePage() {
 
       <section className="pt-4 pb-20">
         <Container>
-          <GalleryGrid title={f("events_title")} photos={events} />
+          <GalleryGrid title={f("events_title")} photos={events} audioSrc={settings.slideshowAudioUrl} />
         </Container>
       </section>
 
       <section className="pb-20">
         <Container>
-          <GalleryGrid title={f("hebergement_title")} photos={hebergement} />
+          <GalleryGrid title={f("hebergement_title")} photos={hebergement} audioSrc={settings.slideshowAudioUrl} />
         </Container>
       </section>
 

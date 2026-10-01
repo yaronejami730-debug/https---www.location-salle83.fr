@@ -1,4 +1,4 @@
-import { supabasePublic } from "./supabase-public";
+import { supabasePublic, mediaUrl } from "./supabase-public";
 import { siteConfig } from "./site";
 
 export async function getPageContent(slug: string) {
@@ -53,6 +53,7 @@ export async function getSiteSettings() {
     ctaTitle: content.cta_title || CTA_DEFAULTS.ctaTitle,
     ctaText: content.cta_text || CTA_DEFAULTS.ctaText,
     ctaButton: content.cta_button || CTA_DEFAULTS.ctaButton,
+    slideshowAudioUrl: content.slideshow_audio_path ? mediaUrl(content.slideshow_audio_path) : "/audio/slideshow.mp3",
   };
 }
 
