@@ -59,7 +59,7 @@ export default async function SeminaireEvenementsPage() {
         scrollFade
       />
 
-      <IntroSection title={fs("intro_title")} action={{ label: fs("intro_button"), href: "#tarifs" }} />
+      <IntroSection title={fs("intro_title")} text={fs("intro_text")} action={{ label: fs("intro_button"), href: "#tarifs" }} />
 
       {features.map((ft) => (
         <ZigzagSection key={ft.n} title={ft.title} text={ft.text} images={ft.images} intervalMs={ft.interval} startDelayMs={ft.delay} reverse={ft.n % 2 === 0} />

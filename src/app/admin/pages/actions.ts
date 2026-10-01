@@ -21,13 +21,14 @@ export async function savePageContent(
   }
 
   const supabase = supabaseAdmin();
-  await supabase.from("pages").upsert({
+  const { error } = await supabase.from("pages").upsert({
     slug,
     content: cleaned,
     seo_title: seo.title.trim() || null,
     seo_description: seo.description.trim() || null,
     updated_at: new Date().toISOString(),
   });
+  if (error) throw new Error(`Échec de l'enregistrement : ${error.message}`);
 
   revalidatePath("/admin/pages");
   revalidatePath(`/admin/pages/${slug}`);
@@ -51,8 +52,13 @@ export async function savePricingBrackets(brackets: PricingBracket[]) {
       sort_order: i,
     }));
 
-  await supabase.from("pricing_brackets").delete().not("id", "is", null);
-  if (rows.length > 0) await supabase.from("pricing_brackets").insert(rows);
+  const { error: deleteError } = await supabase.from("pricing_brackets").delete().not("id", "is", null);
+  if (deleteError) throw new Error(`Échec de l'enregistrement de la grille tarifaire : ${deleteError.message}`);
+
+  if (rows.length > 0) {
+    const { error: insertError } = await supabase.from("pricing_brackets").insert(rows);
+    if (insertError) throw new Error(`Échec de l'enregistrement de la grille tarifaire : ${insertError.message}`);
+  }
 
   revalidatePath("/admin/pages/seminaire");
   revalidatePath("/seminaire");

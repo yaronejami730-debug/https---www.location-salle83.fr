@@ -18,6 +18,7 @@ export function ContractEditor({ initialContent }: { initialContent: Record<stri
   const [savePending, startSave] = useTransition();
   const [previewPending, startPreview] = useTransition();
   const [saved, setSaved] = useState(false);
+  const [saveError, setSaveError] = useState<string | null>(null);
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const breakOf = (blockKey: "clause1" | "signature") => content[pageBreakKey(blockKey)] === "1";
@@ -44,10 +45,15 @@ export function ContractEditor({ initialContent }: { initialContent: Record<stri
   }
 
   function save() {
+    setSaveError(null);
     startSave(async () => {
-      await saveContractContent({ ...content, clauses: JSON.stringify(clauses) });
-      setSaved(true);
-      setTimeout(() => setSaved(false), 2000);
+      try {
+        await saveContractContent({ ...content, clauses: JSON.stringify(clauses) });
+        setSaved(true);
+        setTimeout(() => setSaved(false), 2000);
+      } catch (e) {
+        setSaveError(e instanceof Error ? e.message : "Échec de l'enregistrement.");
+      }
     });
   }
 
@@ -95,6 +101,7 @@ export function ContractEditor({ initialContent }: { initialContent: Record<stri
           </button>
           <span className="text-xs text-[var(--foreground)]/40">L&apos;aperçu se met à jour automatiquement</span>
         </div>
+        {saveError && <p className="rounded-lg bg-red-50 px-3 py-2 text-xs text-red-700">{saveError}</p>}
 
         <div className="rounded-2xl border border-black/5 bg-[var(--background)] p-5">
           <p className="mb-2 text-xs font-medium uppercase tracking-wide text-[var(--foreground)]/40">Clause 1 — Événement et tarifs (calculée)</p>

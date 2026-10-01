@@ -17,7 +17,8 @@ export async function saveContractContent(content: Record<string, string>) {
     if (trimmed) cleaned[key] = trimmed;
   }
 
-  await supabase.from("pages").upsert({ slug: "contrat", content: cleaned, updated_at: new Date().toISOString() });
+  const { error } = await supabase.from("pages").upsert({ slug: "contrat", content: cleaned, updated_at: new Date().toISOString() });
+  if (error) throw new Error(`Échec de l'enregistrement : ${error.message}`);
   revalidatePath("/admin/contrat");
 }
 

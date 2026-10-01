@@ -206,16 +206,22 @@ export function PageEditor({
   const [toolbarOpen, setToolbarOpen] = useState(true);
   const [pending, startTransition] = useTransition();
   const [saved, setSaved] = useState(false);
+  const [saveError, setSaveError] = useState<string | null>(null);
 
   const def = (key: string) => schema.fields.find((f) => f.key === key)?.default ?? "";
   const val = (key: string) => content[key] ?? def(key);
   const set = (key: string) => (v: string) => setContent((prev) => ({ ...prev, [key]: v }));
 
   function save() {
+    setSaveError(null);
     startTransition(async () => {
-      await savePageContent(schema.slug, content, { title: seoTitle, description: seoDescription });
-      setSaved(true);
-      setTimeout(() => setSaved(false), 2000);
+      try {
+        await savePageContent(schema.slug, content, { title: seoTitle, description: seoDescription });
+        setSaved(true);
+        setTimeout(() => setSaved(false), 2000);
+      } catch (e) {
+        setSaveError(e instanceof Error ? e.message : "Échec de l'enregistrement.");
+      }
     });
   }
 
@@ -224,6 +230,9 @@ export function PageEditor({
       <div className="fixed inset-x-0 top-0 z-40 h-1.5 bg-[var(--accent)]" />
 
       <div className="fixed right-4 top-24 z-50 flex flex-col items-end gap-2 sm:top-32 lg:top-48">
+        {saveError && (
+          <p className="max-w-xs rounded-lg bg-red-50 px-3 py-2 text-xs text-red-700 shadow-lg">{saveError}</p>
+        )}
         {toolbarOpen ? (
           <div className="flex items-center gap-2 rounded-full border border-black/10 bg-[var(--background)]/95 px-2 py-1.5 shadow-lg backdrop-blur">
             <Link href="/admin/pages" className="rounded-full px-2.5 py-1.5 text-xs text-[var(--foreground)]/60 hover:bg-black/5" title="Toutes les pages">
@@ -479,6 +488,10 @@ export function PageEditor({
               <span className="mx-auto block h-px w-12 bg-[var(--accent)]/50" />
               <EditableText as="h2" value={val("intro_title")} onChange={set("intro_title")} className="mt-5 font-script text-4xl text-[var(--accent)]" />
               <EditableText value={val("intro_text")} onChange={set("intro_text")} className="mt-5 whitespace-pre-line text-[var(--foreground)]/70" />
+              <span className="mt-8 inline-flex items-center gap-3 rounded-full bg-[var(--accent)] px-9 py-4 text-sm font-medium tracking-wide text-white">
+                <EditableText value={val("intro_button")} onChange={set("intro_button")} className="text-white" />
+                <span aria-hidden>↓</span>
+              </span>
             </Container>
           </section>
 
