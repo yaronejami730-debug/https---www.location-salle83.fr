@@ -53,7 +53,9 @@ export function sanitizeInlineHtml(html: string): string {
     if (ALLOWED_BLOCK_TAGS.has(tag)) return closing ? "" : "<br>";
     return "";
   });
-  return out;
+  // Leading/trailing line breaks (a stray Enter in the editor) only add empty
+  // space above/below the text and make sibling cards uneven — drop them.
+  return out.replace(/^(\s*<br>)+\s*/i, "").replace(/(\s*<br>)+\s*$/i, "");
 }
 
 /** Plain text (tags stripped) for contexts that can't render HTML — alt text, <title>, aria labels. */
