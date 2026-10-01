@@ -106,7 +106,7 @@ export const pageSchemas: PageSchema[] = [
     slug: "seminaire",
     label: "Séminaire & Événements",
     fields: [
-      { key: "eyebrow", label: "Hero — eyebrow (petit texte script au-dessus du titre)", type: "text", default: "Paris & Événements" },
+      { key: "eyebrow", label: "Hero — eyebrow (petit texte script au-dessus du titre)", type: "text", default: "Tarif & Événements" },
       { key: "hero_title", label: "Hero — titre", type: "text", default: "Travail, détente et cohésion dans un cadre privilégié" },
       { key: "hero_description", label: "Hero — sous-titre", type: "textarea", default: "Séminaires, formations, événements d'entreprise, incentive : à 30 minutes de Grasse, Antibes, Cannes, Fréjus-Saint-Raphaël ou Draguignan." },
       { key: "intro_title", label: "Introduction — titre", type: "text", default: "Un cadre propice au travail" },
