@@ -2,6 +2,7 @@ import "server-only";
 import { Document, Page, Text, View, Image, StyleSheet } from "@react-pdf/renderer";
 import { siteConfig } from "@/lib/site";
 import type { PricingBracket } from "@/lib/pricing";
+import { CONTRACT_CLAUSES, CLAUSE7_DEFAULTS, clauseValue, parseClauseBody } from "@/lib/contract-template";
 
 const styles = StyleSheet.create({
   page: { padding: 36, paddingBottom: 50, fontSize: 9, fontFamily: "Helvetica", color: "#2b2a26" },
@@ -62,7 +63,25 @@ export type ContractPdfProps = {
   logoDataUri: string | null;
   qrCodeDataUri: string | null;
   options: { lendemain: boolean; piscine: boolean; vaisselle: boolean; cuisine: boolean; chapiteauCount: number };
+  /** Raw "contrat" page content (slug "contrat") — clause2_title, clause2_body, etc. Falls back to the built-in defaults for anything missing. */
+  clauseContent?: Record<string, string>;
 };
+
+function ClauseBody({ body }: { body: string }) {
+  return (
+    <>
+      {parseClauseBody(body).map((line, i) =>
+        line.type === "bullet" ? (
+          <Bullet key={i}>{line.content}</Bullet>
+        ) : (
+          <Text key={i} style={styles.paragraph}>
+            {line.content}
+          </Text>
+        ),
+      )}
+    </>
+  );
+}
 
 const ALL_BRACKETS: PricingBracket[] = [
   { key: "40", label: "-40 Pers", maxGuests: 40, salle: 1700, lendemain: 250, piscine: 150, vaisselle: 110, cuisine: 200 },
@@ -112,7 +131,9 @@ export function ContractPdfDocument({
   logoDataUri,
   qrCodeDataUri,
   options,
+  clauseContent,
 }: ContractPdfProps) {
+  const clause = (key: string, fallback: string) => clauseValue(clauseContent, key, fallback);
   return (
     <Document>
       <Page size="A4" style={styles.page} wrap>
@@ -214,161 +235,27 @@ export function ContractPdfDocument({
           </View>
         </View>
 
-        <Heading number="2" title="MENAGE :">
-          <Text style={styles.paragraph}>Le ménage doit être fait par le locataire</Text>
-        </Heading>
-        <Text style={styles.paragraph}>Ou payé selon l&apos;état de la salle : Tarif en vigueur = 30 € de l&apos;heure</Text>
+        {CONTRACT_CLAUSES.slice(0, 5).map((c) => (
+          <Heading key={c.key} number={c.number} title={clause(c.titleKey, c.titleDefault)}>
+            <ClauseBody body={clause(c.bodyKey, c.bodyDefault)} />
+          </Heading>
+        ))}
 
-        <Heading number="3" title="MONTANT CAUTION :">
-          <Text style={styles.paragraph}>
-            1 000 EUROS en espèces payable d&apos;avance à la prise en charge de la salle et restituée au départ,
-            déduction faite éventuellement des détériorations occasionnées, des objets manquants et du nettoyage
-            selon l&apos;état des lieux.
-          </Text>
-        </Heading>
-
-        <Heading number="4" title="ATTESTATION D'ASSURANCE :">
-          <Text style={styles.paragraph}>
-            Avertir votre assureur de l&apos;événement, (gratuit dans la plupart des cas). Fournir l&apos;attestation
-            de responsabilité civile.
-          </Text>
-        </Heading>
-
-        <Heading number="5" title="PRISE EN CHARGE DE LA SALLE ET DE LA CUISINE :">
-          <Text style={styles.paragraph}>
-            La salle peut être prise la veille de l&apos;évènement à partir de 9 h, jusqu&apos;à 19 h afin
-            d&apos;approvisionner les réfrigérateurs et de décorer la salle.
-          </Text>
-        </Heading>
-        <Text style={styles.paragraph}>
-          Possibilité de brancher une sono dans une salle prévue à cet effet. L&apos;équipement de la sonorisation
-          devra être adapté à la dimension de la salle pour ne pas créer de nuisance sonore selon la législation en
-          vigueur.
-        </Text>
-        <Text style={styles.paragraph}>
-          Le jour de l&apos;évènement, la fête peut durer jusqu&apos;à 4 heures du matin mais la musique devra être
-          baissée de façon conséquente ou certaines portes et fenêtres seront fermées à partir de 23H30 afin de
-          préserver la tranquillité des résidents et selon la législation en vigueur.
-        </Text>
-
-        <Heading number="6" title="EQUIPEMENTS DE LA SALLE ET DE LA CUISINE :">
-          <Text style={styles.paragraph}>Tarif en fonction du Nombre de personnes (voir le tableau en première page)</Text>
-        </Heading>
-        <Text style={styles.paragraph}>
-          Supplément utilisation de la cuisine forfait de 200 à 290 euros. Une cuisine professionnelle de 49 M² pour
-          orchestrer vos repas.
-        </Text>
-        <Bullet>Cinq frigos pour le stockage de toutes vos denrées alimentaires.</Bullet>
-        <Bullet>Une machine à Glaçons</Bullet>
-        <Bullet>Deux pianos de cuisson.</Bullet>
-        <Bullet>Deux Gaz pour faire vos cuissons.</Bullet>
-        <Bullet>Deux fours (un Gaz et un électrique) — Gaz en Bouteille non inclus, à voir ensemble selon vos besoins.</Bullet>
-        <Bullet>Deux fours micro-ondes</Bullet>
-        <Bullet>Salamandre</Bullet>
-        <Bullet>Deux étuves de petite taille.</Bullet>
-        <Bullet>Un espace plonge équipée (Machine à laver et d&apos;un double évier en inox)</Bullet>
-        <Text style={styles.paragraph}>
-          Supplément utilisation de la vaisselle forfait de 110 à 150 euros. (sur demande la vaisselle : assiettes,
-          verres, couverts). Un inventaire sera signé par le locataire.
-        </Text>
-        <Text style={styles.paragraph}>
-          Utilisation en Extérieur : Supplément pour la location des chaises Blanches soit 1 euro pièce. Et les
-          rendre nettoyées !
-        </Text>
-        <Text style={styles.paragraph}>Supplément Le lendemain Forfait de 250 à 450 Euros</Text>
-        <Text style={styles.paragraph}>Supplément Accès Piscine Forfait de 150 à 350 Euros</Text>
-        <Text style={styles.paragraph}>
-          Supplément « aucun Gîte réservé » Forfait de 500 Euros. Ce supplément est toutefois possible d&apos;être
-          annulé en partie ou totalement dans le cas où vous louez des logements dans le Domaine de la Bégude.
-          Exemple : Un logement loué vous permettra d&apos;avoir une remise de 10% sur cette option unique. Ex :
-          Cinq Logements 50% de remise sur cette option, et à partir de 10 logements réservés sur le domaine, ceci
-          vous permettra l&apos;annulation de ce supplément de 500 euros.
-        </Text>
-        <Text style={styles.paragraph}>Inclus dans le tarif :</Text>
-        <Bullet>
-          La salle de 90 M² est aménagée de tables rectangulaires ou rondes avec les chaises. Soit : 5 Tables Rondes
-          d&apos;un diamètre de 180 pour 12 personnes maxi, + 6 Tables Rondes d&apos;un diamètre de 152 pour 8
-          personnes.
-        </Bullet>
-        <Bullet>Double sanitaires avec sas.</Bullet>
-        <Bullet>Ainsi qu&apos;une terrasse de 90 M².</Bullet>
-        <Bullet>Incluse Piste de danse en plus de 60 m² (pour les événements de plus de 65 Pers Gratuit).</Bullet>
-
-        <Heading number="7" title="MONTANT ARRHES :">
+        <Heading
+          number="7"
+          title={clause(CLAUSE7_DEFAULTS.titleKey, CLAUSE7_DEFAULTS.titleDefault)}
+        >
           <View style={styles.row}>
-            <Text style={styles.label}>50 % du montant total payable le jour de la réservation, (non remboursées en cas d&apos;annulation)</Text>
+            <Text style={styles.label}>{clause(CLAUSE7_DEFAULTS.labelKey, CLAUSE7_DEFAULTS.labelDefault)}</Text>
             <Text style={styles.value}>{arrhes} €</Text>
           </View>
         </Heading>
 
-        <Heading number="8" title="HYGIENE ET PROPRETE :">
-          <Bullet>Interdiction de fumer dans salle</Bullet>
-        </Heading>
-        <Bullet>
-          Les mégots doivent être éteints soigneusement dans les cendriers placés sur la terrasse et non pas jetés
-          au sol afin de respecter les lieux et la nature environnante
-        </Bullet>
-        <Bullet>
-          Les poubelles sont situées à l&apos;entrée de la Résidence et tous les détritus doivent y être déposés
-          dans des sacs poubelles à la fin de la manifestation. De plus, il est obligatoire de faire le tri du verre
-          et du plastique durant votre séjour. La direction du Domaine de la Begude se réserve le droit de conserver
-          la totalité de la caution en cas de non-respect des règles.
-        </Bullet>
-        <Bullet>Règlement de la Piscine : Horaire d&apos;ouverture 9H à 20H</Bullet>
-        <Text style={styles.paragraph}>
-          La piscine n&apos;étant pas surveillée, nous prions les parents de bien vouloir accompagner les enfants de
-          moins de 15 ans, même s&apos;ils savent nager. Un accident est si vite arrivé ! Le Bailleur décline toute
-          responsabilité éventuelle. Vous êtes priés d&apos;informer vos invités du règlement de la Piscine.
-        </Text>
-        <Bullet>De vous déchausser à l&apos;entrée et de laisser vos chaussures de chaque côté de l&apos;escalier dans le gazon</Bullet>
-        <Bullet>De tremper vos pieds dans le pédiluve à chaque fois que vous entrez en piscine.</Bullet>
-        <Bullet>De vous doucher obligatoirement avant chaque baignade (de la tête aux pieds)</Bullet>
-        <Bullet>
-          Interdits en piscine : Les contenants en Verre, les sodas, l&apos;alcool, les chiens, de fumer (toutes
-          cigarettes même vapotage), la nourriture en général (excepté l&apos;eau en bouteille plastique)
-        </Bullet>
-        <Bullet>La musique est interdite en Piscine.</Bullet>
-        <Bullet>De ranger les transats utilisés et de les mettre en position horizontale lors de votre départ.</Bullet>
-        <Bullet>
-          Durant votre absence sur les lieux, il est interdit de laisser vos serviettes de bains sur les transats
-          afin de les réserver.
-        </Bullet>
-        <Bullet>Tout manquement à ces règles entrainera la fermeture de la Piscine immédiate.</Bullet>
-
-        <Heading number="9" title="CHAPITEAU :">
-          <Text style={styles.paragraph}>Couvre une belle partie de la terrasse extérieure.</Text>
-        </Heading>
-        <Bullet>Tarif unitaire : 200 Euros</Bullet>
-        <Bullet>En stock deux chapiteaux de cette taille : Dimension 8 Mts x 4 Mts pouvant accueillir 32 personnes par chapiteau.</Bullet>
-        <Bullet>En stock trois chapiteaux de cette taille : Dimension 4 Mts x 4 Mts pouvant accueillir 12 personnes par chapiteau.</Bullet>
-
-        <Heading number="10" title="L'INVENTAIRE :">
-          <Text style={styles.paragraph}>
-            A signer le jour de la prise en charge de la salle. (Tout matériel détérioré ou cassé devra être
-            remboursé au retour des clés).
-          </Text>
-        </Heading>
-
-        <Heading number="11" title="TARIFS des HEBERGEMENTS en Formule Hôtel">
-          <Text style={styles.paragraph}>Le Domaine de la Begude pourra accueillir environ 60 Personnes.</Text>
-        </Heading>
-        <Text style={styles.paragraph}>Exemple : Pour un Mazet 2/4 Personnes 110 à 135 Euros la Nuitée en formule Hôtel.</Text>
-        <Text style={styles.paragraph}>
-          A certaines dates, un minimum de nuitée par logement vous sera demandé. Exemple en période estivale : en
-          Juillet quatre nuitées et en Août 6 ou 7 nuitées.
-        </Text>
-        <Text style={styles.paragraph}>
-          La Formule Hôtel : sont inclus Draps, serviettes de toilette et ménage final selon le nombre de jours
-          choisi. + Montant des Taxes de séjour (soit 1,30 €/pers de plus de 17 ans et par jour).
-        </Text>
-        <Text style={styles.paragraph}>
-          A certaines périodes, l&apos;ensemble des gîtes est indissociable du Contrat de location de Salle,
-          c&apos;est-à-dire qu&apos;ils doivent être intégrés en totalité ou en partie.
-        </Text>
-
-        <Heading number="12" title="LE REGLEMENT DE LA PRESTATION">
-          <Text style={styles.paragraph}>Le solde et la caution doivent être payés à l&apos;arrivée dans les lieux.</Text>
-        </Heading>
+        {CONTRACT_CLAUSES.slice(5).map((c) => (
+          <Heading key={c.key} number={c.number} title={clause(c.titleKey, c.titleDefault)}>
+            <ClauseBody body={clause(c.bodyKey, c.bodyDefault)} />
+          </Heading>
+        ))}
 
         <View style={styles.section} wrap={false}>
           <Text style={styles.paragraph}>Fayence, le _______________</Text>

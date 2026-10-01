@@ -46,6 +46,9 @@ export async function generateContractPdf(leadId: string, extra: { eventDateOver
 
   const bracket = pricingBrackets.find((b) => b.key === lead.pricing_bracket) ?? pricingBrackets[0];
 
+  const { data: contractRow } = await supabase.from("pages").select("content").eq("slug", "contrat").maybeSingle();
+  const clauseContent = (contractRow?.content as Record<string, string>) ?? {};
+
   const lineItems: { label: string; amount: number }[] = [];
   if (lead.option_lendemain) lineItems.push({ label: "Accès le lendemain", amount: bracket.lendemain });
   if (lead.option_piscine) lineItems.push({ label: "Accès piscine", amount: bracket.piscine });
@@ -100,6 +103,7 @@ export async function generateContractPdf(leadId: string, extra: { eventDateOver
         cuisine: lead.option_cuisine,
         chapiteauCount: lead.option_chapiteau_count ?? 0,
       }}
+      clauseContent={clauseContent}
     />,
   );
 

@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useTransition } from "react";
+import Link from "next/link";
 import { generateContractPdf } from "./actions";
 import { leadReference } from "@/lib/lead-reference";
 
@@ -44,6 +45,13 @@ export function GenerateContractButton({ leadId }: { leadId: string }) {
         >
           Générer PDF
         </button>
+        <Link
+          href="/admin/contrat"
+          className="rounded-lg border border-black/10 px-3 py-1.5 text-xs text-[var(--foreground)] hover:bg-black/5"
+          title="Modifie le texte du contrat pour tous les clients, pas seulement celui-ci"
+        >
+          Modifier le modèle
+        </Link>
       </div>
     );
   }
