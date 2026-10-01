@@ -21,7 +21,8 @@ export const DEFAULT_PRICING_BRACKETS: PricingBracket[] = [
   { key: "110", label: "-110 pers.", maxGuests: 110, salle: 2400, lendemain: 450, piscine: 350, vaisselle: 150, cuisine: 290 },
 ];
 
-export const CHAPITEAU_UNIT_PRICE = 200;
+/** Repli si le champ "Prix du chapiteau" (page Séminaire) est vide ou inaccessible. */
+export const DEFAULT_CHAPITEAU_UNIT_PRICE = 200;
 
 export type QuoteOptions = {
   guestCount: number;
@@ -31,6 +32,14 @@ export type QuoteOptions = {
   cuisine: boolean;
   chapiteauCount: number;
 };
+
+export async function getChapiteauUnitPrice(): Promise<number> {
+  const supabase = supabasePublic();
+  const { data } = await supabase.from("pages").select("content").eq("slug", "seminaire").maybeSingle();
+  const raw = (data?.content as Record<string, string> | null)?.chapiteau_price;
+  const parsed = raw ? Number(raw) : NaN;
+  return Number.isFinite(parsed) && parsed >= 0 ? parsed : DEFAULT_CHAPITEAU_UNIT_PRICE;
+}
 
 export async function getPricingBrackets(): Promise<PricingBracket[]> {
   const supabase = supabasePublic();
@@ -54,17 +63,17 @@ export function findBracket(guestCount: number, brackets: PricingBracket[]): Pri
 }
 
 /** Phrase prête à injecter dans le contexte du chatbot : tarif de base de la salle pour ce nombre d'invités. */
-export function describeBaseRate(guestCount: number, brackets: PricingBracket[]): string | null {
+export function describeBaseRate(guestCount: number, brackets: PricingBracket[], chapiteauUnitPrice = DEFAULT_CHAPITEAU_UNIT_PRICE): string | null {
   const bracket = findBracket(guestCount, brackets);
   if (!bracket) return null;
-  return `Pour un événement jusqu'à ${bracket.maxGuests} personnes, le tarif de base de la location de la salle est de ${bracket.salle} €. En supplément selon les besoins : le lendemain (${bracket.lendemain} €), l'accès piscine le lendemain (${bracket.piscine} €), la vaisselle (${bracket.vaisselle} €), la cuisine professionnelle (${bracket.cuisine} €), et les chapiteaux (${CHAPITEAU_UNIT_PRICE} € l'unité). Un acompte de 50 % du montant total est demandé à la réservation.`;
+  return `Pour un événement jusqu'à ${bracket.maxGuests} personnes, le tarif de base de la location de la salle est de ${bracket.salle} €. En supplément selon les besoins : le lendemain (${bracket.lendemain} €), l'accès piscine le lendemain (${bracket.piscine} €), la vaisselle (${bracket.vaisselle} €), la cuisine professionnelle (${bracket.cuisine} €), et les chapiteaux (${chapiteauUnitPrice} € l'unité). Un acompte de 50 % du montant total est demandé à la réservation.`;
 }
 
-export function computeQuote(options: QuoteOptions, brackets: PricingBracket[]) {
+export function computeQuote(options: QuoteOptions, brackets: PricingBracket[], chapiteauUnitPrice = DEFAULT_CHAPITEAU_UNIT_PRICE) {
   const bracket = findBracket(options.guestCount, brackets);
   if (!bracket) return null;
 
-  const chapiteauTotal = Math.max(0, options.chapiteauCount) * CHAPITEAU_UNIT_PRICE;
+  const chapiteauTotal = Math.max(0, options.chapiteauCount) * chapiteauUnitPrice;
   const total =
     bracket.salle +
     (options.lendemain ? bracket.lendemain : 0) +

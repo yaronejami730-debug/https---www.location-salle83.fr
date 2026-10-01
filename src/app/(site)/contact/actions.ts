@@ -3,7 +3,7 @@
 import { z } from "zod";
 import { after } from "next/server";
 import { supabaseAdmin } from "@/lib/supabase-admin";
-import { computeQuote, getPricingBrackets } from "@/lib/pricing";
+import { computeQuote, getPricingBrackets, getChapiteauUnitPrice } from "@/lib/pricing";
 import { sendAlertEmail, sendEmail } from "@/lib/mail";
 import { welcomeEmail, faqFollowUpEmail } from "@/lib/email-templates";
 
@@ -32,7 +32,7 @@ export type SubmitLeadInput = z.infer<typeof schema>;
 export async function submitLead(input: SubmitLeadInput) {
   const values = schema.parse(input);
 
-  const brackets = await getPricingBrackets();
+  const [brackets, chapiteauUnitPrice] = await Promise.all([getPricingBrackets(), getChapiteauUnitPrice()]);
   const quote = computeQuote(
     {
       guestCount: Number(values.guestCount) || 0,
@@ -43,6 +43,7 @@ export async function submitLead(input: SubmitLeadInput) {
       chapiteauCount: Number(values.chapiteauCount) || 0,
     },
     brackets,
+    chapiteauUnitPrice,
   );
 
   const supabase = supabaseAdmin();

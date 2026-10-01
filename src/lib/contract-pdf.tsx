@@ -64,6 +64,7 @@ export type ContractPdfProps = {
   logoDataUri: string | null;
   qrCodeDataUri: string | null;
   options: { lendemain: boolean; piscine: boolean; vaisselle: boolean; cuisine: boolean; chapiteauCount: number };
+  chapiteauUnitPrice: number;
   /** Resolved clause list (already merged with defaults) — see resolveClauses() in contract-template.ts. */
   clauses: ClauseItem[];
   clause1PageBreak?: boolean;
@@ -134,6 +135,7 @@ export function ContractPdfDocument({
   logoDataUri,
   qrCodeDataUri,
   options,
+  chapiteauUnitPrice,
   clauses,
   clause1PageBreak,
   signaturePageBreak,
@@ -212,7 +214,7 @@ export function ContractPdfDocument({
                   <Text style={cellStyle(options.piscine)}>{b.piscine} €</Text>
                   <Text style={cellStyle(options.vaisselle)}>{b.vaisselle} €</Text>
                   <Text style={cellStyle(options.cuisine)}>{b.cuisine} €</Text>
-                  <Text style={cellStyle(options.chapiteauCount > 0)}>200 €/Pièce</Text>
+                  <Text style={cellStyle(options.chapiteauCount > 0)}>{chapiteauUnitPrice} €/Pièce</Text>
                 </View>
               );
             })}

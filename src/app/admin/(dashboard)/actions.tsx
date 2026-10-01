@@ -6,7 +6,7 @@ import { revalidatePath } from "next/cache";
 import { renderToBuffer } from "@react-pdf/renderer";
 import QRCode from "qrcode";
 import { supabaseAdmin } from "@/lib/supabase-admin";
-import { getPricingBrackets, CHAPITEAU_UNIT_PRICE } from "@/lib/pricing";
+import { getPricingBrackets, getChapiteauUnitPrice } from "@/lib/pricing";
 import { leadReference } from "@/lib/lead-reference";
 import { siteConfig } from "@/lib/site";
 import { ContractPdfDocument } from "@/lib/contract-pdf";
@@ -45,7 +45,7 @@ export async function generateContractPdf(leadId: string, extra: { eventDateOver
   const { data: lead, error } = await supabase.from("leads").select("*").eq("id", leadId).single();
   if (error || !lead) throw new Error("lead_not_found");
 
-  const pricingBrackets = await getPricingBrackets();
+  const [pricingBrackets, chapiteauUnitPrice] = await Promise.all([getPricingBrackets(), getChapiteauUnitPrice()]);
   const bracket = pricingBrackets.find((b) => b.key === lead.pricing_bracket) ?? pricingBrackets[0];
 
   const { data: contractRow } = await supabase.from("pages").select("content").eq("slug", "contrat").maybeSingle();
@@ -59,7 +59,7 @@ export async function generateContractPdf(leadId: string, extra: { eventDateOver
   if (lead.option_chapiteau_count > 0) {
     lineItems.push({
       label: `Chapiteau x${lead.option_chapiteau_count}`,
-      amount: lead.option_chapiteau_count * CHAPITEAU_UNIT_PRICE,
+      amount: lead.option_chapiteau_count * chapiteauUnitPrice,
     });
   }
 
@@ -105,6 +105,7 @@ export async function generateContractPdf(leadId: string, extra: { eventDateOver
         cuisine: lead.option_cuisine,
         chapiteauCount: lead.option_chapiteau_count ?? 0,
       }}
+      chapiteauUnitPrice={chapiteauUnitPrice}
       clauses={resolveClauses(clauseContent)}
       clause1PageBreak={hasPageBreak(clauseContent, "clause1")}
       signaturePageBreak={hasPageBreak(clauseContent, "signature")}

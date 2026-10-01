@@ -5,7 +5,7 @@ import path from "node:path";
 import { revalidatePath } from "next/cache";
 import { renderToBuffer } from "@react-pdf/renderer";
 import { supabaseAdmin } from "@/lib/supabase-admin";
-import { computeQuote, getPricingBrackets } from "@/lib/pricing";
+import { computeQuote, getPricingBrackets, getChapiteauUnitPrice } from "@/lib/pricing";
 import { ContractPdfDocument } from "@/lib/contract-pdf";
 import { resolveClauses, hasPageBreak } from "@/lib/contract-template";
 
@@ -23,11 +23,12 @@ export async function saveContractContent(content: Record<string, string>) {
 
 /** Renders a preview PDF against sample lead data — this editor has no real lead attached, it's the template. */
 export async function previewContractPdf(content: Record<string, string>): Promise<string> {
-  const pricingBrackets = await getPricingBrackets();
+  const [pricingBrackets, chapiteauUnitPrice] = await Promise.all([getPricingBrackets(), getChapiteauUnitPrice()]);
   const bracket = pricingBrackets[Math.min(2, pricingBrackets.length - 1)];
   const quote = computeQuote(
     { guestCount: bracket.maxGuests, lendemain: true, piscine: true, vaisselle: true, cuisine: true, chapiteauCount: 1 },
     pricingBrackets,
+    chapiteauUnitPrice,
   )!;
 
   let logoDataUri: string | null = null;
@@ -54,13 +55,14 @@ export async function previewContractPdf(content: Record<string, string>): Promi
         { label: "Accès piscine", amount: bracket.piscine },
         { label: "Vaisselle complète", amount: bracket.vaisselle },
         { label: "Cuisine professionnelle", amount: bracket.cuisine },
-        { label: "Chapiteau x1", amount: 200 },
+        { label: "Chapiteau x1", amount: chapiteauUnitPrice },
       ]}
       total={quote.total}
       arrhes={quote.arrhes}
       logoDataUri={logoDataUri}
       qrCodeDataUri={null}
       options={{ lendemain: true, piscine: true, vaisselle: true, cuisine: true, chapiteauCount: 1 }}
+      chapiteauUnitPrice={chapiteauUnitPrice}
       clauses={resolveClauses(content)}
       clause1PageBreak={hasPageBreak(content, "clause1")}
       signaturePageBreak={hasPageBreak(content, "signature")}

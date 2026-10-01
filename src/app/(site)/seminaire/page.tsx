@@ -113,7 +113,7 @@ export default async function SeminaireEvenementsPage() {
           </div>
 
           <p className="mt-4 text-center text-xs text-[var(--foreground)]/50">
-            Chapiteau : 200 €/pièce. Exemples de calcul et détails complets envoyés avec votre devis personnalisé.
+            Chapiteau : {fs("chapiteau_price")} €/pièce. Exemples de calcul et détails complets envoyés avec votre devis personnalisé.
           </p>
         </Container>
       </section>

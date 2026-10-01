@@ -86,7 +86,15 @@ type FormValues = z.infer<typeof schema>;
 
 const HEBERGEMENT_BOOKING_URL = "https://www.domainedelabegude.com/fr";
 
-export function ContactForm({ labels, pricingBrackets }: { labels: ContactFormLabels; pricingBrackets: PricingBracket[] }) {
+export function ContactForm({
+  labels,
+  pricingBrackets,
+  chapiteauUnitPrice,
+}: {
+  labels: ContactFormLabels;
+  pricingBrackets: PricingBracket[];
+  chapiteauUnitPrice: number;
+}) {
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
   const [lastQuote, setLastQuote] = useState<ReturnType<typeof computeQuote>>(null);
   const [lastReference, setLastReference] = useState<string | null>(null);
@@ -149,6 +157,7 @@ export function ContactForm({ labels, pricingBrackets }: { labels: ContactFormLa
       chapiteauCount: Number(watched.chapiteauCount) || 0,
     },
     pricingBrackets,
+    chapiteauUnitPrice,
   );
 
   async function onSubmit(values: FormValues) {
@@ -288,7 +297,7 @@ export function ContactForm({ labels, pricingBrackets }: { labels: ContactFormLa
 
         <div className="mt-3 flex items-center justify-between rounded-xl border border-black/10 px-4 py-3.5">
           <span className="flex items-center gap-3 text-sm text-[var(--foreground)]">
-            <RichText value={labels.chapiteauLabel} /> <span className="text-xs text-[var(--foreground)]/50">(200 €/pièce)</span>
+            <RichText value={labels.chapiteauLabel} /> <span className="text-xs text-[var(--foreground)]/50">({chapiteauUnitPrice} €/pièce)</span>
           </span>
           <Controller
             name="chapiteauCount"

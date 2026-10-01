@@ -129,6 +129,7 @@ export const pageSchemas: PageSchema[] = [
       { key: "event4", label: "Type d'événement 4", type: "text", default: "Événements d'entreprise" },
       { key: "pricing_title", label: "Grille tarifaire — titre", type: "text", default: "Grille tarifaire" },
       { key: "pricing_note", label: "Grille tarifaire — note", type: "textarea", default: "À partir de 18 € par personne. Forfait salle minimum : 1700 € (1800 € le 31 décembre). Tarifs en fonction du nombre de personnes le jour de l'événement, enfants comme adultes." },
+      { key: "chapiteau_price", label: "Prix du chapiteau (€ / pièce)", type: "text", default: "200" },
     ],
   },
   {

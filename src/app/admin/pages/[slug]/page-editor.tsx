@@ -536,6 +536,15 @@ export function PageEditor({
               <p className="mt-3 text-center text-xs text-[var(--foreground)]/40">
                 Grille partagée avec le calculateur de devis du formulaire de contact — s&apos;enregistre séparément du reste de la page.
               </p>
+              <div className="mx-auto mt-6 max-w-xs">
+                <label className="mb-1.5 block text-xs text-[var(--foreground)]/50">Prix du chapiteau (€ / pièce)</label>
+                <input
+                  type="number"
+                  value={val("chapiteau_price")}
+                  onChange={(e) => set("chapiteau_price")(e.target.value)}
+                  className="w-full rounded-lg border border-black/10 px-3 py-2 text-sm"
+                />
+              </div>
             </Container>
           </section>
         </>
