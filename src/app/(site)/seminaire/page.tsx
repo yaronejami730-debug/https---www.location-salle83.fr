@@ -59,7 +59,7 @@ export default async function SeminaireEvenementsPage() {
         scrollFade
       />
 
-      <IntroSection title={fs("intro_title")} text={fs("intro_text")} />
+      <IntroSection title={fs("intro_title")} action={{ label: fs("intro_button"), href: "#tarifs" }} />
 
       {features.map((ft) => (
         <ZigzagSection key={ft.n} title={ft.title} text={ft.text} images={ft.images} intervalMs={ft.interval} startDelayMs={ft.delay} reverse={ft.n % 2 === 0} />
@@ -80,7 +80,7 @@ export default async function SeminaireEvenementsPage() {
         </Container>
       </section>
 
-      <section className="py-20">
+      <section id="tarifs" className="scroll-mt-20 py-20">
         <Container>
           <RichText as="h2" value={fs("pricing_title")} className="text-center font-serif text-3xl text-[var(--foreground)]" />
           <RichText as="p" value={fs("pricing_note")} className="mx-auto mt-4 max-w-xl text-center text-sm text-[var(--foreground)]/70" />
