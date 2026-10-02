@@ -50,7 +50,7 @@ export const DEFAULT_CLAUSES: ClauseItem[] = [
   {
     id: "clause6",
     title: "EQUIPEMENTS DE LA SALLE ET DE LA CUISINE :",
-    body: "Tarif en fonction du Nombre de personnes (voir le tableau en première page)\nSupplément utilisation de la cuisine forfait de 200 à 290 euros. Une cuisine professionnelle de 49 M² pour orchestrer vos repas.\n- Cinq frigos pour le stockage de toutes vos denrées alimentaires.\n- Une machine à Glaçons\n- Deux pianos de cuisson.\n- Deux Gaz pour faire vos cuissons.\n- Deux fours (un Gaz et un électrique) — Gaz en Bouteille non inclus, à voir ensemble selon vos besoins.\n- Deux fours micro-ondes\n- Salamandre\n- Deux étuves de petite taille.\n- Un espace plonge équipée (Machine à laver et d'un double évier en inox)\nSupplément utilisation de la vaisselle forfait de 110 à 150 euros. (sur demande la vaisselle : assiettes, verres, couverts). Un inventaire sera signé par le locataire.\nUtilisation en Extérieur : Supplément pour la location des chaises Blanches soit 1 euro pièce. Et les rendre nettoyées !\nSupplément Le lendemain Forfait de 250 à 450 Euros\nSupplément Accès Piscine Forfait de 150 à 350 Euros\nSupplément « aucun Gîte réservé » Forfait de 500 Euros. Ce supplément est toutefois possible d'être annulé en partie ou totalement dans le cas où vous louez des logements dans le Domaine de la Bégude. Exemple : Un logement loué vous permettra d'avoir une remise de 10% sur cette option unique. Ex : Cinq Logements 50% de remise sur cette option, et à partir de 10 logements réservés sur le domaine, ceci vous permettra l'annulation de ce supplément de 500 euros.\nInclus dans le tarif :\n- La salle de 90 M² est aménagée de tables rectangulaires ou rondes avec les chaises. Soit : 5 Tables Rondes d'un diamètre de 180 pour 12 personnes maxi, + 6 Tables Rondes d'un diamètre de 152 pour 8 personnes.\n- Double sanitaires avec sas.\n- Ainsi qu'une terrasse de 90 M².\n- Incluse Piste de danse en plus de 60 m² (pour les événements de plus de 65 Pers Gratuit).",
+    body: "Tarif en fonction du Nombre de personnes (voir le tableau en première page)\nSupplément utilisation de la cuisine forfait de {{cuisine_min}} à {{cuisine_max}} euros. Une cuisine professionnelle de 49 M² pour orchestrer vos repas.\n- Cinq frigos pour le stockage de toutes vos denrées alimentaires.\n- Une machine à Glaçons\n- Deux pianos de cuisson.\n- Deux Gaz pour faire vos cuissons.\n- Deux fours (un Gaz et un électrique) — Gaz en Bouteille non inclus, à voir ensemble selon vos besoins.\n- Deux fours micro-ondes\n- Salamandre\n- Deux étuves de petite taille.\n- Un espace plonge équipée (Machine à laver et d'un double évier en inox)\nSupplément utilisation de la vaisselle forfait de {{vaisselle_min}} à {{vaisselle_max}} euros. (sur demande la vaisselle : assiettes, verres, couverts). Un inventaire sera signé par le locataire.\nUtilisation en Extérieur : Supplément pour la location des chaises Blanches soit 1 euro pièce. Et les rendre nettoyées !\nSupplément Le lendemain Forfait de {{lendemain_min}} à {{lendemain_max}} Euros\nSupplément Accès Piscine Forfait de {{piscine_min}} à {{piscine_max}} Euros\nSupplément « aucun Gîte réservé » Forfait de 500 Euros. Ce supplément est toutefois possible d'être annulé en partie ou totalement dans le cas où vous louez des logements dans le Domaine de la Bégude. Exemple : Un logement loué vous permettra d'avoir une remise de 10% sur cette option unique. Ex : Cinq Logements 50% de remise sur cette option, et à partir de 10 logements réservés sur le domaine, ceci vous permettra l'annulation de ce supplément de 500 euros.\nInclus dans le tarif :\n- La salle de 90 M² est aménagée de tables rectangulaires ou rondes avec les chaises. Soit : 5 Tables Rondes d'un diamètre de 180 pour 12 personnes maxi, + 6 Tables Rondes d'un diamètre de 152 pour 8 personnes.\n- Double sanitaires avec sas.\n- Ainsi qu'une terrasse de 90 M².\n- Incluse Piste de danse en plus de 60 m² (pour les événements de plus de 65 Pers Gratuit).",
     pageBreak: false,
   },
   {
@@ -69,7 +69,7 @@ export const DEFAULT_CLAUSES: ClauseItem[] = [
   {
     id: "clause9",
     title: "CHAPITEAU :",
-    body: "Couvre une belle partie de la terrasse extérieure.\n- Tarif unitaire : 200 Euros\n- En stock deux chapiteaux de cette taille : Dimension 8 Mts x 4 Mts pouvant accueillir 32 personnes par chapiteau.\n- En stock trois chapiteaux de cette taille : Dimension 4 Mts x 4 Mts pouvant accueillir 12 personnes par chapiteau.",
+    body: "Couvre une belle partie de la terrasse extérieure.\n- Tarif unitaire : {{chapiteau}} Euros\n- En stock deux chapiteaux de cette taille : Dimension 8 Mts x 4 Mts pouvant accueillir 32 personnes par chapiteau.\n- En stock trois chapiteaux de cette taille : Dimension 4 Mts x 4 Mts pouvant accueillir 12 personnes par chapiteau.",
     pageBreak: false,
   },
   {
@@ -111,6 +111,51 @@ export function pageBreakKey(blockKey: "clause1" | "signature"): string {
 
 export function hasPageBreak(content: Record<string, string> | undefined, blockKey: "clause1" | "signature"): boolean {
   return content?.[pageBreakKey(blockKey)] === "1";
+}
+
+/**
+ * Price variables usable in clause titles/bodies, e.g. "{{chapiteau}} €".
+ * They are filled from the live pricing grid when the PDF is generated, so
+ * editing the grid updates the contract with no clause edit. "_min"/"_max"
+ * are the smallest/largest value across all brackets; "salle_31dec" is the
+ * minimum room price + 100 € (the New Year's Eve surcharge).
+ */
+export const PRICE_TOKENS: { token: string; label: string }[] = [
+  { token: "salle_min", label: "Forfait salle minimum" },
+  { token: "salle_31dec", label: "Forfait salle minimum le 31 décembre (+100 €)" },
+  { token: "lendemain_min", label: "Lendemain — minimum" },
+  { token: "lendemain_max", label: "Lendemain — maximum" },
+  { token: "piscine_min", label: "Piscine — minimum" },
+  { token: "piscine_max", label: "Piscine — maximum" },
+  { token: "vaisselle_min", label: "Vaisselle — minimum" },
+  { token: "vaisselle_max", label: "Vaisselle — maximum" },
+  { token: "cuisine_min", label: "Cuisine — minimum" },
+  { token: "cuisine_max", label: "Cuisine — maximum" },
+  { token: "chapiteau", label: "Prix d'un chapiteau" },
+];
+
+export function fillPriceTokens(
+  text: string,
+  brackets: { salle: number; lendemain: number; piscine: number; vaisselle: number; cuisine: number }[],
+  chapiteauUnitPrice: number,
+): string {
+  if (!text.includes("{{")) return text;
+  const range = (k: "lendemain" | "piscine" | "vaisselle" | "cuisine") => {
+    const v = brackets.map((b) => b[k]);
+    return v.length ? [Math.min(...v), Math.max(...v)] : [0, 0];
+  };
+  const salleMin = brackets.length ? Math.min(...brackets.map((b) => b.salle)) : 0;
+  const values: Record<string, number> = {
+    salle_min: salleMin,
+    salle_31dec: salleMin + 100,
+    chapiteau: chapiteauUnitPrice,
+  };
+  for (const k of ["lendemain", "piscine", "vaisselle", "cuisine"] as const) {
+    const [lo, hi] = range(k);
+    values[`${k}_min`] = lo;
+    values[`${k}_max`] = hi;
+  }
+  return text.replace(/\{\{\s*(\w+)\s*\}\}/g, (m, key: string) => (key in values ? String(values[key]) : m));
 }
 
 export type ClauseLine = { type: "text" | "bullet"; content: string };

@@ -241,7 +241,7 @@ function ClauseFields({
       ) : (
         <>
           <label className="mb-1 block text-xs text-[var(--foreground)]/50">
-            Texte — une ligne = un paragraphe. Faites commencer une ligne par « - » pour une puce.
+            Texte — une ligne = un paragraphe. Faites commencer une ligne par « - » pour une puce. Tarifs automatiques (suivent la grille) :{" {{chapiteau}}, {{cuisine_min}}, {{cuisine_max}}, {{vaisselle_min}}, {{vaisselle_max}}, {{lendemain_min}}, {{lendemain_max}}, {{piscine_min}}, {{piscine_max}}, {{salle_min}}, {{salle_31dec}}."}
           </label>
           <textarea
             value={clause.body}

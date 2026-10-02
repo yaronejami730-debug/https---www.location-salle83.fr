@@ -3,7 +3,7 @@ import { Document, Page, Text, View, Image, StyleSheet } from "@react-pdf/render
 import { siteConfig } from "@/lib/site";
 import type { PricingBracket } from "@/lib/pricing";
 import type { ClauseItem } from "@/lib/contract-template";
-import { parseClauseBody } from "@/lib/contract-template";
+import { parseClauseBody, fillPriceTokens } from "@/lib/contract-template";
 
 const styles = StyleSheet.create({
   page: { padding: 36, paddingBottom: 50, fontSize: 9, fontFamily: "Helvetica", color: "#2b2a26" },
@@ -182,7 +182,7 @@ export function ContractPdfDocument({
           <Text style={[styles.paragraph, { marginTop: 4 }]}>
             Les Tarifs et les Options : (En fonction du nombre de personnes le jour de l&apos;évènement) Enfants
             comme adultes sont comptabilisés.{"\n"}
-            (FORFAIT SALLE MINIMUM de 1700 euros, Sauf le 31 Décembre 1800 Euros).
+            (FORFAIT SALLE MINIMUM de {fillPriceTokens("{{salle_min}}", allBrackets, chapiteauUnitPrice)} euros, Sauf le 31 Décembre {fillPriceTokens("{{salle_31dec}}", allBrackets, chapiteauUnitPrice)} Euros).
           </Text>
 
           <View style={styles.table}>
@@ -236,14 +236,14 @@ export function ContractPdfDocument({
         </View>
 
         {clauses.map((c, i) => (
-          <Heading key={c.id} number={String(i + 2)} title={c.title} pageBreak={c.pageBreak}>
+          <Heading key={c.id} number={String(i + 2)} title={fillPriceTokens(c.title, allBrackets, chapiteauUnitPrice)} pageBreak={c.pageBreak}>
             {c.special === "arrhes" ? (
               <View style={styles.row}>
-                <Text style={styles.label}>{c.body}</Text>
+                <Text style={styles.label}>{fillPriceTokens(c.body, allBrackets, chapiteauUnitPrice)}</Text>
                 <Text style={styles.value}>{arrhes} €</Text>
               </View>
             ) : (
-              <ClauseBody body={c.body} />
+              <ClauseBody body={fillPriceTokens(c.body, allBrackets, chapiteauUnitPrice)} />
             )}
           </Heading>
         ))}
