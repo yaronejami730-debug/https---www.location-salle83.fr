@@ -104,6 +104,19 @@ export function resolveClauses(content: Record<string, string> | undefined): Cla
   }
 }
 
+/** Default text of clause 1 (the intro above the pricing table). Editable from the admin; price tokens ({{salle_min}}, {{salle_31dec}}…) are filled from the live grid, or type a fixed amount instead. */
+export const DEFAULT_CLAUSE1_INTRO =
+  "Les Tarifs et les Options : (En fonction du nombre de personnes le jour de l'évènement) Enfants comme adultes sont comptabilisés.\n(FORFAIT SALLE MINIMUM de {{salle_min}} euros, Sauf le 31 Décembre {{salle_31dec}} Euros).";
+
+export const DEFAULT_CLAUSE1_TITLE = "EVENEMENT :";
+
+export function resolveClause1(content: Record<string, string> | undefined): { title: string; intro: string } {
+  return {
+    title: content?.clause1_title?.trim() || DEFAULT_CLAUSE1_TITLE,
+    intro: content?.clause1_intro?.trim() || DEFAULT_CLAUSE1_INTRO,
+  };
+}
+
 /** Storage key of the "start this block on a new page" flag for the two fixed, non-reorderable blocks (the pricing table and the signature). */
 export function pageBreakKey(blockKey: "clause1" | "signature"): string {
   return `${blockKey}_pagebreak`;

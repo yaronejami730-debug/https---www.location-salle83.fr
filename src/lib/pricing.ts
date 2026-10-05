@@ -24,6 +24,9 @@ export const DEFAULT_PRICING_BRACKETS: PricingBracket[] = [
 /** Repli si le champ "Prix du chapiteau" (page Séminaire) est vide ou inaccessible. */
 export const DEFAULT_CHAPITEAU_UNIT_PRICE = 200;
 
+/** Option supplémentaire libre (ex. « Sono », « Photobooth ») ajoutée depuis l'admin, au même titre que le chapiteau : un libellé et un prix forfaitaire. */
+export type ExtraOption = { id: string; label: string; price: number };
+
 export type QuoteOptions = {
   guestCount: number;
   lendemain: boolean;
@@ -31,7 +34,29 @@ export type QuoteOptions = {
   vaisselle: boolean;
   cuisine: boolean;
   chapiteauCount: number;
+  /** Ids des options supplémentaires cochées (voir getExtraOptions). */
+  extraIds?: string[];
 };
+
+/** Les options supplémentaires vivent dans leur propre ligne `pages` (slug "tarifs-options") pour ne pas entrer en conflit avec l'enregistrement de la page Séminaire. */
+export async function getExtraOptions(): Promise<ExtraOption[]> {
+  const supabase = supabasePublic();
+  const { data } = await supabase.from("pages").select("content").eq("slug", "tarifs-options").maybeSingle();
+  return parseExtraOptions((data?.content as Record<string, string> | null)?.extras);
+}
+
+export function parseExtraOptions(raw: string | undefined | null): ExtraOption[] {
+  if (!raw) return [];
+  try {
+    const parsed = JSON.parse(raw);
+    if (!Array.isArray(parsed)) return [];
+    return parsed
+      .filter((o) => o && typeof o.id === "string" && typeof o.label === "string" && o.label.trim())
+      .map((o) => ({ id: o.id, label: o.label.trim(), price: Number.isFinite(Number(o.price)) ? Math.max(0, Number(o.price)) : 0 }));
+  } catch {
+    return [];
+  }
+}
 
 export async function getChapiteauUnitPrice(): Promise<number> {
   const supabase = supabasePublic();
@@ -69,22 +94,30 @@ export function describeBaseRate(guestCount: number, brackets: PricingBracket[],
   return `Pour un événement jusqu'à ${bracket.maxGuests} personnes, le tarif de base de la location de la salle est de ${bracket.salle} €. En supplément selon les besoins : le lendemain (${bracket.lendemain} €), l'accès piscine le lendemain (${bracket.piscine} €), la vaisselle (${bracket.vaisselle} €), la cuisine professionnelle (${bracket.cuisine} €), et les chapiteaux (${chapiteauUnitPrice} € l'unité). Un acompte de 50 % du montant total est demandé à la réservation.`;
 }
 
-export function computeQuote(options: QuoteOptions, brackets: PricingBracket[], chapiteauUnitPrice = DEFAULT_CHAPITEAU_UNIT_PRICE) {
+export function computeQuote(
+  options: QuoteOptions,
+  brackets: PricingBracket[],
+  chapiteauUnitPrice = DEFAULT_CHAPITEAU_UNIT_PRICE,
+  extraOptions: ExtraOption[] = [],
+) {
   const bracket = findBracket(options.guestCount, brackets);
   if (!bracket) return null;
 
   const chapiteauTotal = Math.max(0, options.chapiteauCount) * chapiteauUnitPrice;
+  const extrasTotal = extraOptions.filter((o) => options.extraIds?.includes(o.id)).reduce((sum, o) => sum + o.price, 0);
   const total =
     bracket.salle +
     (options.lendemain ? bracket.lendemain : 0) +
     (options.piscine ? bracket.piscine : 0) +
     (options.vaisselle ? bracket.vaisselle : 0) +
     (options.cuisine ? bracket.cuisine : 0) +
-    chapiteauTotal;
+    chapiteauTotal +
+    extrasTotal;
 
   return {
     bracket,
     chapiteauTotal,
+    extrasTotal,
     total,
     arrhes: Math.round(total * 0.5),
   };

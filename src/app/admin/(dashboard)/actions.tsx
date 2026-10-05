@@ -6,11 +6,11 @@ import { revalidatePath } from "next/cache";
 import { renderToBuffer } from "@react-pdf/renderer";
 import QRCode from "qrcode";
 import { supabaseAdmin } from "@/lib/supabase-admin";
-import { getPricingBrackets, getChapiteauUnitPrice } from "@/lib/pricing";
+import { getPricingBrackets, getChapiteauUnitPrice, getExtraOptions } from "@/lib/pricing";
 import { leadReference } from "@/lib/lead-reference";
 import { siteConfig } from "@/lib/site";
 import { ContractPdfDocument } from "@/lib/contract-pdf";
-import { resolveClauses, hasPageBreak } from "@/lib/contract-template";
+import { resolveClauses, resolveClause1, hasPageBreak } from "@/lib/contract-template";
 import { sendEmail } from "@/lib/mail";
 import { wasteSortingEmail } from "@/lib/email-templates";
 
@@ -45,7 +45,7 @@ export async function generateContractPdf(leadId: string, extra: { eventDateOver
   const { data: lead, error } = await supabase.from("leads").select("*").eq("id", leadId).single();
   if (error || !lead) throw new Error("lead_not_found");
 
-  const [pricingBrackets, chapiteauUnitPrice] = await Promise.all([getPricingBrackets(), getChapiteauUnitPrice()]);
+  const [pricingBrackets, chapiteauUnitPrice, extraOptions] = await Promise.all([getPricingBrackets(), getChapiteauUnitPrice(), getExtraOptions()]);
   const bracket = pricingBrackets.find((b) => b.key === lead.pricing_bracket) ?? pricingBrackets[0];
 
   const { data: contractRow } = await supabase.from("pages").select("content").eq("slug", "contrat").maybeSingle();
@@ -61,6 +61,11 @@ export async function generateContractPdf(leadId: string, extra: { eventDateOver
       label: `Chapiteau x${lead.option_chapiteau_count}`,
       amount: lead.option_chapiteau_count * chapiteauUnitPrice,
     });
+  }
+
+  const extraIds: string[] = Array.isArray(lead.option_extras) ? lead.option_extras : [];
+  for (const o of extraOptions) {
+    if (extraIds.includes(o.id)) lineItems.push({ label: o.label, amount: o.price });
   }
 
   const total = lead.estimated_total ?? bracket.salle;
@@ -81,6 +86,8 @@ export async function generateContractPdf(leadId: string, extra: { eventDateOver
   } catch {
     qrCodeDataUri = null;
   }
+
+  const clause1 = resolveClause1(clauseContent);
 
   const buffer = await renderToBuffer(
     <ContractPdfDocument
@@ -107,6 +114,10 @@ export async function generateContractPdf(leadId: string, extra: { eventDateOver
         chapiteauCount: lead.option_chapiteau_count ?? 0,
       }}
       chapiteauUnitPrice={chapiteauUnitPrice}
+      extraOptions={extraOptions}
+      extraIds={extraIds}
+      clause1Title={clause1.title}
+      clause1Intro={clause1.intro}
       clauses={resolveClauses(clauseContent)}
       clause1PageBreak={hasPageBreak(clauseContent, "clause1")}
       signaturePageBreak={hasPageBreak(clauseContent, "signature")}

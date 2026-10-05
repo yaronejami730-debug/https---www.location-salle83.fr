@@ -36,7 +36,7 @@ export function GalleryLightbox({
 }) {
   const [index, setIndex] = useState(startIndex);
   const [playing, setPlaying] = useState(autoplay);
-  const [musicOn, setMusicOn] = useState(false);
+  const [musicOn, setMusicOn] = useState(autoplay);
   const audioRef = useRef<HTMLAudioElement>(null);
   const touchStartX = useRef<number | null>(null);
   const coverflow = useIsLandscapeTouch();
@@ -95,7 +95,14 @@ export function GalleryLightbox({
           {index + 1} / {photos.length}
         </p>
         <div className="flex items-center gap-4 text-sm">
-          <button onClick={() => setPlaying((v) => !v)} className="hover:text-white">
+          <button
+            onClick={() => {
+              // Starting the slideshow also starts the music (this click is the user gesture browsers require).
+              if (!playing) setMusicOn(true);
+              setPlaying((v) => !v);
+            }}
+            className="hover:text-white"
+          >
             {playing ? "Pause" : "Lancer le diaporama"}
           </button>
           <button onClick={() => setMusicOn((v) => !v)} className="hover:text-white">

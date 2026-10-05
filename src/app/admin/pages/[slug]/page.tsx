@@ -2,7 +2,7 @@ import { notFound } from "next/navigation";
 import { supabaseAdmin } from "@/lib/supabase-admin";
 import { getSchema } from "@/lib/page-schemas";
 import { getSiteSettings } from "@/lib/content";
-import { getPricingBrackets } from "@/lib/pricing";
+import { getPricingBrackets, getExtraOptions } from "@/lib/pricing";
 import { Header } from "@/components/header";
 import { Footer } from "@/components/footer";
 import { PageEditor } from "./page-editor";
@@ -25,7 +25,7 @@ export default async function AdminPageEditorRoute({ params }: { params: Promise
         ? ["home-histoire", "home-choice-mariage", "home-choice-evenements", "home-choice-domaine"]
         : [];
 
-  const [settings, { data: row }, { data: faqs }, { data: reviews }, { data: media }, { data: hebergementMedia }, zigzagRows, pricingBrackets] = await Promise.all([
+  const [settings, { data: row }, { data: faqs }, { data: reviews }, { data: media }, { data: hebergementMedia }, zigzagRows, pricingBrackets, extraOptions] = await Promise.all([
     getSiteSettings(),
     supabase.from("pages").select("*").eq("slug", slug).maybeSingle(),
     slug === "home" ? supabase.from("faqs").select("*").eq("page", "home").eq("published", true).order("sort_order") : Promise.resolve({ data: [] }),
@@ -42,6 +42,7 @@ export default async function AdminPageEditorRoute({ params }: { params: Promise
       : Promise.resolve({ data: [] }),
     Promise.all(zigzagCategories.map((cat) => supabase.from("media").select("*").eq("page", cat).order("sort_order"))),
     slug === "seminaire" ? getPricingBrackets() : Promise.resolve([]),
+    slug === "seminaire" ? getExtraOptions() : Promise.resolve([]),
   ]);
 
   const zigzagMedia = Object.fromEntries(zigzagCategories.map((cat, i) => [cat, zigzagRows[i]?.data ?? []]));
@@ -61,6 +62,7 @@ export default async function AdminPageEditorRoute({ params }: { params: Promise
         zigzagMedia={zigzagMedia}
         hasCustomSlideshowAudio={settings.slideshowAudioUrl !== "/audio/slideshow.mp3"}
         pricingBrackets={pricingBrackets}
+        extraOptions={extraOptions}
       />
       <Footer />
     </>

@@ -5,9 +5,9 @@ import path from "node:path";
 import { revalidatePath } from "next/cache";
 import { renderToBuffer } from "@react-pdf/renderer";
 import { supabaseAdmin } from "@/lib/supabase-admin";
-import { computeQuote, getPricingBrackets, getChapiteauUnitPrice } from "@/lib/pricing";
+import { computeQuote, getPricingBrackets, getChapiteauUnitPrice, getExtraOptions } from "@/lib/pricing";
 import { ContractPdfDocument } from "@/lib/contract-pdf";
-import { resolveClauses, hasPageBreak } from "@/lib/contract-template";
+import { resolveClauses, resolveClause1, hasPageBreak } from "@/lib/contract-template";
 
 export async function saveContractContent(content: Record<string, string>) {
   const supabase = supabaseAdmin();
@@ -24,13 +24,16 @@ export async function saveContractContent(content: Record<string, string>) {
 
 /** Renders a preview PDF against sample lead data — this editor has no real lead attached, it's the template. */
 export async function previewContractPdf(content: Record<string, string>): Promise<string> {
-  const [pricingBrackets, chapiteauUnitPrice] = await Promise.all([getPricingBrackets(), getChapiteauUnitPrice()]);
+  const [pricingBrackets, chapiteauUnitPrice, extraOptions] = await Promise.all([getPricingBrackets(), getChapiteauUnitPrice(), getExtraOptions()]);
+  const sampleExtra = extraOptions[0];
   const bracket = pricingBrackets[Math.min(2, pricingBrackets.length - 1)];
   const quote = computeQuote(
-    { guestCount: bracket.maxGuests, lendemain: true, piscine: true, vaisselle: true, cuisine: true, chapiteauCount: 1 },
+    { guestCount: bracket.maxGuests, lendemain: true, piscine: true, vaisselle: true, cuisine: true, chapiteauCount: 1, extraIds: sampleExtra ? [sampleExtra.id] : [] },
     pricingBrackets,
     chapiteauUnitPrice,
+    extraOptions,
   )!;
+  const clause1 = resolveClause1(content);
 
   let logoDataUri: string | null = null;
   try {
@@ -58,6 +61,7 @@ export async function previewContractPdf(content: Record<string, string>): Promi
         { label: "Vaisselle complète", amount: bracket.vaisselle },
         { label: "Cuisine professionnelle", amount: bracket.cuisine },
         { label: "Chapiteau x1", amount: chapiteauUnitPrice },
+        ...(sampleExtra ? [{ label: sampleExtra.label, amount: sampleExtra.price }] : []),
       ]}
       total={quote.total}
       arrhes={quote.arrhes}
@@ -65,6 +69,10 @@ export async function previewContractPdf(content: Record<string, string>): Promi
       qrCodeDataUri={null}
       options={{ lendemain: true, piscine: true, vaisselle: true, cuisine: true, chapiteauCount: 1 }}
       chapiteauUnitPrice={chapiteauUnitPrice}
+      extraOptions={extraOptions}
+      extraIds={sampleExtra ? [sampleExtra.id] : []}
+      clause1Title={clause1.title}
+      clause1Intro={clause1.intro}
       clauses={resolveClauses(content)}
       clause1PageBreak={hasPageBreak(content, "clause1")}
       signaturePageBreak={hasPageBreak(content, "signature")}

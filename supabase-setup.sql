@@ -155,3 +155,6 @@ alter table public.faq_entries enable row level security;
 
 create policy "public read published faq_entries" on public.faq_entries for select to anon using (published = true);
 create policy "service role full access faq_entries" on public.faq_entries for all to service_role using (true) with check (true);
+
+-- Lot 10: extra pricing options picked by visitors (ids from pages.slug='tarifs-options') — run this block to add it.
+alter table public.leads add column if not exists option_extras jsonb not null default '[]'::jsonb;

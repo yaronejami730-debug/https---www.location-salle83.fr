@@ -9,8 +9,9 @@ import { savePageContent } from "../actions";
 import { uploadPhoto, deletePhoto, reorderPhotos, replacePhoto, uploadSlideshowAudio, removeSlideshowAudio } from "../../(dashboard)/photos/actions";
 import type { PageSchema } from "@/lib/page-schemas";
 import { parseListField } from "@/lib/page-schemas";
-import type { PricingBracket } from "@/lib/pricing";
+import type { PricingBracket, ExtraOption } from "@/lib/pricing";
 import { PricingGridEditor } from "./pricing-grid-editor";
+import { ExtraOptionsEditor } from "./extra-options-editor";
 import { mediaUrl } from "@/lib/supabase-public";
 import { EditableAmenityList, type AmenityItem } from "./amenity-list-editor";
 import { LocationMap } from "@/components/location-map";
@@ -186,6 +187,7 @@ export function PageEditor({
   zigzagMedia,
   hasCustomSlideshowAudio,
   pricingBrackets,
+  extraOptions,
 }: {
   schema: PageSchema;
   initialContent: Record<string, string>;
@@ -198,6 +200,7 @@ export function PageEditor({
   zigzagMedia: Record<string, MediaRow[]>;
   hasCustomSlideshowAudio: boolean;
   pricingBrackets: PricingBracket[];
+  extraOptions: ExtraOption[];
 }) {
   const [content, setContent] = useState<Record<string, string>>(initialContent);
   const [seoTitle, setSeoTitle] = useState(initialSeoTitle);
@@ -546,6 +549,7 @@ export function PageEditor({
               <EditableText as="h2" value={val("pricing_title")} onChange={set("pricing_title")} className="text-center font-serif text-3xl text-[var(--foreground)]" />
               <EditableText value={val("pricing_note")} onChange={set("pricing_note")} className="mx-auto mt-4 max-w-xl text-center text-sm text-[var(--foreground)]/70" />
               <PricingGridEditor initialBrackets={pricingBrackets} />
+              <ExtraOptionsEditor initialOptions={extraOptions} />
               <p className="mt-3 text-center text-xs text-[var(--foreground)]/40">
                 Grille partagée avec le calculateur de devis du formulaire de contact — s&apos;enregistre séparément du reste de la page.
               </p>

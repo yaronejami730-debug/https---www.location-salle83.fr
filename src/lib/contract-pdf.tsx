@@ -1,7 +1,7 @@
 import "server-only";
 import { Document, Page, Text, View, Image, StyleSheet } from "@react-pdf/renderer";
 import { siteConfig } from "@/lib/site";
-import type { PricingBracket } from "@/lib/pricing";
+import type { PricingBracket, ExtraOption } from "@/lib/pricing";
 import type { ClauseItem } from "@/lib/contract-template";
 import { parseClauseBody, fillPriceTokens } from "@/lib/contract-template";
 
@@ -67,6 +67,12 @@ export type ContractPdfProps = {
   qrCodeDataUri: string | null;
   options: { lendemain: boolean; piscine: boolean; vaisselle: boolean; cuisine: boolean; chapiteauCount: number };
   chapiteauUnitPrice: number;
+  /** Options supplémentaires définies dans l'admin (colonnes en plus du chapiteau dans le tableau) et celles cochées pour ce dossier. */
+  extraOptions?: ExtraOption[];
+  extraIds?: string[];
+  /** Titre et texte d'introduction de la clause 1 (éditables) — voir resolveClause1(). */
+  clause1Title: string;
+  clause1Intro: string;
   /** Resolved clause list (already merged with defaults) — see resolveClauses() in contract-template.ts. */
   clauses: ClauseItem[];
   clause1PageBreak?: boolean;
@@ -130,6 +136,10 @@ export function ContractPdfDocument({
   qrCodeDataUri,
   options,
   chapiteauUnitPrice,
+  extraOptions = [],
+  extraIds = [],
+  clause1Title,
+  clause1Intro,
   clauses,
   clause1PageBreak,
   signaturePageBreak,
@@ -170,7 +180,7 @@ export function ContractPdfDocument({
         </View>
 
         <View style={styles.section} break={clause1PageBreak}>
-          <Text style={styles.sectionTitle}>1) EVENEMENT :</Text>
+          <Text style={styles.sectionTitle}>1) {fillPriceTokens(clause1Title, allBrackets, chapiteauUnitPrice)}</Text>
           <View style={styles.row}>
             <Text style={styles.label}>Date</Text>
             <Text style={styles.value}>{eventDate || "……… / ……… / 2026"}</Text>
@@ -179,11 +189,9 @@ export function ContractPdfDocument({
             <Text style={styles.label}>Nombre de personnes occupant et entrant dans le domaine pour l&apos;événement</Text>
             <Text style={styles.value}>{guestCount || "……"}</Text>
           </View>
-          <Text style={[styles.paragraph, { marginTop: 4 }]}>
-            Les Tarifs et les Options : (En fonction du nombre de personnes le jour de l&apos;évènement) Enfants
-            comme adultes sont comptabilisés.{"\n"}
-            (FORFAIT SALLE MINIMUM de {fillPriceTokens("{{salle_min}}", allBrackets, chapiteauUnitPrice)} euros, Sauf le 31 Décembre {fillPriceTokens("{{salle_31dec}}", allBrackets, chapiteauUnitPrice)} Euros).
-          </Text>
+          <View style={{ marginTop: 4 }}>
+            <ClauseBody body={fillPriceTokens(clause1Intro, allBrackets, chapiteauUnitPrice)} />
+          </View>
 
           <View style={styles.table}>
             <View style={styles.tHeadRow}>
@@ -194,6 +202,11 @@ export function ContractPdfDocument({
               <Text style={styles.tCellHead}>Vaisselle</Text>
               <Text style={styles.tCellHead}>Cuisine</Text>
               <Text style={styles.tCellHead}>Chapiteau</Text>
+              {extraOptions.map((o) => (
+                <Text key={o.id} style={styles.tCellHead}>
+                  {o.label}
+                </Text>
+              ))}
             </View>
             {allBrackets.map((b, i) => {
               const active = b.key === bracket.key;
@@ -209,6 +222,11 @@ export function ContractPdfDocument({
                   <Text style={cellStyle(options.vaisselle)}>{b.vaisselle} €</Text>
                   <Text style={cellStyle(options.cuisine)}>{b.cuisine} €</Text>
                   <Text style={cellStyle(options.chapiteauCount > 0)}>{chapiteauUnitPrice} €/Pièce</Text>
+                  {extraOptions.map((o) => (
+                    <Text key={o.id} style={cellStyle(extraIds.includes(o.id))}>
+                      {o.price} €
+                    </Text>
+                  ))}
                 </View>
               );
             })}

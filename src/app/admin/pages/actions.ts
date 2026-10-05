@@ -4,7 +4,7 @@ import { revalidatePath } from "next/cache";
 import { supabaseAdmin } from "@/lib/supabase-admin";
 import { getSchema } from "@/lib/page-schemas";
 import { sanitizeRichText } from "@/lib/sanitize-html";
-import type { PricingBracket } from "@/lib/pricing";
+import type { PricingBracket, ExtraOption } from "@/lib/pricing";
 
 export async function savePageContent(
   slug: string,
@@ -69,5 +69,21 @@ export async function savePricingBrackets(brackets: PricingBracket[]) {
 
   revalidatePath("/admin/pages/seminaire");
   revalidatePath("/seminaire");
+  revalidatePath("/contact");
+}
+
+export async function saveExtraOptions(options: ExtraOption[]) {
+  const supabase = supabaseAdmin();
+  const cleaned = options
+    .filter((o) => o.label.trim())
+    .map((o) => ({ id: o.id, label: o.label.trim(), price: Math.max(0, Number(o.price) || 0) }));
+
+  const { error } = await supabase
+    .from("pages")
+    .upsert({ slug: "tarifs-options", content: { extras: JSON.stringify(cleaned) }, updated_at: new Date().toISOString() });
+  if (error) throw new Error(`Échec de l'enregistrement des options : ${error.message}`);
+
+  revalidatePath("/admin/pages/seminaire");
+  revalidatePath("/admin/contrat");
   revalidatePath("/contact");
 }

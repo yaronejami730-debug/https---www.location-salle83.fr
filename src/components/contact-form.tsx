@@ -7,7 +7,7 @@ import { useState } from "react";
 import { z } from "zod";
 import { DatePicker } from "./date-picker";
 import { AddressAutocomplete } from "./address-autocomplete";
-import { computeQuote, findBracket, type PricingBracket } from "@/lib/pricing";
+import { computeQuote, findBracket, type PricingBracket, type ExtraOption } from "@/lib/pricing";
 import { leadReference } from "@/lib/lead-reference";
 import { submitLead } from "@/app/(site)/contact/actions";
 import { RichText } from "@/components/rich-text";
@@ -90,11 +90,14 @@ export function ContactForm({
   labels,
   pricingBrackets,
   chapiteauUnitPrice,
+  extraOptions = [],
 }: {
   labels: ContactFormLabels;
   pricingBrackets: PricingBracket[];
   chapiteauUnitPrice: number;
+  extraOptions?: ExtraOption[];
 }) {
+  const [extraIds, setExtraIds] = useState<string[]>([]);
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
   const [lastQuote, setLastQuote] = useState<ReturnType<typeof computeQuote>>(null);
   const [lastReference, setLastReference] = useState<string | null>(null);
@@ -155,9 +158,11 @@ export function ContactForm({
       vaisselle: watched.vaisselle,
       cuisine: watched.cuisine,
       chapiteauCount: Number(watched.chapiteauCount) || 0,
+      extraIds,
     },
     pricingBrackets,
     chapiteauUnitPrice,
+    extraOptions,
   );
 
   async function onSubmit(values: FormValues) {
@@ -166,6 +171,7 @@ export function ContactForm({
       const civilityLabel = values.civility.map((v) => v.charAt(0).toUpperCase() + v.slice(1)).join(" et ");
       const { quote, leadId } = await submitLead({
         ...values,
+        extraIds,
         civility: civilityLabel,
         fullName: `${values.firstName} ${values.lastName}`.trim(),
         lastName: values.lastName,
@@ -173,6 +179,7 @@ export function ContactForm({
       setLastQuote(quote);
       setLastReference(leadReference(leadId));
       setStatus("success");
+      setExtraIds([]);
       reset();
     } catch {
       setStatus("error");
@@ -326,6 +333,25 @@ export function ContactForm({
             }}
           />
         </div>
+
+        {extraOptions.map((o) => (
+          <label
+            key={o.id}
+            className="mt-3 flex cursor-pointer items-center gap-3 rounded-xl border border-black/10 px-4 py-3.5 text-sm"
+          >
+            <input
+              type="checkbox"
+              checked={extraIds.includes(o.id)}
+              onChange={(e) => setExtraIds((prev) => (e.target.checked ? [...prev, o.id] : prev.filter((id) => id !== o.id)))}
+              className="peer sr-only"
+            />
+            <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-md border border-black/20 text-[10px] text-transparent peer-checked:border-[var(--accent)] peer-checked:bg-[var(--accent)] peer-checked:text-white">
+              ✓
+            </span>
+            <span className="flex-1 text-[var(--foreground)]">{o.label}</span>
+            <span className="text-xs text-[var(--foreground)]/50">+{o.price} €</span>
+          </label>
+        ))}
       </div>
 
       <div className="rounded-xl bg-[var(--background-muted)] p-5">

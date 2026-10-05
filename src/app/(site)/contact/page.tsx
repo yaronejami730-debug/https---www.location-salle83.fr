@@ -4,7 +4,7 @@ import { Container } from "@/components/container";
 import { ContactForm } from "@/components/contact-form";
 import { getPageContent } from "@/lib/content";
 import { getSchema, fieldValue } from "@/lib/page-schemas";
-import { getPricingBrackets, getChapiteauUnitPrice } from "@/lib/pricing";
+import { getPricingBrackets, getChapiteauUnitPrice, getExtraOptions } from "@/lib/pricing";
 
 const schema = getSchema("contact")!;
 
@@ -22,7 +22,7 @@ export async function generateMetadata(): Promise<Metadata> {
 
 export default async function ContactPage() {
   const pageContent = await getPageContent("contact");
-  const [pricingBrackets, chapiteauUnitPrice] = await Promise.all([getPricingBrackets(), getChapiteauUnitPrice()]);
+  const [pricingBrackets, chapiteauUnitPrice, extraOptions] = await Promise.all([getPricingBrackets(), getChapiteauUnitPrice(), getExtraOptions()]);
   const c = pageContent?.content ?? {};
   const f = (key: string) => fieldValue(c, schema.fields.find((x) => x.key === key)!);
 
@@ -74,7 +74,7 @@ export default async function ContactPage() {
 
       <section className="py-20">
         <Container className="max-w-2xl">
-          <ContactForm labels={labels} pricingBrackets={pricingBrackets} chapiteauUnitPrice={chapiteauUnitPrice} />
+          <ContactForm labels={labels} pricingBrackets={pricingBrackets} chapiteauUnitPrice={chapiteauUnitPrice} extraOptions={extraOptions} />
         </Container>
       </section>
     </>

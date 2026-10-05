@@ -85,6 +85,7 @@ export default async function AdminDashboard({
                     lead.option_vaisselle && "Vaisselle",
                     lead.option_cuisine && "Cuisine",
                     lead.option_chapiteau_count > 0 && `${lead.option_chapiteau_count} chapiteau(x)`,
+                    Array.isArray(lead.option_extras) && lead.option_extras.length > 0 && `${lead.option_extras.length} option(s) suppl.`,
                   ]
                     .filter(Boolean)
                     .join(", ") || "—"}

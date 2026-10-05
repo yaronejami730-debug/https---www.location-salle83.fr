@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState, useTransition } from "react";
-import { resolveClauses, pageBreakKey, type ClauseItem } from "@/lib/contract-template";
+import { resolveClauses, resolveClause1, pageBreakKey, type ClauseItem } from "@/lib/contract-template";
 import { saveContractContent, previewContractPdf } from "./actions";
 
 const AUTO_PREVIEW_DELAY_MS = 900;
@@ -21,6 +21,7 @@ export function ContractEditor({ initialContent }: { initialContent: Record<stri
   const [saveError, setSaveError] = useState<string | null>(null);
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
+  const clause1 = resolveClause1(content);
   const breakOf = (blockKey: "clause1" | "signature") => content[pageBreakKey(blockKey)] === "1";
   const setBreak = (blockKey: "clause1" | "signature") => (on: boolean) =>
     setContent((prev) => ({ ...prev, [pageBreakKey(blockKey)]: on ? "1" : "" }));
@@ -104,8 +105,24 @@ export function ContractEditor({ initialContent }: { initialContent: Record<stri
         {saveError && <p className="rounded-lg bg-red-50 px-3 py-2 text-xs text-red-700">{saveError}</p>}
 
         <div className="rounded-2xl border border-black/5 bg-[var(--background)] p-5">
-          <p className="mb-2 text-xs font-medium uppercase tracking-wide text-[var(--foreground)]/40">Clause 1 — Événement et tarifs (calculée)</p>
+          <p className="mb-2 text-xs font-medium uppercase tracking-wide text-[var(--foreground)]/40">Clause 1 — Événement et tarifs</p>
           <PageBreakToggle checked={breakOf("clause1")} onChange={setBreak("clause1")} />
+
+          <label className="mb-1 mt-3 block text-xs text-[var(--foreground)]/50">Titre</label>
+          <input
+            value={clause1.title}
+            onChange={(e) => setContent((prev) => ({ ...prev, clause1_title: e.target.value }))}
+            className="mb-3 w-full rounded-lg border border-black/10 px-3 py-2 text-sm font-medium"
+          />
+          <label className="mb-1 block text-xs text-[var(--foreground)]/50">
+            Texte au-dessus du tableau — une ligne = un paragraphe. Vous pouvez écrire un montant fixe (ex. 2000) ou garder {"{{salle_min}}"} / {"{{salle_31dec}}"} qui suivent la grille tarifaire. Le tableau, les options choisies et le total restent calculés automatiquement.
+          </label>
+          <textarea
+            value={clause1.intro}
+            onChange={(e) => setContent((prev) => ({ ...prev, clause1_intro: e.target.value }))}
+            rows={5}
+            className="w-full rounded-lg border border-black/10 px-3 py-2 font-mono text-xs leading-relaxed"
+          />
         </div>
 
         {clauses.map((c, i) => (

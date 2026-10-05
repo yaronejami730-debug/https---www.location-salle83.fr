@@ -3,7 +3,7 @@
 import { z } from "zod";
 import { after } from "next/server";
 import { supabaseAdmin } from "@/lib/supabase-admin";
-import { computeQuote, getPricingBrackets, getChapiteauUnitPrice } from "@/lib/pricing";
+import { computeQuote, getPricingBrackets, getChapiteauUnitPrice, getExtraOptions } from "@/lib/pricing";
 import { sendAlertEmail, sendEmail } from "@/lib/mail";
 import { welcomeEmail, faqFollowUpEmail } from "@/lib/email-templates";
 
@@ -18,6 +18,7 @@ const schema = z.object({
   vaisselle: z.boolean(),
   cuisine: z.boolean(),
   chapiteauCount: z.string(),
+  extraIds: z.array(z.string()).default([]),
   civility: z.string().optional(),
   fullName: z.string().min(2),
   lastName: z.string().optional(),
@@ -32,7 +33,8 @@ export type SubmitLeadInput = z.infer<typeof schema>;
 export async function submitLead(input: SubmitLeadInput) {
   const values = schema.parse(input);
 
-  const [brackets, chapiteauUnitPrice] = await Promise.all([getPricingBrackets(), getChapiteauUnitPrice()]);
+  const [brackets, chapiteauUnitPrice, extraOptions] = await Promise.all([getPricingBrackets(), getChapiteauUnitPrice(), getExtraOptions()]);
+  const extraIds = values.extraIds.filter((id) => extraOptions.some((o) => o.id === id));
   const quote = computeQuote(
     {
       guestCount: Number(values.guestCount) || 0,
@@ -41,9 +43,11 @@ export async function submitLead(input: SubmitLeadInput) {
       vaisselle: values.vaisselle,
       cuisine: values.cuisine,
       chapiteauCount: Number(values.chapiteauCount) || 0,
+      extraIds,
     },
     brackets,
     chapiteauUnitPrice,
+    extraOptions,
   );
 
   const supabase = supabaseAdmin();
@@ -71,6 +75,12 @@ export async function submitLead(input: SubmitLeadInput) {
     .single();
 
   if (error) throw new Error("insert_failed");
+
+  // Separate from the insert on purpose: if the option_extras column hasn't been added yet (see supabase-setup.sql), a lead is never lost over it.
+  if (extraIds.length > 0) {
+    const { error: extrasError } = await supabase.from("leads").update({ option_extras: extraIds }).eq("id", data.id);
+    if (extrasError) console.error("option_extras update failed", extrasError.message);
+  }
 
   await sendAlertEmail(
     "Nouvelle demande de devis",
