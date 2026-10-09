@@ -8,7 +8,7 @@ import { getPageContent, getMedia } from "@/lib/content";
 import { mediaUrl } from "@/lib/supabase-public";
 import { staticGalleryPhotos } from "@/lib/static-gallery";
 import { getSchema, fieldValue } from "@/lib/page-schemas";
-import { getPricingBrackets } from "@/lib/pricing";
+import { getPricingBrackets, getChapiteauUnitPrice, getExtraOptions } from "@/lib/pricing";
 import { RichText } from "@/components/rich-text";
 
 const seminaireSchema = getSchema("seminaire")!;
@@ -26,12 +26,14 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function SeminaireEvenementsPage() {
-  const [seminaireContent, zigzag1, zigzag2, zigzag3, pricingBrackets] = await Promise.all([
+  const [seminaireContent, zigzag1, zigzag2, zigzag3, pricingBrackets, chapiteauUnitPrice, extraOptions] = await Promise.all([
     getPageContent("seminaire"),
     getMedia("seminaire-zigzag-1"),
     getMedia("seminaire-zigzag-2"),
     getMedia("seminaire-zigzag-3"),
     getPricingBrackets(),
+    getChapiteauUnitPrice(),
+    getExtraOptions(),
   ]);
   const cs = seminaireContent?.content ?? {};
   const fs = (key: string) => fieldValue(cs, seminaireSchema.fields.find((x) => x.key === key)!);
@@ -112,8 +114,31 @@ export default async function SeminaireEvenementsPage() {
             </table>
           </div>
 
+          <div className="mt-6 overflow-hidden rounded-2xl border border-black/5 bg-[var(--background-muted)]">
+            <table className="w-full text-sm">
+              <thead>
+                <tr className="border-b border-black/5 text-left text-[var(--foreground)]/60">
+                  <th className="px-5 py-4 font-medium">Options supplémentaires</th>
+                  <th className="px-5 py-4 text-right font-medium">Tarif</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr className="border-b border-black/5 last:border-0">
+                  <td className="px-5 py-4 font-medium text-[var(--foreground)]">Chapiteau</td>
+                  <td className="px-5 py-4 text-right text-[var(--foreground)]/80">{chapiteauUnitPrice} € / pièce</td>
+                </tr>
+                {extraOptions.map((o) => (
+                  <tr key={o.id} className="border-b border-black/5 last:border-0">
+                    <td className="px-5 py-4 font-medium text-[var(--foreground)]">{o.label}</td>
+                    <td className="px-5 py-4 text-right text-[var(--foreground)]/80">{o.price} €{o.unit ? ` ${o.unit}` : ""}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+
           <p className="mt-4 text-center text-xs text-[var(--foreground)]/50">
-            Chapiteau : {fs("chapiteau_price")} €/pièce. Exemples de calcul et détails complets envoyés avec votre devis personnalisé.
+            Exemples de calcul et détails complets envoyés avec votre devis personnalisé.
           </p>
         </Container>
       </section>

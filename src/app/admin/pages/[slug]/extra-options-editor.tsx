@@ -17,7 +17,7 @@ export function ExtraOptionsEditor({ initialOptions }: { initialOptions: ExtraOp
     setRows((prev) => prev.filter((_, i) => i !== index));
   }
   function add() {
-    setRows((prev) => [...prev, { id: `opt-${Date.now()}`, label: "", price: 0 }]);
+    setRows((prev) => [...prev, { id: `opt-${Date.now()}`, label: "", price: 0, unit: "" }]);
   }
   function save() {
     setError(null);
@@ -39,6 +39,13 @@ export function ExtraOptionsEditor({ initialOptions }: { initialOptions: ExtraOp
         Au même titre que le chapiteau : une option, un prix. Elle apparaît dans le formulaire de devis, dans le tableau des tarifs du contrat PDF et dans le total.
       </p>
 
+      <datalist id="extra-unit-suggestions">
+        <option value="/ pièce" />
+        <option value="forfait" />
+        <option value="/ m²" />
+        <option value="/ jour" />
+        <option value="/ personne" />
+      </datalist>
       <div className="space-y-2">
         {rows.map((row, i) => (
           <div key={row.id} className="flex items-center gap-2">
@@ -56,6 +63,13 @@ export function ExtraOptionsEditor({ initialOptions }: { initialOptions: ExtraOp
               className="w-24 rounded border border-black/10 bg-[var(--background)] px-2 py-1.5 text-sm"
             />
             <span className="text-xs text-[var(--foreground)]/50">€</span>
+            <input
+              list="extra-unit-suggestions"
+              value={row.unit ?? ""}
+              onChange={(e) => update(i, { unit: e.target.value })}
+              placeholder="Unité (/ pièce, forfait…)"
+              className="w-40 rounded border border-black/10 bg-[var(--background)] px-2 py-1.5 text-sm"
+            />
             <button type="button" onClick={() => remove(i)} className="flex h-6 w-6 items-center justify-center rounded-full bg-black/10 text-xs text-red-700 hover:bg-red-100">
               ✕
             </button>

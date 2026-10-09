@@ -349,7 +349,7 @@ export function ContactForm({
               ✓
             </span>
             <span className="flex-1 text-[var(--foreground)]">{o.label}</span>
-            <span className="text-xs text-[var(--foreground)]/50">+{o.price} €</span>
+            <span className="text-xs text-[var(--foreground)]/50">+{o.price} €{o.unit ? ` ${o.unit}` : ""}</span>
           </label>
         ))}
       </div>

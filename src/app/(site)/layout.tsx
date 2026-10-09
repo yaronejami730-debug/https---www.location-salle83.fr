@@ -5,6 +5,9 @@ import { RouteTransitionCover } from "@/components/route-transition-cover";
 import { siteConfig } from "@/lib/site";
 import { getSiteSettings } from "@/lib/content";
 
+// Pages are statically generated; re-check the database at most once a minute so anything edited in the admin (photos, prices, options) always reaches the site even if a revalidatePath call was missed.
+export const revalidate = 60;
+
 export default async function SiteLayout({ children }: { children: React.ReactNode }) {
   const settings = await getSiteSettings();
 

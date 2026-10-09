@@ -25,7 +25,7 @@ export const DEFAULT_PRICING_BRACKETS: PricingBracket[] = [
 export const DEFAULT_CHAPITEAU_UNIT_PRICE = 200;
 
 /** Option supplémentaire libre (ex. « Sono », « Photobooth ») ajoutée depuis l'admin, au même titre que le chapiteau : un libellé et un prix forfaitaire. */
-export type ExtraOption = { id: string; label: string; price: number };
+export type ExtraOption = { id: string; label: string; price: number; /** Libellé d'unité affiché après le prix (ex. « / pièce », « forfait »). Vide = rien. */ unit?: string };
 
 export type QuoteOptions = {
   guestCount: number;
@@ -52,7 +52,12 @@ export function parseExtraOptions(raw: string | undefined | null): ExtraOption[]
     if (!Array.isArray(parsed)) return [];
     return parsed
       .filter((o) => o && typeof o.id === "string" && typeof o.label === "string" && o.label.trim())
-      .map((o) => ({ id: o.id, label: o.label.trim(), price: Number.isFinite(Number(o.price)) ? Math.max(0, Number(o.price)) : 0 }));
+      .map((o) => ({
+        id: o.id,
+        label: o.label.trim(),
+        price: Number.isFinite(Number(o.price)) ? Math.max(0, Number(o.price)) : 0,
+        unit: typeof o.unit === "string" ? o.unit.trim() : "",
+      }));
   } catch {
     return [];
   }

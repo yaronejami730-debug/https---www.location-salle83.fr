@@ -40,6 +40,7 @@ export async function savePageContent(
   revalidatePath("/admin/pages");
   revalidatePath(`/admin/pages/${slug}`);
   revalidatePath(slug === "home" ? "/" : `/${slug}`);
+  if (slug === "seminaire") revalidatePath("/contact");
 }
 
 export async function savePricingBrackets(brackets: PricingBracket[]) {
@@ -76,7 +77,7 @@ export async function saveExtraOptions(options: ExtraOption[]) {
   const supabase = supabaseAdmin();
   const cleaned = options
     .filter((o) => o.label.trim())
-    .map((o) => ({ id: o.id, label: o.label.trim(), price: Math.max(0, Number(o.price) || 0) }));
+    .map((o) => ({ id: o.id, label: o.label.trim(), price: Math.max(0, Number(o.price) || 0), unit: (o.unit ?? "").trim() }));
 
   const { error } = await supabase
     .from("pages")
@@ -85,5 +86,6 @@ export async function saveExtraOptions(options: ExtraOption[]) {
 
   revalidatePath("/admin/pages/seminaire");
   revalidatePath("/admin/contrat");
+  revalidatePath("/seminaire");
   revalidatePath("/contact");
 }
